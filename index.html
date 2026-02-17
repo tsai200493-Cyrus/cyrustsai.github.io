@@ -3,401 +3,45 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>進階圖片尺寸調整工具</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- 引入 Cropper.js CSS -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css">
-    <!-- 引入 Cropper.js JS -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
+    <title>承育 | 營運自動化與數據分析作品集</title>
     <style>
-        .canvas-container {
-            box-shadow: 0 0 20px rgba(0,0,0,0.1);
-            background-image: 
-                linear-gradient(45deg, #eee 25%, transparent 25%), 
-                linear-gradient(-45deg, #eee 25%, transparent 25%),
-                linear-gradient(45deg, transparent 75%, #eee 75%),
-                linear-gradient(-45deg, transparent 75%, #eee 75%);
-            background-size: 20px 20px;
-            background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
-        }
-        canvas {
-            cursor: move;
-            max-width: 100%;
-            height: auto;
-        }
+        body { font-family: "Microsoft JhengHei", Arial, sans-serif; line-height: 1.6; color: #333; max-width: 1000px; margin: 0 auto; padding: 20px; }
+        .header { text-align: center; padding: 50px 0; background: #f4f4f4; margin-bottom: 30px; }
+        .project-card { border: 1px solid #ddd; padding: 20px; margin-bottom: 30px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .tag { background: #007bff; color: white; padding: 3px 10px; border-radius: 5px; font-size: 12px; }
+        .dashboard-container { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; margin-top: 20px; }
+        .dashboard-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0; }
+        h2 { color: #2c3e50; border-left: 5px solid #007bff; padding-left: 15px; }
     </style>
 </head>
-<body class="bg-slate-50 min-h-screen text-slate-800 font-sans">
+<body>
 
-    <div class="max-w-6xl mx-auto p-4 md:p-8">
-        <header class="mb-8">
-            <h1 class="text-3xl font-bold text-slate-900 mb-2">圖片尺寸調整與剪裁工具</h1>
-            <p class="text-slate-500">上傳圖片、調整畫布、精確剪裁、縮放並自由調整位置。</p>
-        </header>
-
-        <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
-            <!-- 左側控制面板 -->
-            <aside class="lg:col-span-1 space-y-6 bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
-                
-                <!-- 檔案上傳 -->
-                <div>
-                    <label class="block text-sm font-semibold mb-2">1. 上傳圖片</label>
-                    <input type="file" id="imageInput" accept="image/*" class="w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 cursor-pointer" />
-                </div>
-
-                <!-- 尺寸設定 -->
-                <div class="grid grid-cols-2 gap-4">
-                    <div>
-                        <label class="block text-sm font-semibold mb-2">畫布寬度 (PX)</label>
-                        <input type="number" id="targetWidth" value="1200" class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-semibold mb-2">畫布高度 (PX)</label>
-                        <input type="number" id="targetHeight" value="630" class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none">
-                    </div>
-                </div>
-
-                <!-- 縮放設定 -->
-                <div>
-                    <div class="flex justify-between items-center mb-2">
-                        <label class="text-sm font-semibold">圖片縮放</label>
-                        <span id="scaleValue" class="text-xs font-mono bg-blue-50 text-blue-600 px-2 py-0.5 rounded">100%</span>
-                    </div>
-                    <input type="range" id="imageScale" min="0.1" max="5" step="0.01" value="1" class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-blue-600">
-                </div>
-
-                <!-- 背景顏色 -->
-                <div>
-                    <label class="block text-sm font-semibold mb-2">畫布背景顏色</label>
-                    <div class="flex items-center gap-3">
-                        <input type="color" id="bgColor" value="#ffffff" class="w-10 h-10 rounded cursor-pointer border-0 p-0">
-                        <span id="colorHex" class="text-sm font-mono text-slate-500">#ffffff</span>
-                    </div>
-                </div>
-
-                <!-- 操作按鈕 -->
-                <div class="space-y-3 pt-4 border-t border-slate-100">
-                    <button id="processBtn" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-xl transition shadow-lg shadow-blue-200">生成畫布</button>
-                    <button id="cropModeBtn" class="w-full bg-indigo-50 text-indigo-700 hover:bg-indigo-100 font-semibold py-2 rounded-xl transition border border-indigo-100 hidden">進入剪裁模式</button>
-                    <button id="saveTemplateBtn" class="w-full bg-slate-100 text-slate-700 hover:bg-slate-200 font-semibold py-2 rounded-xl transition">儲存為範本</button>
-                </div>
-
-                <!-- 範本列表 -->
-                <div id="templatesSection" class="pt-4 border-t border-slate-100 hidden">
-                    <label class="block text-sm font-semibold mb-2">已存範本</label>
-                    <div id="templateList" class="space-y-2"></div>
-                </div>
-            </aside>
-
-            <!-- 右側預覽區域 -->
-            <main class="lg:col-span-3 space-y-4">
-                <div class="flex justify-between items-center bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
-                    <div class="text-sm text-slate-500">
-                        提示：拖動「圖片縮放」滑桿可調整大小，滑鼠在畫布上可拖曳位置
-                    </div>
-                    <button id="downloadBtn" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2 px-6 rounded-lg transition hidden">下載圖片</button>
-                </div>
-
-                <!-- 畫布/剪裁容器 -->
-                <div id="workArea" class="canvas-container rounded-xl overflow-hidden min-h-[400px] flex items-center justify-center relative">
-                    <div id="cropperWrapper" class="hidden w-full h-full flex items-center justify-center">
-                        <img id="cropperImg" class="max-w-full">
-                    </div>
-                    <canvas id="mainCanvas" class="hidden"></canvas>
-                    <div id="emptyState" class="text-slate-400 text-center">
-                        <p class="text-lg">尚未上傳圖片</p>
-                        <p class="text-sm">請於左側選擇圖片並設定尺寸</p>
-                    </div>
-                </div>
-
-                <!-- 剪裁確認按鈕 -->
-                <div id="cropActions" class="hidden flex justify-center gap-4">
-                    <button id="confirmCropBtn" class="bg-indigo-600 text-white px-8 py-2 rounded-full font-bold shadow-md hover:bg-indigo-700 transition">確認剪裁</button>
-                    <button id="cancelCropBtn" class="bg-slate-200 text-slate-700 px-8 py-2 rounded-full font-bold hover:bg-slate-300 transition">取消</button>
-                </div>
-            </main>
-        </div>
+    <div class="header">
+        <h1>承育 (Chen-Yu)</h1>
+        <p>具備自動化開發能力的營運分析專家 | Python · GAS · SQL</p>
     </div>
 
-    <!-- 提示框 -->
-    <div id="toast" class="fixed bottom-8 right-8 bg-slate-800 text-white px-6 py-3 rounded-lg shadow-2xl transform translate-y-20 transition-transform duration-300 pointer-events-none"></div>
+    <section id="projects">
+        <h2>實戰專案展示</h2>
 
-    <script>
-        // 核心變數
-        const canvas = document.getElementById('mainCanvas');
-        const ctx = canvas.getContext('2d');
-        const imageInput = document.getElementById('imageInput');
-        const processBtn = document.getElementById('processBtn');
-        const downloadBtn = document.getElementById('downloadBtn');
-        const cropModeBtn = document.getElementById('cropModeBtn');
-        const bgColorInput = document.getElementById('bgColor');
-        const colorHexDisplay = document.getElementById('colorHex');
-        const imageScaleInput = document.getElementById('imageScale');
-        const scaleValueDisplay = document.getElementById('scaleValue');
-        const cropperImg = document.getElementById('cropperImg');
-        const cropperWrapper = document.getElementById('cropperWrapper');
-        const workArea = document.getElementById('workArea');
-        const cropActions = document.getElementById('cropActions');
-        const saveTemplateBtn = document.getElementById('saveTemplateBtn');
-        const templateList = document.getElementById('templateList');
-        const templatesSection = document.getElementById('templatesSection');
-
-        let originalImage = new Image();
-        let currentImageSource = null; // 用於儲存目前的圖片數據 (原始或剪裁後)
-        let cropper = null;
-        
-        // 畫布狀態
-        let imgState = {
-            x: 0,
-            y: 0,
-            width: 0,
-            height: 0,
-            currentScale: 1, // 相對於 currentImageSource 的縮放倍率
-            isDragging: false,
-            lastMouseX: 0,
-            lastMouseY: 0
-        };
-
-        // 1. 初始化監聽
-        imageInput.addEventListener('change', handleImageUpload);
-        processBtn.addEventListener('click', () => processImage(true));
-        downloadBtn.addEventListener('click', downloadCanvas);
-        
-        bgColorInput.addEventListener('input', (e) => {
-            colorHexDisplay.textContent = e.target.value.toUpperCase();
-            drawCanvas();
-        });
-
-        imageScaleInput.addEventListener('input', (e) => {
-            const scale = parseFloat(e.target.value);
-            scaleValueDisplay.textContent = `${Math.round(scale * 100)}%`;
-            if (currentImageSource) {
-                updateImageDimensions(scale);
-                drawCanvas();
-            }
-        });
-
-        // 2. 圖片上傳處理
-        function handleImageUpload(e) {
-            const file = e.target.files[0];
-            if (!file) return;
-
-            const reader = new FileReader();
-            reader.onload = (event) => {
-                originalImage.onload = () => {
-                    currentImageSource = originalImage;
-                    document.getElementById('emptyState').classList.add('hidden');
-                    cropModeBtn.classList.remove('hidden');
-                    processImage(true); // 上傳後自動初始生成一次
-                    showToast("圖片上傳成功");
-                };
-                originalImage.src = event.target.result;
-            };
-            reader.readAsDataURL(file);
-        }
-
-        // 3. 更新圖片尺寸（維持比例）
-        function updateImageDimensions(scale) {
-            imgState.currentScale = scale;
-            imgState.width = currentImageSource.width * scale;
-            imgState.height = currentImageSource.height * scale;
-        }
-
-        // 4. 處理畫布邏輯
-        function processImage(resetAll = false) {
-            if (!currentImageSource) return;
-
-            const targetW = parseInt(document.getElementById('targetWidth').value) || 800;
-            const targetH = parseInt(document.getElementById('targetHeight').value) || 600;
-
-            canvas.width = targetW;
-            canvas.height = targetH;
-            canvas.classList.remove('hidden');
-            downloadBtn.classList.remove('hidden');
-
-            if (resetAll) {
-                // 初始縮放：盡量填滿但「不拉伸」且「不超過」 (Contain 邏輯)
-                let initialScale = Math.min(targetW / currentImageSource.width, targetH / currentImageSource.height);
-                
-                // 如果圖片比目標小，預設用 100% 原始大小
-                if (currentImageSource.width <= targetW && currentImageSource.height <= targetH) {
-                    initialScale = 1;
-                }
-
-                imageScaleInput.value = initialScale;
-                scaleValueDisplay.textContent = `${Math.round(initialScale * 100)}%`;
-                
-                updateImageDimensions(initialScale);
-                
-                // 置中位置
-                imgState.x = (targetW - imgState.width) / 2;
-                imgState.y = (targetH - imgState.height) / 2;
-            }
-
-            drawCanvas();
-        }
-
-        // 5. 繪製畫布
-        function drawCanvas() {
-            if (!currentImageSource) return;
-
-            // 填滿背景
-            ctx.fillStyle = bgColorInput.value;
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-            // 繪製圖片
-            ctx.drawImage(
-                currentImageSource, 
-                imgState.x, 
-                imgState.y, 
-                imgState.width, 
-                imgState.height
-            );
-        }
-
-        // 6. 拖曳邏輯
-        canvas.onmousedown = (e) => {
-            imgState.isDragging = true;
-            const rect = canvas.getBoundingClientRect();
-            const scaleX = canvas.width / rect.width;
-            const scaleY = canvas.height / rect.height;
-            imgState.lastMouseX = e.clientX * scaleX;
-            imgState.lastMouseY = e.clientY * scaleY;
-        };
-
-        window.onmousemove = (e) => {
-            if (!imgState.isDragging) return;
+        <div class="project-card">
+            <h3><span class="tag">互動 Demo</span> 營運關鍵指標戰情室 (Dashboard)</h3>
+            <p><strong>痛點：</strong> 過去依賴人工整理週報，耗時且數據滯後。</p>
+            <p><strong>解決方案：</strong> 整合 ERP 數據，利用 Excel/Looker Studio 建立自動化更新儀表板，支援多維度交叉篩選。</p>
             
-            const rect = canvas.getBoundingClientRect();
-            const scaleX = canvas.width / rect.width;
-            const scaleY = canvas.height / rect.height;
-            const mouseX = e.clientX * scaleX;
-            const mouseY = e.clientY * scaleY;
+            <div class="dashboard-container">
+                <iframe src="https://lookerstudio.google.com/embed/reporting/你的報表ID/page/1M" allowfullscreen></iframe>
+            </div>
+            <p style="margin-top:15px; font-size: 14px; color: #666;">*註：此為模擬數據，僅供展示操作邏輯。請試著點選右方篩選器觀察數據變動。</p>
+        </div>
 
-            const dx = mouseX - imgState.lastMouseX;
-            const dy = mouseY - imgState.lastMouseY;
+        <div class="project-card">
+            <h3><span class="tag">自動化</span> 採購預測與庫存管理系統</h3>
+            <p><strong>技術棧：</strong> Python (Pandas), Google Apps Script</p>
+            <p><strong>核心價值：</strong> 將採購決策時間從 4 小時縮短至 15 分鐘，顯著降低斷貨風險。</p>
+            <a href="https://github.com/你的帳號/你的專案庫" target="_blank">查看去識別化代碼及邏輯流程圖</a>
+        </div>
+    </section>
 
-            imgState.x += dx;
-            imgState.y += dy;
-
-            imgState.lastMouseX = mouseX;
-            imgState.lastMouseY = mouseY;
-
-            drawCanvas();
-        };
-
-        window.onmouseup = () => {
-            imgState.isDragging = false;
-        };
-
-        // 7. 剪裁模式 (Cropper.js)
-        cropModeBtn.onclick = () => {
-            if (!currentImageSource) return;
-
-            canvas.classList.add('hidden');
-            cropperWrapper.classList.remove('hidden');
-            cropActions.classList.remove('hidden');
-            downloadBtn.classList.add('hidden');
-            processBtn.classList.add('opacity-50', 'pointer-events-none');
-
-            cropperImg.src = currentImageSource.src;
-            
-            if (cropper) cropper.destroy();
-            cropper = new Cropper(cropperImg, {
-                viewMode: 1,
-                autoCropArea: 0.8,
-                responsive: true
-            });
-        };
-
-        document.getElementById('confirmCropBtn').onclick = () => {
-            const croppedCanvas = cropper.getCroppedCanvas();
-            const croppedImg = new Image();
-            croppedImg.onload = () => {
-                currentImageSource = croppedImg;
-                exitCropMode();
-                processImage(true); // 剪裁後重新計算置中與初始縮放
-                showToast("剪裁已應用");
-            };
-            croppedImg.src = croppedCanvas.toDataURL();
-        };
-
-        document.getElementById('cancelCropBtn').onclick = exitCropMode;
-
-        function exitCropMode() {
-            cropperWrapper.classList.add('hidden');
-            cropActions.classList.add('hidden');
-            canvas.classList.remove('hidden');
-            downloadBtn.classList.remove('hidden');
-            processBtn.classList.remove('opacity-50', 'pointer-events-none');
-            if (cropper) {
-                cropper.destroy();
-                cropper = null;
-            }
-        }
-
-        // 8. 下載功能
-        function downloadCanvas() {
-            const link = document.createElement('a');
-            link.download = `resized_image_${Date.now()}.png`;
-            link.href = canvas.toDataURL('image/png');
-            link.click();
-            showToast("圖片下載中...");
-        }
-
-        // 9. 範本系統
-        saveTemplateBtn.onclick = () => {
-            const template = {
-                id: Date.now(),
-                name: `${document.getElementById('targetWidth').value}x${document.getElementById('targetHeight').value}`,
-                width: document.getElementById('targetWidth').value,
-                height: document.getElementById('targetHeight').value,
-                bg: bgColorInput.value
-            };
-
-            let templates = JSON.parse(localStorage.getItem('img_templates') || '[]');
-            templates.push(template);
-            localStorage.setItem('img_templates', JSON.stringify(templates));
-            loadTemplates();
-            showToast("範本已儲存");
-        };
-
-        function loadTemplates() {
-            const templates = JSON.parse(localStorage.getItem('img_templates') || '[]');
-            if (templates.length > 0) {
-                templatesSection.classList.remove('hidden');
-                templateList.innerHTML = '';
-                templates.forEach(t => {
-                    const btn = document.createElement('button');
-                    btn.className = "w-full text-left text-xs bg-slate-50 hover:bg-slate-100 p-2 rounded border border-slate-200 flex justify-between items-center group";
-                    btn.innerHTML = `
-                        <span>${t.name} <span style="color:${t.bg}">■</span></span>
-                        <span class="text-[10px] text-slate-400 opacity-0 group-hover:opacity-100">套用</span>
-                    `;
-                    btn.onclick = () => {
-                        document.getElementById('targetWidth').value = t.width;
-                        document.getElementById('targetHeight').value = t.height;
-                        bgColorInput.value = t.bg;
-                        colorHexDisplay.textContent = t.bg.toUpperCase();
-                        processImage(true);
-                        showToast("已套用範本");
-                    };
-                    templateList.appendChild(btn);
-                });
-            }
-        }
-
-        function showToast(msg) {
-            const toast = document.getElementById('toast');
-            toast.textContent = msg;
-            toast.classList.remove('translate-y-20');
-            setTimeout(() => {
-                toast.classList.add('translate-y-20');
-            }, 3000);
-        }
-
-        loadTemplates();
-
-    </script>
 </body>
 </html>
