@@ -3,150 +3,837 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>承育 | 營運自動化與數據分析作品集8888</title>
+    <title>承育 (Cheng-Yu) | 營運自動化與數據分析作品集</title>
+    
+    <!-- 外部資源 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
     <style>
+        /* --- 全域變數定義 --- */
         :root {
-            --primary-color: #2563eb; /* 專業藍 */
+            --primary-color: #2563eb;       /* 主色調：藍色 */
+            --primary-dark: #1e40af;
+            --success-color: #10b981;       /* 成功：綠色 */
+            --warning-color: #f59e0b;       /* 警告：橘色 */
+            --python-color: #3776ab;        /* Python 專屬色 */
             --bg-color: #f8fafc;
             --card-bg: #ffffff;
             --text-main: #1e293b;
             --text-sub: #64748b;
+            --timeline-line: #e2e8f0;
         }
+
+        * { box-sizing: border-box; }
 
         body { 
             font-family: "PingFang TC", "Microsoft JhengHei", sans-serif; 
             line-height: 1.7; 
             color: var(--text-main); 
             background-color: var(--bg-color);
-            max-width: 900px; 
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        .container {
+            max-width: 1100px; 
             margin: 0 auto; 
             padding: 40px 20px; 
         }
 
-        /* 個人簡介區塊 */
+        /* --- 1. 個人簡介 Header --- */
         .profile-header {
             text-align: center;
-            padding: 40px 0;
+            padding: 60px 20px;
             background: var(--card-bg);
-            border-radius: 20px;
-            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
-            margin-bottom: 50px;
+            border-radius: 24px;
+            box-shadow: 0 10px 25px -5px rgba(0,0,0,0.05);
+            margin-bottom: 60px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .profile-header::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 8px;
+            background: linear-gradient(90deg, var(--primary-color), var(--success-color), var(--python-color));
         }
 
         .avatar {
-            width: 120px;
-            height: 120px;
+            width: 120px; height: 120px;
             border-radius: 50%;
-            border: 4px solid white;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-            object-fit: cover; /* 確保圖片不變形 */
-            margin-bottom: 20px;
+            border: 4px solid #fff;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            object-fit: cover;
+            margin-bottom: 24px;
+            background: #eee;
         }
 
-        .profile-header h1 { margin: 10px 0; color: var(--primary-color); letter-spacing: 1px; }
-        .tagline { color: var(--text-sub); font-size: 1.1em; margin-bottom: 20px; }
+        .profile-header h1 { margin: 10px 0; color: var(--primary-color); font-size: 2.2rem; }
+        .tagline { color: var(--text-sub); font-size: 1.1rem; margin-bottom: 24px; }
 
-        /* 技能標籤 */
         .skill-chips { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; }
-        .chip { background: #e2e8f0; padding: 5px 15px; border-radius: 20px; font-size: 0.9em; font-weight: 500; }
+        .chip { background: #f1f5f9; color: #475569; padding: 6px 16px; border-radius: 50px; font-size: 0.9rem; font-weight: 600; transition: 0.3s; }
+        .chip:hover { background: var(--primary-color); color: white; transform: translateY(-2px); }
 
-        /* 專案卡片 */
-        h2 { border-bottom: 2px solid var(--primary-color); padding-bottom: 10px; margin-top: 40px; display: inline-block; }
+        /* --- 共通標題與卡片 --- */
+        .section-title { text-align: center; margin: 80px 0 40px; font-size: 1.8rem; border-bottom: 2px solid #e2e8f0; padding-bottom: 20px; display: inline-block; width: 100%; }
+        .section-title i { color: var(--primary-color); margin-right: 10px; }
         
         .project-card { 
-            background: var(--card-bg);
-            padding: 30px; 
-            margin-bottom: 40px; 
-            border-radius: 15px; 
-            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
-            transition: transform 0.3s ease;
+            background: white; 
+            border-radius: 24px; 
+            padding: 40px; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05); 
+            margin-bottom: 60px; 
+            border-left: 6px solid var(--primary-color);
+            transition: transform 0.3s;
         }
+        .project-card:hover { transform: translateY(-5px); box-shadow: 0 20px 40px rgba(0,0,0,0.1); }
 
-        .project-card:hover { transform: translateY(-5px); }
+        /* --- 2. 職涯 Timeline --- */
+        .timeline { position: relative; max-width: 800px; margin: 0 auto 40px; padding: 20px 0; }
+        .timeline::after { content: ''; position: absolute; width: 4px; background-color: var(--timeline-line); top: 0; bottom: 0; left: 50%; margin-left: -2px; }
+        .timeline-item { padding: 10px 40px; position: relative; width: 50%; opacity: 0; transform: translateY(30px); transition: all 0.8s ease-out; }
+        .timeline-item.show { opacity: 1; transform: translateY(0); }
+        .left { left: 0; text-align: right; }
+        .right { left: 50%; text-align: left; }
+        .timeline-item::after { content: ''; position: absolute; width: 20px; height: 20px; right: -10px; background-color: white; border: 4px solid var(--primary-color); top: 25px; border-radius: 50%; z-index: 1; }
+        .right::after { left: -10px; }
+        .content { padding: 20px; background-color: white; border-radius: 16px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+        .content .date { font-weight: bold; color: var(--text-sub); display: block; margin-bottom: 8px; font-size: 0.9rem; }
+        .content h3 { margin: 0 0 10px; color: var(--primary-color); }
 
-        .project-header { display: flex; align-items: center; gap: 15px; margin-bottom: 15px; }
-        .project-icon { 
-            font-size: 1.5em; 
-            background: #dbeafe; 
-            color: var(--primary-color); 
-            width: 50px; height: 50px; 
-            display: flex; align-items: center; justify-content: center; 
-            border-radius: 12px;
-        }
+        /* --- 專案 A: 互動儀表板 (Dashboard) --- */
+        .filter-row { display: flex; gap: 20px; margin-bottom: 30px; padding: 20px; background: #f8fafc; border-radius: 15px; flex-wrap: wrap; }
+        .filter-group { display: flex; flex-direction: column; gap: 5px; flex: 1; min-width: 150px; }
+        .filter-group select { padding: 10px; border-radius: 8px; border: 1px solid #e2e8f0; }
+        .dashboard-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 25px; }
+        .chart-box { background: #fff; border: 1px solid #f1f5f9; border-radius: 12px; padding: 15px; }
+        .chart-box h4 { margin: 0 0 15px 0; display: flex; align-items: center; gap: 8px; }
+        .full-width { grid-column: span 2; }
+        .chart-wrapper { height: 250px; position: relative; }
 
-        .tag { background: var(--primary-color); color: white; padding: 4px 12px; border-radius: 6px; font-size: 12px; font-weight: bold; }
+        /* --- 專案 B: AI 名片 (Card Scanner) --- */
+        .card-demo-container { display: flex; gap: 30px; align-items: center; background: #f1f5f9; padding: 30px; border-radius: 16px; flex-wrap: wrap; margin-top: 20px; }
+        .mock-card { width: 300px; height: 180px; background: white; border-radius: 8px; box-shadow: 0 10px 20px rgba(0,0,0,0.1); position: relative; overflow: hidden; display: flex; flex-direction: column; justify-content: center; padding: 20px; }
+        .scan-line { position: absolute; top: -5px; left: 0; width: 100%; height: 4px; background: var(--success-color); box-shadow: 0 0 15px var(--success-color); opacity: 0; z-index: 10; }
+        .scanning .scan-line { opacity: 1; animation: scanAnim 2s infinite ease-in-out; }
+        @keyframes scanAnim { 0% { top: 0; } 50% { top: 100%; } 100% { top: 0; } }
+        .result-panel { flex: 1; min-width: 250px; background: #1e293b; color: #f8fafc; border-radius: 12px; padding: 25px; font-family: 'Courier New', monospace; }
+        .data-row { margin-bottom: 10px; opacity: 0; transform: translateX(10px); transition: 0.3s; }
+        .data-row.visible { opacity: 1; transform: translateX(0); }
+        .btn-scan { background: var(--success-color); color: white; border: none; padding: 12px 24px; border-radius: 12px; cursor: pointer; font-weight: bold; margin-bottom: 20px; width: 100%; }
+        .btn-scan:hover { filter: brightness(1.1); }
+
+        /* --- 專案 C: Python Batch Processing (優化版) --- */
+        #python-batch-zone { height: 400px; background: #0f172a; border-radius: 20px; position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center; cursor: pointer; margin-top: 20px; box-shadow: inset 0 0 50px rgba(0,0,0,0.5); }
         
-        .dashboard-container { 
-            position: relative; padding-bottom: 56.25%; height: 0; 
-            overflow: hidden; margin: 20px 0; border-radius: 10px; border: 1px solid #e2e8f0;
-        }
-        .dashboard-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
-
-        .btn-link {
-            display: inline-block;
-            margin-top: 15px;
-            color: var(--primary-color);
-            text-decoration: none;
-            font-weight: bold;
-            border: 1px solid var(--primary-color);
-            padding: 8px 20px;
-            border-radius: 8px;
-            transition: all 0.3s;
+        .chaos-bg {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%; 
+            color: rgba(55,118,171,0.15); font-family: 'Courier New', monospace; 
+            font-size: 12px; line-height: 12px; word-break: break-all; pointer-events: none;
+            overflow: hidden;
         }
 
-        .btn-link:hover { background: var(--primary-color); color: white; }
+        .excel-icon { 
+            position: absolute; color: #1d6f42; font-size: 1.5rem; 
+            transition: all 0.8s cubic-bezier(0.68, -0.55, 0.27, 1.55); 
+            z-index: 5; 
+        }
+        
+        /* Terminal UI */
+        .terminal-box {
+            position: absolute; top: 20px; left: 20px; z-index: 40;
+            background: rgba(15, 23, 42, 0.9); border: 1px solid #334155;
+            border-radius: 8px; padding: 0; min-width: 300px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+            font-family: 'Courier New', monospace;
+            opacity: 1; transition: opacity 0.5s;
+        }
+        .terminal-header {
+            background: #1e293b; padding: 8px 12px; border-radius: 8px 8px 0 0;
+            display: flex; align-items: center; border-bottom: 1px solid #334155;
+        }
+        .dot { width: 10px; height: 10px; border-radius: 50%; margin-right: 6px; }
+        .red { background: #ef4444; } .yellow { background: #f59e0b; } .green { background: #10b981; }
+        .terminal-content { padding: 15px; color: #f8fafc; font-size: 0.85rem; height: 120px; overflow: hidden; }
+        .cursor-line { border-right: 2px solid var(--success-color); animation: blink 1s step-end infinite; }
+        @keyframes blink { 50% { border-color: transparent; } }
 
-        @media (max-width: 600px) {
-            .profile-header { padding: 20px; }
+        /* Python Core Animation */
+        .python-core { 
+            width: 100px; height: 100px; background: var(--python-color); 
+            border-radius: 50%; display: flex; align-items: center; justify-content: center; 
+            box-shadow: 0 0 30px var(--python-color); z-index: 20; color: white; 
+            font-size: 3.5rem; transform: scale(0); transition: 0.5s; position: relative;
+        }
+        .python-core.active { transform: scale(1); }
+        .core-ring {
+            position: absolute; top: -10px; left: -10px; right: -10px; bottom: -10px;
+            border: 2px dashed rgba(255,255,255,0.3); border-radius: 50%;
+            animation: spin 4s linear infinite; display: none;
+        }
+        .python-core.active .core-ring { display: block; }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+
+        .batch-scan-line { 
+            position: absolute; top: 0; left: 0; width: 100%; height: 4px; 
+            background: linear-gradient(90deg, transparent, var(--success-color), transparent); 
+            box-shadow: 0 0 20px var(--success-color); z-index: 30; opacity: 0; 
+        }
+
+        .batch-metrics { 
+            position: absolute; z-index: 50; display: none; 
+            grid-template-columns: repeat(2, 1fr); gap: 20px; width: 80%; 
+        }
+        .batch-stat-card { 
+            background: rgba(255,255,255,0.95); padding: 20px; border-radius: 16px; 
+            text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.3); 
+            backdrop-filter: blur(5px); transform: translateY(20px); animation: slideUp 0.5s forwards;
+        }
+        @keyframes slideUp { to { transform: translateY(0); } }
+        
+        .metric-val { font-size: 3rem; font-weight: 800; line-height: 1; display: block; }
+        .metric-unit { font-size: 1rem; font-weight: bold; color: var(--text-sub); }
+        .val-time { color: var(--success-color); }
+        .val-acc { color: var(--primary-color); }
+
+        #click-hint { animation: pulse 2s infinite; }
+        @keyframes pulse { 0% { opacity: 0.4; } 50% { opacity: 1; } 100% { opacity: 0.4; } }
+
+
+        /* --- 專案 D: 採購預測 (Procurement Loop) --- */
+        .procurement-interactive { 
+            display: flex; flex-direction: column; align-items: center; width: 100%; padding: 20px 0;
+        }
+
+        .loop-container { 
+            position: relative; width: 100%; max-width: 600px; height: 400px; margin: 0 auto; 
+        }
+
+        .loop-center { 
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); 
+            width: 220px; height: 220px; background: #f8fafc; border-radius: 50%; 
+            border: 2px dashed #cbd5e1; display: flex; flex-direction: column; 
+            align-items: center; justify-content: center; text-align: center; 
+            padding: 20px; z-index: 5; overflow: hidden;
+        }
+
+        .step-node { 
+            position: absolute; width: 90px; height: 90px; background: white; 
+            border: 3px solid #e2e8f0; border-radius: 50%; display: flex; 
+            flex-direction: column; align-items: center; justify-content: center; 
+            cursor: pointer; transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+            z-index: 10; box-shadow: 0 4px 6px rgba(0,0,0,0.05); 
+        }
+
+        .step-node i { font-size: 1.5rem; color: var(--text-sub); margin-bottom: 4px; }
+        .step-node span { font-size: 0.7rem; font-weight: bold; color: var(--text-sub); line-height: 1.2; text-align: center; }
+
+        .step-node:hover, .step-node.active { 
+            border-color: var(--primary-color); transform: scale(1.15); 
+            background: var(--primary-color); 
+        }
+        .step-node:hover i, .step-node.active i, 
+        .step-node:hover span, .step-node.active span { color: white; }
+
+        /* Loop Positioning */
+        .node-1 { top: 0; left: 50%; transform: translateX(-50%); } 
+        .node-2 { top: 25%; right: 0; }
+        .node-3 { bottom: 0; right: 15%; }
+        .node-4 { bottom: 0; left: 15%; }
+        .node-5 { top: 25%; left: 0; }
+
+        .loop-svg {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none;
+        }
+
+        .sync-animation { animation: rotateSync 2s infinite linear; font-size: 2rem; color: var(--primary-color); }
+        @keyframes rotateSync { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+        .btn-confirm {
+            background: var(--success-color); color: white; border: none; 
+            padding: 8px 16px; border-radius: 6px; cursor: pointer; 
+            font-size: 0.9rem; margin-top: 10px; font-weight: bold;
+        }
+        .btn-confirm:hover { opacity: 0.9; }
+        
+        /* 響應式調整 */
+        @media screen and (max-width: 768px) {
+            .timeline::after { left: 31px; }
+            .timeline-item { width: 100%; padding-left: 70px; text-align: left !important; }
+            .timeline-item::after { left: 21px; right: auto; }
+            .right { left: 0; }
+            
+            .dashboard-grid, .card-demo-container, .batch-metrics { grid-template-columns: 1fr; flex-direction: column; }
+            .full-width { grid-column: span 1; }
+            
+            .loop-container { height: auto; display: flex; flex-direction: column; gap: 15px; padding: 20px 0; margin-top: 20px; }
+            .step-node { position: static; width: 100%; height: auto; border-radius: 12px; flex-direction: row; padding: 15px; gap: 15px; transform: none !important; }
+            .loop-center { position: static; transform: none; width: 100%; height: auto; margin-top: 20px; border-radius: 12px; border: 2px solid #e2e8f0; }
+            .loop-svg { display: none; }
+            
+            .terminal-box { width: 90%; left: 5%; top: 10px; min-width: auto; }
         }
     </style>
 </head>
 <body>
 
-    <div class="profile-header">
-        <img src="images/Cyrus382kb.jpg" alt="承育" class="avatar">
-        <h1>承育 (Cheng-Yu)</h1>
-        <p class="tagline">數據分析師 | 營運自動化專家</p>
-        <div class="skill-chips">
-            <span class="chip">Python</span>
-            <span class="chip">Google Apps Script</span>
-            <span class="chip">SQL</span>
-            <span class="chip">Looker Studio</span>
-            <span class="chip">Automation</span>
+    <div class="container">
+        <!-- 1. 個人簡介 -->
+        <header class="profile-header">
+            <img src="https://ui-avatars.com/api/?name=Cheng+Yu&background=2563eb&color=fff&size=150" alt="承育" class="avatar">
+            <h1>承育 (Cheng-Yu)</h1>
+            <p class="tagline">數據分析師 | 營運自動化專家</p>
+            <div class="skill-chips">
+                <span class="chip"><i class="fa-brands fa-python"></i> Python Automation</span>
+                <span class="chip"><i class="fa-solid fa-database"></i> SQL / BigQuery</span>
+                <span class="chip"><i class="fa-solid fa-chart-line"></i> Interactive Dashboard</span>
+                <span class="chip"><i class="fa-solid fa-robot"></i> Google Gemini API</span>
+                <span class="chip"><i class="fa-solid fa-gears"></i> Apps Script</span>
+            </div>
+        </header>
+
+        <!-- 2. 職涯地圖 -->
+        <h2 class="section-title"><i class="fa-solid fa-map-location-dot"></i> 職涯發展地圖</h2>
+        <div class="timeline" id="timeline">
+            <div class="timeline-item left">
+                <div class="content">
+                    <span class="date">2026 - Present</span>
+                    <h3>進階自動化解決方案</h3>
+                    <p>專注於營運流程的全自動化開發，透過 API 串接與數據模型預測，提升跨部門協作效率。</p>
+                </div>
+            </div>
+            <div class="timeline-item right">
+                <div class="content">
+                    <span class="date">2024 - 2025</span>
+                    <h3>數據分析戰情室建立</h3>
+                    <p>成功整合多方數據源（ERP/GA4），將原本需耗時 2 天的月報表優化為即時自動更新。</p>
+                </div>
+            </div>
+            <div class="timeline-item left">
+                <div class="content">
+                    <span class="date">2022 - 2023</span>
+                    <h3>營運流程優化專員</h3>
+                    <p>初步接觸 Google Apps Script，自動化日常行政重複作業，每年節省約 120 小時工時。</p>
+                </div>
+            </div>
         </div>
+
+        <!-- 3. 專案 A: 營運動態交叉分析戰情室 -->
+        <h2 class="section-title"><i class="fa-solid fa-chart-pie"></i> 專案一：動態數據儀錶板</h2>
+        <div class="project-card">
+            <div class="filter-row">
+                <div class="filter-group">
+                    <label><i class="fa-solid fa-store"></i> 銷售通路</label>
+                    <select id="filter-channel" onchange="runDashboardUpdate()">
+                        <option value="all">全部通路</option>
+                        <option value="電商">僅電商</option>
+                        <option value="實體">僅實體</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label><i class="fa-solid fa-tags"></i> 品牌篩選</label>
+                    <select id="filter-brand" onchange="runDashboardUpdate()">
+                        <option value="all">全部品牌</option>
+                        <option value="Apple">Apple</option>
+                        <option value="Google">Google</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="dashboard-grid">
+                <div class="chart-box">
+                    <h4><i class="fa-solid fa-line-chart"></i> 1-6 月營業額趨勢</h4>
+                    <div class="chart-wrapper"><canvas id="lineTrendChart"></canvas></div>
+                </div>
+                <div class="chart-box">
+                    <h4><i class="fa-solid fa-chart-pie"></i> 通路營收佔比</h4>
+                    <div class="chart-wrapper"><canvas id="pieShareChart"></canvas></div>
+                </div>
+                <div class="chart-box full-width">
+                    <h4><i class="fa-solid fa-trophy"></i> 熱賣產品營收排行 Top 3</h4>
+                    <div class="chart-wrapper" style="height: 250px;"><canvas id="barRankChart"></canvas></div>
+                </div>
+            </div>
+            <p style="font-size: 0.8rem; color: var(--text-sub); margin-top: 20px;">* 技術亮點：原生 JavaScript 數據引擎，不依賴後端即可進行多維度交叉過濾。</p>
+        </div>
+
+        <!-- 4. 專案 B: AI 自動名片識別 -->
+        <h2 class="section-title"><i class="fa-solid fa-address-card"></i> 專案二：AI 自動名片識別系統</h2>
+        <div class="project-card" style="border-left-color: var(--success-color);">
+            <p><strong>專案目的：</strong> 運用 Gemini API 實現大規模非結構化影像識別，將逾 6,000 張實體名片自動轉化為結構化數據。</p>
+            
+            <div class="card-demo-container">
+                <div style="flex: 1; display:flex; flex-direction:column; align-items:center;">
+                    <button class="btn-scan" onclick="startCardScan()">
+                        <i class="fa-solid fa-expand"></i> 執行 AI 掃描
+                    </button>
+                    <div class="mock-card" id="businessCard">
+                        <div class="scan-line"></div>
+                        <div style="font-size: 1.5rem; color: #cbd5e1; margin-bottom:10px;"><i class="fa-solid fa-building"></i> COMPANY</div>
+                        <div style="width: 60%; height: 8px; background: #f1f5f9; margin-bottom: 10px;"></div>
+                        <div style="width: 40%; height: 8px; background: #f1f5f9;"></div>
+                        <p style="font-size: 10px; color: #cbd5e1; margin-top: 20px;">BUSINESS CARD SAMPLE</p>
+                    </div>
+                </div>
+
+                <div class="result-panel">
+                    <h5 style="margin:0 0 15px 0; color: var(--success-color); border-bottom: 1px solid #334155; padding-bottom: 10px;">
+                        <i class="fa-solid fa-code"></i> AI JSON Output
+                    </h5>
+                    <div id="ai-result-rows">
+                        <div class="data-row" id="row-1"><span style="color:#94a3b8">"name":</span> "王大明"</div>
+                        <div class="data-row" id="row-2"><span style="color:#94a3b8">"title":</span> "營運總監"</div>
+                        <div class="data-row" id="row-3"><span style="color:#94a3b8">"company":</span> "創新科技有限公司"</div>
+                        <div class="data-row" id="row-4"><span style="color:#94a3b8">"email":</span> "wang@tech-demo.com"</div>
+                        <div class="data-row" id="row-5"><span style="color:#94a3b8">"status":</span> <span style="color:var(--success-color)">"Verified"</span></div>
+                    </div>
+                    <p id="scanPlaceholder" style="color: #64748b; font-size: 0.8rem; margin-top: 20px;">等待掃描指令...</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 5. 專案 C: Python 20萬筆數據處理 (已優化) -->
+        <h2 class="section-title"><i class="fa-brands fa-python"></i> 專案三：Python 海量數據自動整合</h2>
+        <div class="project-card" style="border-left-color: var(--python-color);">
+            <p><strong>挑戰：</strong> 處理分散在 70+ 個 Excel 檔案中的 200,000 筆原始數據。</p>
+            <div id="python-batch-zone" onclick="startPythonAnimation()">
+                <!-- 背景亂碼 -->
+                <div class="chaos-bg" id="chaos-bg"></div>
+                <!-- Excel 圖示容器 -->
+                <div id="excel-icons-container"></div>
+                
+                <!-- 狀態文字 (終端機風格) -->
+                <div class="terminal-box" id="terminal-box">
+                    <div class="terminal-header">
+                        <span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span>
+                        <span style="margin-left: 10px; font-size: 0.8rem; color: #cbd5e1;">bash — 80x24</span>
+                    </div>
+                    <div class="terminal-content" id="status-text">
+                        <span class="cursor-line">> _</span>
+                    </div>
+                </div>
+
+                <!-- Python 核心 -->
+                <div class="python-core" id="py-core">
+                    <div class="core-ring"></div>
+                    <i class="fa-brands fa-python"></i>
+                </div>
+
+                <!-- 掃描線 -->
+                <div class="batch-scan-line" id="batch-scan-line"></div>
+
+                <!-- 結果展示 -->
+                <div class="batch-metrics" id="batch-results">
+                    <div class="batch-stat-card">
+                        <span class="metric-val val-time" id="metric-time">0</span>
+                        <p style="margin:0; color:var(--text-sub);">Processing Time (s)</p>
+                    </div>
+                    <div class="batch-stat-card">
+                        <span class="metric-val val-acc" id="metric-acc">0</span>
+                        <p style="margin:0; color:var(--text-sub);">Accuracy (%)</p>
+                    </div>
+                </div>
+                
+                <!-- 點擊提示 -->
+                <div id="click-hint" style="position:absolute; bottom:20px; color:rgba(255,255,255,0.5); font-size:0.9rem; pointer-events:none;">
+                    <i class="fa-solid fa-play"></i> 點擊執行自動化腳本
+                </div>
+            </div>
+        </div>
+
+        <!-- 6. 專案 D: 採購閉環預測系統 (Updated based on user request) -->
+        <h2 class="section-title"><i class="fa-solid fa-arrows-spin"></i> 專案四：採購閉環決策系統</h2>
+        <div class="project-card" style="border-left-color: var(--warning-color);">
+            <div class="procurement-interactive">
+                <p style="color: var(--text-sub); margin-bottom: 30px; font-size: 0.9rem;">
+                    <i class="fa-solid fa-hand-pointer"></i> 點擊外圍圓圈步驟，查看自動化邏輯與模擬數據
+                </p>
+
+                <div class="loop-container">
+                    <!-- 背景連接虛線 (SVG) -->
+                    <svg class="loop-svg" viewBox="0 0 600 400">
+                        <path d="M300,45 Q550,45 550,200 Q550,355 300,355 Q50,355 50,200 Q50,45 300,45" 
+                              fill="none" stroke="#e2e8f0" stroke-width="2" stroke-dasharray="10,10" />
+                    </svg>
+
+                    <!-- 5個步驟節點 -->
+                    <div class="step-node node-1 active" onclick="showProcurementStep(1)">
+                        <i class="fa-solid fa-database"></i>
+                        <span>數據自動寫入</span>
+                    </div>
+                    <div class="step-node node-2" onclick="showProcurementStep(2)">
+                        <i class="fa-solid fa-chart-line"></i>
+                        <span>預測演算</span>
+                    </div>
+                    <div class="step-node node-3" onclick="showProcurementStep(3)">
+                        <i class="fa-solid fa-user-check"></i>
+                        <span>決策審核</span>
+                    </div>
+                    <div class="step-node node-4" onclick="showProcurementStep(4)">
+                        <i class="fa-solid fa-paper-plane"></i>
+                        <span>一鍵發送</span>
+                    </div>
+                    <div class="step-node node-5" onclick="showProcurementStep(5)">
+                        <i class="fa-solid fa-truck-fast"></i>
+                        <span>在途追蹤</span>
+                    </div>
+
+                    <!-- 中央動態顯示區 -->
+                    <div class="loop-center">
+                        <div id="step-animation" style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center;">
+                            <!-- 內容會透過 JS 動態替換 -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer style="text-align:center; padding: 40px 0; border-top: 1px solid #e2e8f0; color: var(--text-sub);">
+            <p>Built by Cheng-Yu | 讓數據成為決策的導航</p>
+            <div style="font-size: 1.5rem; display: flex; justify-content: center; gap: 20px; margin-top:10px;">
+                <a href="#" style="color:var(--primary-color)"><i class="fa-solid fa-envelope"></i></a>
+                <a href="#" style="color:var(--primary-color)"><i class="fa-brands fa-linkedin"></i></a>
+                <a href="#" style="color:var(--primary-color)"><i class="fa-brands fa-github"></i></a>
+            </div>
+        </footer>
     </div>
 
-    <section id="projects">
-        <h2><i class="fa-solid fa-rocket"></i> 實戰專案展示</h2>
+    <!-- JAVASCRIPT 邏輯區 -->
+    <script>
+        // --- A. 全域初始化 ---
+        window.onload = function() {
+            initTimelineObserver();
+            initDashboard();
+            initPythonBackground();
+            showProcurementStep(1); // 初始化採購圖表
+        };
 
-        <div class="project-card">
-            <div class="project-header">
-                <div class="project-icon"><i class="fa-solid fa-chart-line"></i></div>
-                <h3>營運關鍵指標戰情室 (Dashboard)</h3>
-                <span class="tag">互動演示</span>
-            </div>
-            <p><strong>解決痛點：</strong> 解決傳統 Excel 報表數據滯後與手動操作的高錯誤率。</p>
+        // --- B. 職涯 Timeline 動畫 ---
+        function initTimelineObserver() {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) entry.target.classList.add('show');
+                });
+            }, { threshold: 0.2 });
+            document.querySelectorAll('.timeline-item').forEach(item => observer.observe(item));
+        }
+
+        // --- C. 營運戰情室邏輯 ---
+        const rawSalesData = [
+            { month: '1月', brand: 'Apple', channel: '電商', product: 'iPhone 15', revenue: 50000 },
+            { month: '1月', brand: 'Apple', channel: '實體', product: 'iPhone 15', revenue: 30000 },
+            { month: '1月', brand: 'Google', channel: '電商', product: 'Pixel 8', revenue: 20000 },
+            { month: '2月', brand: 'Apple', channel: '電商', product: 'iPhone 15', revenue: 55000 },
+            { month: '2月', brand: 'Google', channel: '實體', product: 'Pixel 8', revenue: 25000 },
+            { month: '3月', brand: 'Apple', channel: '電商', product: 'iPhone 15', revenue: 48000 },
+            { month: '4月', brand: 'Apple', channel: '實體', product: 'iPhone 15 Pro', revenue: 90000 },
+            { month: '5月', brand: 'Google', channel: '電商', product: 'Pixel 8 Pro', revenue: 45000 },
+            { month: '6月', brand: 'Apple', channel: '實體', product: 'iPhone 15 Pro', revenue: 95000 },
+        ];
+
+        let lineChart, pieChart, barChart;
+
+        function initDashboard() {
+            lineChart = new Chart(document.getElementById('lineTrendChart'), {
+                type: 'line',
+                data: { labels: [], datasets: [{ label: '營收 ($)', data: [], borderColor: '#2563eb', tension: 0.4, fill: true, backgroundColor: '#2563eb15' }] },
+                options: { responsive: true, maintainAspectRatio: false }
+            });
+
+            pieChart = new Chart(document.getElementById('pieShareChart'), {
+                type: 'doughnut',
+                data: { labels: ['電商', '實體'], datasets: [{ data: [], backgroundColor: ['#3b82f6', '#94a3b8'] }] },
+                options: { responsive: true, maintainAspectRatio: false }
+            });
+
+            barChart = new Chart(document.getElementById('barRankChart'), {
+                type: 'bar',
+                data: { labels: [], datasets: [{ label: '產品營收', data: [], backgroundColor: '#60a5fa' }] },
+                options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false }
+            });
+
+            runDashboardUpdate();
+        }
+
+        function runDashboardUpdate() {
+            const channelFilter = document.getElementById('filter-channel').value;
+            const brandFilter = document.getElementById('filter-brand').value;
+
+            // 1. 數據過濾
+            const filtered = rawSalesData.filter(item => {
+                return (channelFilter === 'all' || item.channel === channelFilter) &&
+                       (brandFilter === 'all' || item.brand === brandFilter);
+            });
+
+            // 2. 數據計算
+            const months = ['1月', '2月', '3月', '4月', '5月', '6月'];
+            const trendData = months.map(m => filtered.filter(d => d.month === m).reduce((a, b) => a + b.revenue, 0));
             
-            <div class="dashboard-container">
-                <iframe src="https://lookerstudio.google.com/embed/reporting/你的報表ID/page/1M" allowfullscreen></iframe>
-            </div>
-            <p style="font-size: 14px; color: #64748b;">*註：此為模擬數據，展示自動化串接與篩選邏輯。</p>
-        </div>
+            const ecRevenue = filtered.filter(d => d.channel === '電商').reduce((a, b) => a + b.revenue, 0);
+            const phyRevenue = filtered.filter(d => d.channel === '實體').reduce((a, b) => a + b.revenue, 0);
 
-        <div class="project-card">
-            <div class="project-header">
-                <div class="project-icon"><i class="fa-solid fa-gears"></i></div>
-                <h3>採購預測與庫存管理自動化</h3>
-                <span class="tag">流程優化</span>
-            </div>
-            <p><strong>技術應用：</strong> Python (Pandas) 處理海量數據 + GAS 自動發送庫存預警訊息。</p>
-            <p><strong>成果：</strong> 決策時間縮短 93%，庫存周轉率提升 15%。</p>
-            <a href="https://github.com/你的帳號" target="_blank" class="btn-link">
-                <i class="fa-brands fa-github"></i> 查看技術文檔
-            </a>
-        </div>
-    </section>
+            const productMap = {};
+            filtered.forEach(d => { productMap[d.product] = (productMap[d.product] || 0) + d.revenue; });
+            const sortedProducts = Object.entries(productMap).sort((a, b) => b[1] - a[1]).slice(0, 5);
 
+            // 3. 更新圖表
+            lineChart.data.labels = months;
+            lineChart.data.datasets[0].data = trendData;
+            lineChart.update();
+
+            pieChart.data.datasets[0].data = [ecRevenue, phyRevenue];
+            pieChart.update();
+
+            barChart.data.labels = sortedProducts.map(p => p[0]);
+            barChart.data.datasets[0].data = sortedProducts.map(p => p[1]);
+            barChart.update();
+        }
+
+        // --- D. AI 名片掃描邏輯 ---
+        function startCardScan() {
+            const card = document.getElementById('businessCard');
+            const placeholder = document.getElementById('scanPlaceholder');
+            const rows = document.querySelectorAll('.data-row');
+            
+            rows.forEach(r => r.classList.remove('visible'));
+            card.classList.add('scanning');
+            placeholder.innerText = "Gemini API 正在分析影像語意...";
+            
+            setTimeout(() => {
+                card.classList.remove('scanning');
+                placeholder.innerText = "數據解析完成，已同步至 ERP。";
+                rows.forEach((row, index) => {
+                    setTimeout(() => { row.classList.add('visible'); }, index * 200);
+                });
+            }, 2000);
+        }
+
+        // --- E. Python Batch Animation (優化版邏輯) ---
+        function initPythonBackground() {
+            const bg = document.getElementById('chaos-bg');
+            let text = "";
+            for(let i=0; i<300; i++) text += Math.random().toString(16).substring(2, 8) + " ";
+            bg.innerText = text;
+            
+            const container = document.getElementById('excel-icons-container');
+            container.innerHTML = '';
+            for(let i=0; i<30; i++) {
+                const icon = document.createElement('i');
+                icon.className = 'fa-solid fa-file-excel excel-icon';
+                // 隨機初始位置
+                icon.style.left = (Math.random() * 80 + 10) + "%";
+                icon.style.top = (Math.random() * 80 + 10) + "%";
+                // 隨機旋轉角度
+                icon.style.transform = `rotate(${Math.random() * 360}deg)`;
+                container.appendChild(icon);
+            }
+        }
+
+        let isPythonRunning = false;
+        
+        function typeWriter(text, elementId, speed = 30) {
+            const el = document.getElementById(elementId);
+            // 清除游標行
+            const cursor = el.querySelector('.cursor-line');
+            if(cursor) cursor.remove();
+            
+            let i = 0;
+            function type() {
+                if (i < text.length) {
+                    el.innerHTML += text.charAt(i);
+                    i++;
+                    setTimeout(type, speed);
+                } else {
+                    el.innerHTML += '<br><span class="cursor-line">> _</span>';
+                }
+            }
+            type();
+        }
+
+        function animateValue(obj, start, end, duration) {
+            let startTimestamp = null;
+            const step = (timestamp) => {
+                if (!startTimestamp) startTimestamp = timestamp;
+                const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+                obj.innerHTML = Math.floor(progress * (end - start) + start);
+                if (progress < 1) {
+                    window.requestAnimationFrame(step);
+                }
+            };
+            window.requestAnimationFrame(step);
+        }
+
+        function startPythonAnimation() {
+            if(isPythonRunning) return;
+            isPythonRunning = true;
+            
+            document.getElementById('click-hint').style.display = 'none';
+            const core = document.getElementById('py-core');
+            const icons = document.querySelectorAll('.excel-icon');
+            const statusBox = document.getElementById('status-text');
+            const scanLine = document.getElementById('batch-scan-line');
+            const results = document.getElementById('batch-results');
+            const terminal = document.getElementById('terminal-box');
+
+            // 1. 初始化引擎
+            core.classList.add('active');
+            statusBox.innerHTML = ''; // 清空初始文字
+            typeWriter("> Initializing Python Kernel v3.11... ", 'status-text', 20);
+            
+            // 2. 吸入數據 (Data Sucking)
+            setTimeout(() => {
+                icons.forEach((icon, index) => {
+                    // 給予隨機延遲，製造層次感
+                    setTimeout(() => {
+                        icon.style.left = "50%"; 
+                        icon.style.top = "50%"; 
+                        icon.style.opacity = "0"; 
+                        icon.style.transform = "scale(0.1) rotate(720deg)";
+                    }, Math.random() * 1000);
+                });
+                
+                statusBox.innerHTML += '<br><span style="color:#60a5fa">> Importing pandas as pd...</span>';
+                setTimeout(() => {
+                    statusBox.innerHTML += '<br><span style="color:#fbbf24">> Merging 74 Excel files (200k rows)...</span>';
+                }, 800);
+            }, 1500);
+
+            // 3. 處理運算 (Processing)
+            setTimeout(() => {
+                scanLine.style.opacity = "1";
+                scanLine.style.animation = "scanMove 1s linear infinite";
+                statusBox.innerHTML += '<br><span style="color:#fff">> Cleaning & Formatting data... OK</span>';
+            }, 3000);
+
+            // 4. 完成與結果 (Completion)
+            setTimeout(() => {
+                scanLine.style.display = "none";
+                core.classList.remove('active');
+                core.style.transform = "scale(0)";
+                terminal.style.opacity = "0"; // 隱藏終端機
+                
+                results.style.display = "grid";
+                // 數字跳動特效
+                animateValue(document.getElementById("metric-time"), 0, 180, 1500);
+                animateValue(document.getElementById("metric-acc"), 0, 100, 1500);
+            }, 5000);
+        }
+
+        // --- F. 採購閉環邏輯 (Updated) ---
+        const stepsData = {
+            1: {
+                title: "數據自動寫入",
+                content: `
+                    <div style="text-align:center;">
+                        <i class="fa-solid fa-sync sync-animation"></i>
+                        <p style="font-size:0.9rem; margin-top:15px; font-weight:bold; color:#1e293b;">ERP 數據同步中...</p>
+                        <p style="font-size:0.75rem; color:#64748b;">API 已串接庫存與銷售明細</p>
+                    </div>`
+            },
+            2: {
+                title: "預測演算",
+                // 這裡預留 canvas 給 Chart.js
+                content: `
+                    <div style="width:100%; height:140px; display:flex; flex-direction:column; align-items:center;">
+                        <p style="font-size:0.8rem; color:var(--primary-color); margin:0 0 5px 0;">未來 6 個月需求預測</p>
+                        <div style="flex:1; width:100%; position:relative;">
+                            <canvas id="miniChart"></canvas>
+                        </div>
+                    </div>`
+            },
+            3: {
+                title: "決策審核",
+                content: `
+                    <div style="text-align:center;">
+                        <p style="font-size:0.9rem; margin:0; color:#64748b;">系統建議採購量</p>
+                        <p style="font-size:1.8rem; margin:5px 0; color:var(--primary-color); font-weight:800;">500 <span style="font-size:1rem">Unit</span></p>
+                        <button class="btn-confirm" onclick="confirmPurchase()">
+                            <i class="fa-regular fa-circle-check"></i> 確認採購
+                        </button>
+                        <div id="confirm-status" style="height:20px; margin-top:5px;"></div>
+                    </div>`
+            },
+            4: {
+                title: "一鍵發送",
+                content: `
+                    <div style="text-align:center;">
+                        <i class="fa-solid fa-envelope-circle-check" style="font-size:3rem; color:var(--primary-color);"></i>
+                        <p style="font-size:0.9rem; margin-top:15px; font-weight:bold;">訂單已發送</p>
+                        <p style="font-size:0.75rem; color:#64748b;">Apple供應商窗口: joyce@apple.com,<br>Google供應商窗口: joyce@Google.com</p>
+                    </div>`
+            },
+            5: {
+                title: "在途追蹤 & 閉環",
+                content: `
+                    <div style="text-align:center;">
+                        <i class="fa-solid fa-truck-arrow-right" style="font-size:2.5rem; color:var(--success-color);"></i>
+                        <p style="font-size:0.9rem; margin-top:15px;">在途庫存: <b>500</b></p>
+                        <p style="font-size:0.75rem; color:#64748b;">數據回寫完成，修正下輪參數</p>
+                    </div>`
+            }
+        };
+
+        // 切換步驟的主要函數
+        function showProcurementStep(stepId) {
+            // 1. 更新節點樣式 (移除舊的 active，新增新的 active)
+            document.querySelectorAll('.step-node').forEach(node => node.classList.remove('active'));
+            document.querySelector(`.node-${stepId}`).classList.add('active');
+
+            // 2. 更新中央區域內容
+            const container = document.getElementById('step-animation');
+            container.innerHTML = stepsData[stepId].content;
+
+            // 3. 特殊處理：如果是步驟 2，需要繪製圖表
+            if (stepId === 2) {
+                // 使用 setTimeout 確保 DOM 已經更新，才能抓到 canvas 元素
+                setTimeout(() => {
+                    const ctx = document.getElementById('miniChart').getContext('2d');
+                    new Chart(ctx, {
+                        type: 'line',
+                        data: {
+                            labels: ['1月', '2月', '3月', '4月', '5月', '6月'],
+                            datasets: [{
+                                label: '預測量',
+                                data: [6, 8, 15,18,10,25],
+                                borderColor: '#2563eb',
+                                backgroundColor: 'rgba(37, 99, 235, 0.1)',
+                                borderWidth: 2,
+                                pointRadius: 2,
+                                fill: true,
+                                tension: 0.4
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: { legend: { display: false } },
+                            scales: {
+                                x: { display: false }, 
+                                y: { display: false, min: 0 } 
+                            }
+                        }
+                    });
+                }, 50);
+            }
+        }
+
+        // 模擬按鈕點擊後的確認動畫
+        function confirmPurchase() {
+            const status = document.getElementById('confirm-status');
+            status.innerHTML = `<span style="color:var(--success-color); font-size:0.8rem;">已核准！系統處理中...</span>`;
+            
+            // 0.8秒後自動跳轉到步驟 4 (發送)
+            setTimeout(() => { 
+                showProcurementStep(4); 
+            }, 800);
+        }
+    </script>
 </body>
 </html>
