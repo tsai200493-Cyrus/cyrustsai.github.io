@@ -1,8 +1,5 @@
- Hi there, I'm Cheng-Yu Tsai 👋
-### 🚀 具備工程思維的 Citizen Developer | 營運流程自動化專家
-
-[![Portfolio](https://tsai200493-cyrus.github.io/cyrustsai.github.io/)](https://tsai200493-cyrus.github.io/cyrustsai.github.io/) 
-*(👆 點擊上方按鈕，進入我的互動式數據儀表板與自動化成果展示)*
+ Hi there, I'm Cheng-Yu 👋
+### 具備工程思維的 Citizen Developer | 營運流程自動化專家
 
 ---
 
@@ -48,7 +45,6 @@
 | 領域 | 工具與技術 |
 | :--- | :--- |
 | **自動化腳本** | Python (Selenium, Pandas), Google Apps Script (GAS), VBA |
-| **系統串接** | RESTful API (ERP integration), Line Notify |
 | **資料視覺化** | Dynamic Dashboards (Excel/Sheets) |
 | **AI 應用** | Google Gemini API, Prompt Engineering (Vibe Coding) |
 
