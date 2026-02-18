@@ -1,7 +1,7 @@
  Hi there, I'm Cheng-Yu Tsai 👋
 ### 🚀 具備工程思維的 Citizen Developer | 營運流程自動化專家
 
-[![Portfolio](https://img.shields.io/badge/Interactive-Portfolio-blue?style=for-the-badge&logo=github)](https://你的帳號.github.io/) 
+[![Portfolio](https://tsai200493-cyrus.github.io/cyrustsai.github.io/)](https://tsai200493-cyrus.github.io/cyrustsai.github.io/) 
 *(👆 點擊上方按鈕，進入我的互動式數據儀表板與自動化成果展示)*
 
 ---
@@ -49,7 +49,7 @@
 | :--- | :--- |
 | **自動化腳本** | Python (Selenium, Pandas), Google Apps Script (GAS), VBA |
 | **系統串接** | RESTful API (ERP integration), Line Notify |
-| **資料視覺化** | Looker Studio, Dynamic Dashboards (Excel/Sheets) |
+| **資料視覺化** | Dynamic Dashboards (Excel/Sheets) |
 | **AI 應用** | Google Gemini API, Prompt Engineering (Vibe Coding) |
 
 ---
@@ -59,7 +59,7 @@
 如果您對我的自動化解決方案感興趣，或想了解如何透過技術優化營運流程，歡迎聯繫：
 
 *   📧 **Email:** tsai200493@gmail.com
-*   💻 **互動作品集:** [https://你的帳號.github.io/](https://你的帳號.github.io/)
+*   💻 **互動作品集:** [https://tsai200493-cyrus.github.io/cyrustsai.github.io/](https://tsai200493-cyrus.github.io/cyrustsai.github.io/)
 
 ---
 *本頁面透過 Vibe Coding 概念維護，持續更新我的數位轉型旅程。*
