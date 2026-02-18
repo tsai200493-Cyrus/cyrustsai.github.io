@@ -36,7 +36,53 @@
             overflow-x: hidden;
             scroll-behavior: smooth;
         }
+        /* --- 職涯 Timeline 基礎與動畫樣式 --- */
+        .timeline-item {
+            padding: 10px 40px;
+            position: relative;
+            width: 50%;
+            margin-top: -200px; /* 修正你提到的區塊間隙過大問題 */
+    
+            /* 初始狀態：隱藏 */
+            opacity: 0;
+            transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
 
+        /* 第一個項目不使用負邊距，避免撞到標題 */
+        .timeline-item:first-child {
+            margin-top: 0;
+        }
+
+        /* 左側方塊初始位置：偏左 */
+        .timeline-item.left {
+            left: 0;
+            transform: translateX(-50px);
+        }
+
+        /* 右側方塊初始位置：偏右 */
+        .timeline-item.right {
+            left: 50%;
+            transform: translateX(50px);
+        }
+
+        /* 當 JS 偵測到滾動進入畫面時，觸發 .show */
+        .timeline-item.show {
+            opacity: 1;
+            transform: translateX(0) translateY(0);
+        }
+
+        /* 手機版適應：統一從下方浮現 */
+        @media screen and (max-width: 600px) {
+            .timeline-item {
+                width: 100%;
+                left: 0 !important;
+                margin-top: -20px;
+                transform: translateY(30px) !important;
+            }
+            .timeline-item.show {
+                transform: translateY(0) !important;
+            }
+        }
         .container {
             max-width: 1100px; 
             margin: 0 auto; 
@@ -302,7 +348,7 @@
         </header>
 
         <!-- 2. 職涯地圖 -->
-        <h2 class="section-title"><i class="fa-solid fa-map-location-dot"></i> 職涯發展地圖</h2>
+        <h2 class="section-title"><i class="fa-solid fa-map-location-dot"></i> 職涯經驗地圖</h2>
         <div class="timeline" id="timeline">
             <div class="timeline-item left">
                 <div class="content">
@@ -337,8 +383,12 @@
 
         <!-- 3. 專案 A: 營運動態交叉分析戰情室 -->
         <h2 class="section-title"><i class="fa-solid fa-chart-pie"></i> 專案一：《數據動態儀表板：跨通路與產品績效分析》</h2>
-<p> 專案目的： 實現大規模資料自動化清理與多維度整併，建構即時動態儀表板。透過交叉分析工具協助管理層精準掌握營運現況，加速組織調整並提升決策效率。 </p>
         <div class="project-card">
+            <p><strong>【問題】解決決策滯後與經驗主義的行銷資源錯位</strong></p>
+<p>面對電商平台與實體通路破碎的資料格式，原需耗費大量人工手動整併，導致管理層無法獲得即時的市場反饋。此外，品牌長期依賴傳統經驗（如開學季為銷售高峰）配置行銷資源，缺乏長週期數據驗證，存在潛在的檔期配置風險。</p>
+
+<p><strong>【行動】建構全自動數據管線與互動式分析架構</strong></p>
+<p>運用 Excel 數據清洗技術與自動化邏輯，實現大規模異質資料的即時整合。構建多層次交叉篩選器（如本 Demo 所示），實現從通路、品牌、產品類別至時間軸的即時深度鑽取。同時設計趨勢監控與績效排行模組，讓使用者能透過一鍵操作快速識別市場異動。</p>
             <div class="filter-row">
                 <div class="filter-group">
                     <label><i class="fa-solid fa-store"></i> 銷售通路</label>
@@ -372,13 +422,20 @@
                     <div class="chart-wrapper" style="height: 250px;"><canvas id="barRankChart"></canvas></div>
                 </div>
             </div>
-            <p style="font-size: 0.8rem; color: var(--text-sub); margin-top: 20px;">* 技術亮點：原生 JavaScript 數據引擎，不依賴後端即可進行多維度交叉過濾。</p>
+<p><strong>【成效】</strong></p>
+<p><strong> ✅精準修正資源配置：</strong>透過長週期數據追蹤，<strong>發現特定產品之銷售巔峰實為「寒暑假」而非傳統認知的「開學季」</strong>。此洞察成功修正了品牌長期以來的行銷資源配置，確保資源集中於真正的高轉換時段。</p>
+<p><strong> ✅決策效率極大化：</strong>將原本繁瑣的人工報表製作流程，優化為<strong>一鍵式即時更新與分析</strong>，大幅提升組織對市場變化的反應速度。</p>
+<p><strong> ✅推動業務成長：</strong>成功識別弱勢平台與潛力產品，協助團隊訂定競爭策略，<strong>有效帶動該職務期間之業務成長</strong>。</p>
         </div>
 
         <!-- 4. 專案 B: AI 自動名片識別 -->
-        <h2 class="section-title"><i class="fa-solid fa-address-card"></i> 專案二：AI 自動名片識別系統</h2>
+        <h2 class="section-title"><i class="fa-solid fa-address-card"></i> 專案二：《AI 自動識別名片：打造 24 小時機器助理》</h2>
         <div class="project-card" style="border-left-color: var(--success-color);">
-            <p><strong>專案目的：</strong> 運用 Gemini API 實現大規模非結構化影像識別，將逾 6,000 張實體名片自動轉化為結構化數據。</p>
+<p><strong>【問題】解決非結構化影像積壓與高昂的人工輸入成本</strong></p>
+<p>面對超過 6,000 張 累積已久的實體名片，若採用傳統人工鍵檔方式，不僅需耗費數週的作業時間，且面臨特殊排版與多國語言難以精準辨識的技術瓶頸，導致企業人脈資產無法即時數位化利用。</p>
+
+<p><strong>【行動】建構基於 Gemini API 的 AI 自動化識別系統</strong></p>
+<p>串接 Gemini API 進行視覺辨識與語意分析，精準提取姓名、職稱、聯繫方式等關鍵資訊。開發自動化資料管道，實作批次處理邏輯以穩定應對大規模影像請求，並將提取之數據自動寫入雲端資料庫，徹底取代手動輸入流程。</p>
             
             <div class="card-demo-container">
                 <div style="flex: 1; display:flex; flex-direction:column; align-items:center;">
@@ -407,13 +464,20 @@
                     </div>
                     <p id="scanPlaceholder" style="color: #64748b; font-size: 0.8rem; margin-top: 20px;">等待掃描指令...</p>
                 </div>
-            </div>
+            </div><p><strong>【成效 】</strong></p>
+<p><strong>✅效率極大化：</strong>成功自動化處理 6,000+ 張 名片，將原本耗時數週的作業規模縮短，節省逾 95% 人力成本，並達成每日自動識別 500 張之高效率。</p>
+<p><strong>✅數據準確性：</strong>利用大語言模型 (LLM) 的語意理解能力，有效解決傳統 OCR 無法辨識的複雜排版問題，確保資料處理的高精確度與即時性。</p>
+<p><strong>✅商業價值體現：</strong>該自動化系統因其高度穩定性與實用價值，後續成功轉售予外部企業使用，證明了技術方案具備實質市場產值。</p>
         </div>
 
         <!-- 5. 專案 C: Python 20萬筆數據處理 (已優化) -->
-        <h2 class="section-title"><i class="fa-brands fa-python"></i> 專案三：Python 海量數據自動整合</h2>
+        <h2 class="section-title"><i class="fa-brands fa-python"></i> 專案三：《Python 批次腳本：實現 20 萬筆數據自動試算》</h2>
         <div class="project-card" style="border-left-color: var(--python-color);">
-            <p><strong>挑戰：</strong> 處理分散在 70+ 個 Excel 檔案中的 200,000 筆原始數據。</p>
+<p><strong>【問題】解決跨檔案巨量數據整併與高耗時的人工比價成本</strong></p>
+<p>面對超過 70 份破碎的 Excel 報表與逾 20 萬筆原始數據，傳統人工剪貼或 Excel 函數已難以負荷其計算量。高密度的手動對價流程不僅耗費數小時工時，且極易產生人為疏失，導致缺乏準確度。</p>
+
+<p><strong>【行動】建構 Python 自動化批次處理與數據清洗管線</strong></p>
+<p>運用 Python 開發批次處理腳本，實現自動化掃描指定資料夾內所有檔案。針對跨檔案數據進行深度清洗、精準排除重複值，並設計邏輯模型將破碎數據整併為結構化比價看板。</p>
             <div id="python-batch-zone" onclick="startPythonAnimation()">
                 <!-- 背景亂碼 -->
                 <div class="chaos-bg" id="chaos-bg"></div>
@@ -457,54 +521,67 @@
                     <i class="fa-solid fa-play"></i> 點擊執行自動化腳本
                 </div>
             </div>
+<p><strong>【成效】</strong></p>
+<p><strong> ✅極速效率轉化：</strong>成功將原本需耗費整天的繁瑣計算工程，壓縮至 3 分鐘內自動完成。而整體腳本開發與驗證僅花費約 1 至 2 小時 即完成上線。</p>
+<p><strong> ✅技術突破與產值：</strong>透過 Python 成功解決了傳統 Excel 函數無法處理的複雜數據整合難題。在大幅提升資料準確性的同時，確保了成本試算與比價模型的即時性，支援團隊做出更精準的決策。</p>
         </div>
 
-        <!-- 6. 專案 D: 採購閉環預測系統 (Updated based on user request) -->
-        <h2 class="section-title"><i class="fa-solid fa-arrows-spin"></i> 專案四：採購閉環決策系統</h2>
-        <div class="project-card" style="border-left-color: var(--warning-color);">
-            <div class="procurement-interactive">
-                <p style="color: var(--text-sub); margin-bottom: 30px; font-size: 0.9rem;">
-                    <i class="fa-solid fa-hand-pointer"></i> 點擊外圍圓圈步驟，查看自動化邏輯與模擬數據
-                </p>
+    <!-- 專案 D: 採購閉環預測系統 -->
+    <h2 class="section-title"><i class="fa-solid fa-arrows-spin"></i> 專案四：《採購自動化系統：從採購預測到在途追蹤》</h2>
+<p><strong>【問題】解決傳統採購預測偏差與庫存資訊滯後問題</strong></p>
+<p>面對人工估算導致的庫存壓力，長期存在「旺季缺貨、淡季庫壓」的營運風險。此外，由於國外廠商回傳數據缺乏即時同步機制，導致採購決策者無法準確掌握在途貨品數量，造成採購評估過程耗時且易生人為疏失。</p>
 
-                <div class="loop-container">
-                    <!-- 背景連接虛線 (SVG) -->
-                    <svg class="loop-svg" viewBox="0 0 600 400">
-                        <path d="M300,45 Q550,45 550,200 Q550,355 300,355 Q50,355 50,200 Q50,45 300,45" 
-                              fill="none" stroke="#e2e8f0" stroke-width="2" stroke-dasharray="10,10" />
-                    </svg>
+<p><strong>【行動】建構整合 ERP 與動態參數的自動化採購決策模型</strong></p>
+<p>串接 ERP 與 Google Sheets API，導入季節性加權參數建立動態預測演算模型，實現每月自動產出最佳採購建議，並開發一鍵觸發功能自動發送供應商訂單。同時運用 Google Apps Script (GAS) 處理跨國供應商數據，自動回寫「在途清單」並即時併入採購預測系統，確保庫存資訊同步。</p>
+    <div class="project-card">
+        <div class="procurement-interactive">
+            <p style="color: var(--text-sub); margin-bottom: 30px; font-size: 0.9rem; text-align: center;">
+                <i class="fa-solid fa-sync fa-spin"></i> 系統自動演示中：模擬 ERP 數據與預測模型之閉環邏輯
+            </p>
 
-                    <!-- 5個步驟節點 -->
-                    <div class="step-node node-1 active" onclick="showProcurementStep(1)">
-                        <i class="fa-solid fa-database"></i>
-                        <span>數據自動寫入</span>
-                    </div>
-                    <div class="step-node node-2" onclick="showProcurementStep(2)">
-                        <i class="fa-solid fa-chart-line"></i>
-                        <span>預測演算</span>
-                    </div>
-                    <div class="step-node node-3" onclick="showProcurementStep(3)">
-                        <i class="fa-solid fa-user-check"></i>
-                        <span>決策審核</span>
-                    </div>
-                    <div class="step-node node-4" onclick="showProcurementStep(4)">
-                        <i class="fa-solid fa-paper-plane"></i>
-                        <span>一鍵發送</span>
-                    </div>
-                    <div class="step-node node-5" onclick="showProcurementStep(5)">
-                        <i class="fa-solid fa-truck-fast"></i>
-                        <span>在途追蹤</span>
-                    </div>
+            <div class="loop-container">
+                <!-- 背景連接虛線 (SVG) -->
+                <svg class="loop-svg" viewBox="0 0 600 400">
+                    <path d="M300,45 Q550,45 550,200 Q550,355 300,355 Q50,355 50,200 Q50,45 300,45" 
+                          fill="none" stroke="#cbd5e1" stroke-width="2" stroke-dasharray="8,8" />
+                </svg>
 
-                    <!-- 中央動態顯示區 -->
-                    <div class="loop-center">
-                        <div id="step-animation" style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center;">
-                            <!-- 內容會透過 JS 動態替換 -->
-                        </div>
+                <!-- 5個步驟節點 -->
+                <div class="step-node node-1 active" onclick="manualSwitch(1)">
+                    <i class="fa-solid fa-database"></i>
+                    <span>數據自動寫入</span>
+                </div>
+                <div class="step-node node-2" onclick="manualSwitch(2)">
+                    <i class="fa-solid fa-chart-line"></i>
+                    <span>預測演算</span>
+                </div>
+                <div class="step-node node-3" onclick="manualSwitch(3)">
+                    <i class="fa-solid fa-user-check"></i>
+                    <span>決策審核</span>
+                </div>
+                <div class="step-node node-4" onclick="manualSwitch(4)">
+                    <i class="fa-solid fa-paper-plane"></i>
+                    <span>一鍵發送</span>
+                </div>
+                <div class="step-node node-5" onclick="manualSwitch(5)">
+                    <i class="fa-solid fa-truck-fast"></i>
+                    <span>在途追蹤</span>
+                </div>
+
+                <!-- 中央動態顯示區 -->
+                <div class="loop-center">
+                    <div id="step-animation" style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center;">
+                        <!-- 內容由 JS 動態替換 -->
                     </div>
                 </div>
             </div>
         </div>
+<p><strong>【成效】</strong></p>
+<p><strong>✅決策效率極大化：</strong>透過自動化模型取代人工估算，成功<strong>縮短 90% 以上的採購評估時間</strong>，實現從預測到下單的敏捷營運。</p>
+<p><strong>✅庫存資訊透明化：</strong>建立在途數量即時追蹤機制，大幅提升供應鏈的可視性。每日自動化處理庫存資訊，完全消除人為失誤疑慮，達成精準的庫存水位管理。</p>
+<p><strong>✅低成本高效運作：</strong>利用 GAS 與雲端協作工具實現高效流程整合，確保企業在無需高額系統授權費的情況下，達成「旺季不缺貨、淡季無庫壓」之營運目標。</p>
+    </div>
+
 
         <!-- Footer -->
         <footer style="text-align:center; padding: 40px 0; border-top: 1px solid #e2e8f0; color: var(--text-sub);">
@@ -528,14 +605,27 @@
         };
 
         // --- B. 職涯 Timeline 動畫 ---
-        function initTimelineObserver() {
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) entry.target.classList.add('show');
-                });
-            }, { threshold: 0.2 });
-            document.querySelectorAll('.timeline-item').forEach(item => observer.observe(item));
-        }
+function initTimelineObserver() {
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            // 當元素進入畫面比例達到 20% 時觸發
+            if (entry.isIntersecting) {
+                entry.target.classList.add('show');
+            }
+        });
+    }, { 
+        threshold: 0.2 // 靈敏度設定
+    });
+
+    // 選取所有時間軸項目進行監控
+    const items = document.querySelectorAll('.timeline-item');
+    items.forEach(item => observer.observe(item));
+}
+
+// 關鍵步驟：確保網頁加載完成後執行啟動函式
+document.addEventListener('DOMContentLoaded', () => {
+    initTimelineObserver();
+});
 
         // --- C. 營運戰情室邏輯 ---
         const rawSalesData = [
@@ -616,11 +706,11 @@
             
             rows.forEach(r => r.classList.remove('visible'));
             card.classList.add('scanning');
-            placeholder.innerText = "Gemini API 正在分析影像語意...";
+            placeholder.innerText = "Gemini API 正在分析名片...";
             
             setTimeout(() => {
                 card.classList.remove('scanning');
-                placeholder.innerText = "數據解析完成，已同步至 ERP。";
+                placeholder.innerText = "名片解析完成，已同步至資料庫。";
                 rows.forEach((row, index) => {
                     setTimeout(() => { row.classList.add('visible'); }, index * 200);
                 });
@@ -742,19 +832,20 @@
         const stepsData = {
             1: {
                 title: "數據自動寫入",
+                duration: 3500,
                 content: `
                     <div style="text-align:center;">
                         <i class="fa-solid fa-sync sync-animation"></i>
-                        <p style="font-size:0.9rem; margin-top:15px; font-weight:bold; color:#1e293b;">ERP 數據同步中...</p>
+                        <p style="font-size:0.9rem; margin-top:10px; font-weight:bold;">ERP 數據同步中...</p>
                         <p style="font-size:0.75rem; color:#64748b;">API 已串接庫存與銷售明細</p>
                     </div>`
             },
             2: {
                 title: "預測演算",
-                // 這裡預留 canvas 給 Chart.js
+                duration: 5000,
                 content: `
                     <div style="width:100%; height:140px; display:flex; flex-direction:column; align-items:center;">
-                        <p style="font-size:0.8rem; color:var(--primary-color); margin:0 0 5px 0;">未來 6 個月需求預測</p>
+                        <p style="font-size:0.8rem; color:var(--primary-color); margin-bottom:5px;">未來 12 個月需求預測</p>
                         <div style="flex:1; width:100%; position:relative;">
                             <canvas id="miniChart"></canvas>
                         </div>
@@ -762,58 +853,67 @@
             },
             3: {
                 title: "決策審核",
+                duration: 4000,
                 content: `
                     <div style="text-align:center;">
                         <p style="font-size:0.9rem; margin:0; color:#64748b;">系統建議採購量</p>
                         <p style="font-size:1.8rem; margin:5px 0; color:var(--primary-color); font-weight:800;">500 <span style="font-size:1rem">Unit</span></p>
-                        <button class="btn-confirm" onclick="confirmPurchase()">
+                        <button class="btn-confirm" id="btn-purchase" onclick="confirmPurchase()">
                             <i class="fa-regular fa-circle-check"></i> 確認採購
                         </button>
-                        <div id="confirm-status" style="height:20px; margin-top:5px;"></div>
+                        <div id="confirm-status" style="height:20px; margin-top:5px; font-size:0.75rem;"></div>
                     </div>`
             },
             4: {
                 title: "一鍵發送",
+                duration: 3500,
                 content: `
                     <div style="text-align:center;">
                         <i class="fa-solid fa-envelope-circle-check" style="font-size:3rem; color:var(--primary-color);"></i>
-                        <p style="font-size:0.9rem; margin-top:15px; font-weight:bold;">訂單已發送</p>
-                        <p style="font-size:0.75rem; color:#64748b;">Apple供應商窗口: joyce@apple.com,<br>Google供應商窗口: jay@Google.com</p>
+                        <p style="font-size:0.9rem; margin-top:10px; font-weight:bold;">訂單已發送</p>
+                        <p style="font-size:0.7rem; color:#64748b;">Apple供應商窗口: joyce@apple.com,<br>Google供應商窗口: jay@Google.com</p>
                     </div>`
             },
             5: {
                 title: "在途追蹤 & 閉環",
+                duration: 4000,
                 content: `
                     <div style="text-align:center;">
                         <i class="fa-solid fa-truck-arrow-right" style="font-size:2.5rem; color:var(--success-color);"></i>
-                        <p style="font-size:0.9rem; margin-top:15px;">在途庫存: <b>500</b></p>
-                        <p style="font-size:0.75rem; color:#64748b;">數據回寫完成，修正下輪參數</p>
+                        <p style="font-size:0.9rem; margin-top:10px;">在途庫存: <b>500</b></p>
+                        <p style="font-size:0.7rem; color:#64748b;">數據回寫完成，修正下輪參數</p>
                     </div>`
             }
         };
 
+        let currentStep = 1;
+        let cycleTimer;
+
         // 切換步驟的主要函數
         function showProcurementStep(stepId) {
-            // 1. 更新節點樣式 (移除舊的 active，新增新的 active)
+            currentStep = stepId;
+            // 1. 更新節點樣式
             document.querySelectorAll('.step-node').forEach(node => node.classList.remove('active'));
-            document.querySelector(`.node-${stepId}`).classList.add('active');
+            const targetNode = document.querySelector(`.node-${stepId}`);
+            if (targetNode) targetNode.classList.add('active');
 
             // 2. 更新中央區域內容
             const container = document.getElementById('step-animation');
-            container.innerHTML = stepsData[stepId].content;
+            container.style.opacity = 0;
+            
+            setTimeout(() => {
+                container.innerHTML = stepsData[stepId].content;
+                container.style.opacity = 1;
 
-            // 3. 特殊處理：如果是步驟 2，需要繪製圖表
-            if (stepId === 2) {
-                // 使用 setTimeout 確保 DOM 已經更新，才能抓到 canvas 元素
-                setTimeout(() => {
+                // 3. 特殊處理：如果是步驟 2，繪製圖表
+                if (stepId === 2) {
                     const ctx = document.getElementById('miniChart').getContext('2d');
                     new Chart(ctx, {
                         type: 'line',
                         data: {
                             labels: ['1月', '2月', '3月', '4月', '5月', '6月'],
                             datasets: [{
-                                label: '預測量',
-                                data: [6, 8, 15,18,10,25],
+                                data: [6, 8, 15, 18, 10, 25],
                                 borderColor: '#2563eb',
                                 backgroundColor: 'rgba(37, 99, 235, 0.1)',
                                 borderWidth: 2,
@@ -826,26 +926,55 @@
                             responsive: true,
                             maintainAspectRatio: false,
                             plugins: { legend: { display: false } },
-                            scales: {
-                                x: { display: false }, 
-                                y: { display: false, min: 0 } 
-                            }
+                            scales: { x: { display: false }, y: { display: false, min: 0 } }
                         }
                     });
-                }, 50);
-            }
+                }
+
+                // 4. 特殊處理：如果是步驟 3，模擬自動點擊
+                if (stepId === 3) {
+                    setTimeout(() => {
+                        confirmPurchase();
+                    }, 1500); // 顯示建議後 1.5 秒自動核准
+                }
+            }, 300);
         }
 
         // 模擬按鈕點擊後的確認動畫
         function confirmPurchase() {
             const status = document.getElementById('confirm-status');
-            status.innerHTML = `<span style="color:var(--success-color); font-size:0.8rem;">已核准！系統處理中...</span>`;
-            
-            // 0.8秒後自動跳轉到步驟 4 (發送)
-            setTimeout(() => { 
-                showProcurementStep(4); 
-            }, 800);
+            const btn = document.getElementById('btn-purchase');
+            if (status) status.innerHTML = `<span style="color:var(--success-color);">● 老闆已核准</span>`;
+            if (btn) {
+                btn.style.background = "#059669";
+                btn.innerHTML = `<i class="fa-solid fa-check-double"></i> 核准完成`;
+            }
         }
+
+        // 自動循環邏輯
+        function startAutoCycle() {
+            showProcurementStep(currentStep);
+            
+            cycleTimer = setTimeout(() => {
+                currentStep = currentStep >= 5 ? 1 : currentStep + 1;
+                startAutoCycle();
+            }, stepsData[currentStep].duration);
+        }
+
+        // 手動點擊切換 (點擊後會重新計時)
+        function manualSwitch(id) {
+            clearTimeout(cycleTimer);
+            showProcurementStep(id);
+            cycleTimer = setTimeout(() => {
+                currentStep = id >= 5 ? 1 : id + 1;
+                startAutoCycle();
+            }, stepsData[id].duration);
+        }
+        // 初始化
+        document.addEventListener('DOMContentLoaded', () => {
+            startAutoCycle();
+            initTimelineObserver();
+        });
     </script>
 </body>
 </html>
