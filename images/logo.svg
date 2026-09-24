@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <!-- 頭像 logo（頭部特寫）：依 images/avatar.jpg 的像素座標繪製，再縮放裁切進 100×100 -->
+  <defs><clipPath id="frame"><rect width="100" height="100" rx="22"/></clipPath></defs>
+  <rect width="100" height="100" rx="22" fill="#2350b8"/>
+  <g clip-path="url(#frame)">
+    <g transform="scale(.2) translate(-108 -40)">
+      <path d="M280 505C220 560 90 600 0 640L-20 900H740L719 640C630 600 500 560 436 505Z" fill="#6f7580"/>
+      <path d="M300 440L292 620Q358 650 424 620L416 440Z" fill="#e3bda5"/>
+      <path d="M283 612Q358 645 433 612L425 900H291Z" fill="#f7f5ef"/>
+      <path d="M265 500L283 615L305 900H210L155 700Z" fill="#5d636d"/>
+      <path d="M451 500L433 615L411 900H506L561 700Z" fill="#5d636d"/>
+      <ellipse cx="226" cy="338" rx="20" ry="42" fill="#ecc9b2"/>
+      <ellipse cx="490" cy="338" rx="20" ry="42" fill="#ecc9b2"/>
+      <path d="M240 250C240 170 300 140 358 140C416 140 476 170 476 250C478 335 470 400 446 448C422 496 392 520 358 520C324 520 294 496 270 448C246 400 238 335 240 250Z" fill="#f2d4bf"/>
+      <path d="M238 305L222 300C203 280 196 240 198 205C202 128 262 68 358 68C452 68 516 122 520 205C522 245 514 282 496 302L480 306C478 290 474 275 465 266Q430 215 358 165Q286 215 252 266C244 276 240 290 238 305Z" fill="#1b2230"/>
+      <path d="M262 277Q295 267 332 272M384 272Q421 267 454 277" fill="none" stroke="#1b2230" stroke-width="11" stroke-linecap="round"/>
+      <ellipse cx="300" cy="306" rx="15" ry="9.5" fill="#1b2230"/>
+      <ellipse cx="416" cy="306" rx="15" ry="9.5" fill="#1b2230"/>
+      <path d="M336 450Q358 458 380 450" fill="none" stroke="#c4806f" stroke-width="7" stroke-linecap="round"/>
+    </g>
+  </g>
+</svg>
