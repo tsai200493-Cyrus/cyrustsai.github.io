@@ -418,7 +418,29 @@ mark.todo::before{content:"待確認";font:700 10px var(--mono);color:#a07c00;ma
 .pr .mono{font-size:11.5px;color:var(--blue);letter-spacing:.14em}
 .pr h3{margin:6px 0 10px;font-size:18px}
 .pr p{margin:0;font-size:14.5px;color:var(--ink-2)}
-.pr .eg{margin-top:14px;padding:12px 14px;background:var(--tint);border-radius:8px;font-size:14px;color:var(--ink-2);border-left:3px solid var(--amber);line-height:1.7}
+/* 原則卡的舉例 demo：01 AI 與我的對話、02 決策日記的一條、03 兩個 AI 互審＋測試環境關卡 */
+.pr-demo{margin-top:14px;padding:12px;background:var(--tint);border:1px solid var(--rule);border-radius:10px;font-size:13.5px;line-height:1.6;color:var(--ink-2)}
+.pr-demo .pd-msg{display:flex;gap:8px;align-items:flex-start}
+.pr-demo .pd-msg+.pd-msg{margin-top:8px}
+.pr-demo .pd-msg .who{width:26px;height:26px}
+.pr-demo .pd-msg .who.me svg{width:19px;height:19px}
+.pr-demo .pd-msg .who.ai svg{width:15px;height:15px}
+.pr-demo .pd-b{padding:6px 10px;border-radius:10px;background:var(--blue-soft);color:var(--ink)}
+.pr-demo .me .pd-b{background:var(--ink);color:#fff}
+.pr-demo.pd-log{border-left:3px solid var(--amber);border-radius:0 10px 10px 0}
+.pd-log .pd-h{font:600 11px var(--mono);letter-spacing:.1em;color:var(--amber)}
+.pd-log .pd-t{font-weight:700;color:var(--ink);margin:2px 0 6px}
+.pd-log .pd-t span{color:var(--blue);margin-left:4px}
+.pd-log dl{margin:0;display:grid;grid-template-columns:auto 1fr;gap:2px 10px}
+.pd-log dt{font:600 11.5px var(--mono);color:var(--ink-3);padding-top:2px}
+.pd-log dd{margin:0}
+.pr-demo .pd-duo{display:grid;grid-template-columns:1fr auto 1fr;gap:6px;align-items:stretch}
+.pr-demo .pd-role{border-radius:8px;padding:8px 9px;font-size:12.5px;line-height:1.5}
+.pr-demo .pd-role b{display:block;color:var(--ink);font-size:13px}
+.pr-demo .pd-role.ex{background:var(--blue-soft)}
+.pr-demo .pd-role.rv{background:#fff;border:1px solid var(--rule)}
+.pr-demo .pd-sw{align-self:center;color:var(--ink-3)}
+.pr-demo .pd-gate{margin-top:8px;padding:6px 10px;border-radius:8px;background:var(--green-soft);color:var(--green);font-size:12.5px;font-weight:600}
 
 /* ---------- 05 技能 ---------- */
 .skills{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
@@ -1096,9 +1118,9 @@ html.drawing,html.drawing *{cursor:url("data:image/svg+xml,%3Csvg xmlns='http://
     </ol>
 
     <div class="principles">
-      <div class="pr reveal"><span class="mono">PRINCIPLE 01</span><h3>前提由我負責</h3><p>前提錯了，後面推得再漂亮都是錯的。</p><div class="eg">AI 算出「週五失敗要等 72 小時才會被處理」。我指出營業所週末本來就不出貨，實際缺口是 0。</div></div>
-      <div class="pr reveal"><span class="mono">PRINCIPLE 02</span><h3>每個決定都寫下代價</h3><p>不只寫「為什麼這樣做」，也寫「這樣做會換來什麼問題」。</p><div class="eg">控制台累積 57 條決策紀錄，每條都有前提與已知代價；推翻舊決定時，也留下推翻的原因。</div></div>
-      <div class="pr reveal"><span class="mono">PRINCIPLE 03</span><h3>先求不出事，再求快</h3><p>自動化的價值，常常是「什麼都沒發生」。</p><div class="eg">測試帳號與測試庫優先；上線前新舊並行比對；每個自動化都保留退回人工的開關。</div></div>
+      <div class="pr reveal"><span class="mono">PRINCIPLE 01</span><h3>風險校正</h3><p>AI 會把理論上的風險都當真；哪些在業務上真的會發生，由我校正。</p><div class="pr-demo"><div class="pd-msg"><i class="who ai" role="img" aria-label="AI"><svg viewBox="0 0 24 24" fill="currentColor"><rect x="11" y="2.5" width="2" height="4.5" rx="1"/><circle cx="12" cy="2.6" r="1.7"/><rect x="3.5" y="6.5" width="17" height="13" rx="4"/><rect x="1" y="11" width="2" height="5" rx="1"/><rect x="21" y="11" width="2" height="5" rx="1"/><circle class="eye" cx="9" cy="12.3" r="1.7"/><circle class="eye" cx="15" cy="12.3" r="1.7"/><rect class="eye" x="9" y="15.7" width="6" height="1.7" rx=".85"/></svg></i><span class="pd-b">週五失敗要等 72 小時才會被處理，建議補強。</span></div><div class="pd-msg me"><i class="who me" role="img" aria-label="我"><svg viewBox="0 0 48 48" fill="currentColor" aria-hidden="true"><circle cx="24" cy="24" r="19"/><circle class="cut" cx="17.2" cy="21" r="2.9" fill="#fff"/><circle class="cut" cx="30.8" cy="21" r="2.9" fill="#fff"/><path class="cutS" d="M15.8 28.6q8.2 6.6 16.4 0" fill="none" stroke="#fff" stroke-width="3.4" stroke-linecap="round"/></svg></i><span class="pd-b">營業所週末本來就不出貨，實際缺口是 0。</span></div></div></div>
+      <div class="pr reveal"><span class="mono">PRINCIPLE 02</span><h3>決策日記</h3><p>雙面刃的問題沒有標準答案；寫下前提與代價，方向才不會反覆。</p><div class="pr-demo pd-log"><div class="pd-h">決策日記・共 57 條</div><div class="pd-t">API 放內網，還是雲端？<span>→ 內網</span></div><dl><dt>換到</dt><dd>免 VPN 申請、免資安審查</dd><dt>代價</dt><dd>外部連不進來，伺服器要自己顧</dd></dl></div></div>
+      <div class="pr reveal"><span class="mono">PRINCIPLE 03</span><h3>雙重把關</h3><p>先在測試環境跑通，再讓兩個 AI 互相檢查；意見不合由我拍板。</p><div class="pr-demo"><div class="pd-duo"><div class="pd-role ex"><b>執行 AI</b>最懂業務邏輯，負責寫與改</div><span class="pd-sw" aria-hidden="true">⇄</span><div class="pd-role rv"><b>審查 AI</b>專挑資安、風險邊界、死碼</div></div><div class="pd-gate">✓ 測試環境跑通，才上正式環境</div></div></div>
     </div>
   </div>
 </section>
