@@ -524,7 +524,8 @@ html.drawing,html.drawing *{cursor:url("data:image/svg+xml,%3Csvg xmlns='http://
   .mission{grid-template-columns:1fr;gap:10px;padding:24px}
   .wo-head,.wo-body{padding-left:18px;padding-right:18px}
   .wo-body{grid-template-columns:1fr}
-  .wo .stamp{top:56px;right:16px;font-size:13px}
+  .wo .stamp{top:8px;right:14px;font-size:12px;padding:2px 10px}
+  .wo-head span:last-child{visibility:hidden}
 }
 @media (max-width:480px){
   .id-card{grid-template-columns:96px 1fr}
@@ -1141,6 +1142,7 @@ html.drawing,html.drawing *{cursor:url("data:image/svg+xml,%3Csvg xmlns='http://
   if('IntersectionObserver' in window){
     var spy=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){$$('#steps a').forEach(function(a){a.classList.remove('active')}); var l=links[e.target.id]; if(l) l.classList.add('active');}});},{rootMargin:'-40% 0px -55% 0px'});
     Object.keys(links).forEach(function(id){var s=document.getElementById(id); if(s) spy.observe(s);});
+    spy.observe(document.getElementById('top'));
     var rv=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in'); rv.unobserve(e.target);}});},{rootMargin:'0px 0px -8% 0px'});
     $$('.reveal').forEach(function(el){rv.observe(el);});
   } else { $$('.reveal').forEach(function(el){el.classList.add('in');}); }
