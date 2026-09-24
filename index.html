@@ -447,6 +447,15 @@ mark.todo::before{content:"待確認";font:700 10px var(--mono);color:#a07c00;ma
 .sk{background:#fff;border:1px solid var(--rule);border-radius:var(--r);padding:20px}
 .sk h3{font-size:16px;margin:0 0 14px}
 .sk .ai{background:var(--blue-soft);border-color:#c9d6f3;color:var(--blue)}
+/* 開發機制：橫跨整排，三項各附一句說明 */
+.sk-wide{grid-column:1/-1}
+.mech{display:grid;grid-template-columns:1.3fr 1fr 1fr;gap:16px 28px}
+.mc b{display:block;font-size:15px;margin-bottom:8px}
+.mc p{margin:8px 0 0;font-size:14px;color:var(--ink-2);line-height:1.7}
+.mc+.mc{border-left:1px dashed var(--rule);padding-left:28px}
+.docflow{display:flex;flex-wrap:wrap;align-items:center;gap:6px}
+.docflow span{font-size:13px;font-weight:600;padding:3px 10px;border-radius:6px;background:var(--tint);border:1px solid var(--rule)}
+.docflow i{font-style:normal;color:var(--ink-3)}
 .sk-note{margin:20px 0 0;font-size:14.5px;color:var(--ink-2);background:#fff;border:1px dashed var(--rule);border-radius:10px;padding:12px 16px}
 
 /* ---------- 06 學歷 ---------- */
@@ -528,6 +537,8 @@ html.drawing,html.drawing *{cursor:url("data:image/svg+xml,%3Csvg xmlns='http://
   .cd-phone .empty{margin:6px 0 4px}
 }
 @media (max-width:720px){
+  .mech{grid-template-columns:1fr}
+  .mc+.mc{border-left:0;padding-left:0;border-top:1px dashed var(--rule);padding-top:16px}
   .wrap{padding:0 16px}
   .sec,.contact{padding:64px 0}
   .sec-head{margin-bottom:28px}
@@ -1120,7 +1131,7 @@ html.drawing,html.drawing *{cursor:url("data:image/svg+xml,%3Csvg xmlns='http://
     <div class="principles">
       <div class="pr reveal"><span class="mono">PRINCIPLE 01</span><h3>風險校正</h3><p>AI 會把理論上的風險都當真；哪些在業務上真的會發生，由我校正。</p><div class="pr-demo"><div class="pd-msg"><i class="who ai" role="img" aria-label="AI"><svg viewBox="0 0 24 24" fill="currentColor"><rect x="11" y="2.5" width="2" height="4.5" rx="1"/><circle cx="12" cy="2.6" r="1.7"/><rect x="3.5" y="6.5" width="17" height="13" rx="4"/><rect x="1" y="11" width="2" height="5" rx="1"/><rect x="21" y="11" width="2" height="5" rx="1"/><circle class="eye" cx="9" cy="12.3" r="1.7"/><circle class="eye" cx="15" cy="12.3" r="1.7"/><rect class="eye" x="9" y="15.7" width="6" height="1.7" rx=".85"/></svg></i><span class="pd-b">週五失敗要等 72 小時才會被處理，建議補強。</span></div><div class="pd-msg me"><i class="who me" role="img" aria-label="我"><svg viewBox="0 0 48 48" fill="currentColor" aria-hidden="true"><circle cx="24" cy="24" r="19"/><circle class="cut" cx="17.2" cy="21" r="2.9" fill="#fff"/><circle class="cut" cx="30.8" cy="21" r="2.9" fill="#fff"/><path class="cutS" d="M15.8 28.6q8.2 6.6 16.4 0" fill="none" stroke="#fff" stroke-width="3.4" stroke-linecap="round"/></svg></i><span class="pd-b">營業所週末本來就不出貨，實際缺口是 0。</span></div></div></div>
       <div class="pr reveal"><span class="mono">PRINCIPLE 02</span><h3>決策日記</h3><p>雙面刃的問題沒有標準答案；寫下前提與代價，方向才不會反覆。</p><div class="pr-demo pd-log"><div class="pd-h">決策日記・共 57 條</div><div class="pd-t">API 放內網，還是雲端？<span>→ 內網</span></div><dl><dt>換到</dt><dd>免 VPN 申請、免資安審查</dd><dt>代價</dt><dd>外部連不進來，伺服器要自己顧</dd></dl></div></div>
-      <div class="pr reveal"><span class="mono">PRINCIPLE 03</span><h3>雙重把關</h3><p>先在測試環境跑通，再讓兩個 AI 互相檢查；意見不合由我拍板。</p><div class="pr-demo"><div class="pd-duo"><div class="pd-role ex"><b>執行 AI</b>最懂業務邏輯，負責寫與改</div><span class="pd-sw" aria-hidden="true">⇄</span><div class="pd-role rv"><b>審查 AI</b>專挑資安、風險邊界、死碼</div></div><div class="pd-gate">✓ 測試環境跑通，才上正式環境</div></div></div>
+      <div class="pr reveal"><span class="mono">PRINCIPLE 03</span><h3>AI 分權</h3><p>寫的 AI 和審的 AI 分開，各守一邊；意見不合由我拍板，測試環境跑通才上線。</p><div class="pr-demo"><div class="pd-duo"><div class="pd-role ex"><b>執行 AI</b>最懂業務邏輯，負責寫與改</div><span class="pd-sw" aria-hidden="true">⇄</span><div class="pd-role rv"><b>審查 AI</b>專挑資安、風險邊界、死碼</div></div><div class="pd-gate">✓ 測試環境跑通，才上正式環境</div></div></div>
     </div>
   </div>
 </section>
@@ -1133,9 +1144,14 @@ html.drawing,html.drawing *{cursor:url("data:image/svg+xml,%3Csvg xmlns='http://
       <div class="sk reveal"><h3>自動化與腳本</h3><div class="tags"><span class="tag">Python</span><span class="tag">Playwright</span><span class="tag">Selenium</span><span class="tag">Google Apps Script</span><span class="tag">Excel VBA</span></div></div>
       <div class="sk reveal"><h3>資料與串接</h3><div class="tags"><span class="tag">REST API</span><span class="tag">FastAPI</span><span class="tag">SQL Server</span><span class="tag">Google Sheets API</span><span class="tag">pandas</span></div></div>
       <div class="sk reveal"><h3>系統落地</h3><div class="tags"><span class="tag">內網伺服器（VM）部署</span><span class="tag">Windows 排程</span><span class="tag">Git</span><span class="tag">Email 通知</span><span class="tag">Telegram Bot</span></div></div>
-      <div class="sk reveal"><h3>AI 協作</h3><div class="tags"><span class="tag ai">Claude Code</span><span class="tag ai">Gemini API</span><span class="tag ai">Prompt 設計</span><span class="tag ai">AI 審查流程</span></div></div>
+      <div class="sk reveal"><h3>AI 協作</h3><div class="tags"><span class="tag ai">Claude Code</span><span class="tag ai">Gemini API</span><span class="tag ai">Prompt 設計</span><span class="tag ai">AI 分權</span></div></div>
+      <div class="sk sk-wide reveal"><h3>大型專案的開發機制</h3><div class="mech">
+        <div class="mc"><b>四層專案文件</b><div class="docflow"><span>提案</span><i aria-hidden="true">→</i><span>計畫書</span><i aria-hidden="true">→</i><span>決策</span><i aria-hidden="true">→</i><span>維護與管理</span></div><p>計畫書只留待辦事項，原則上越寫越少；決策層就是決策日記。</p></div>
+        <div class="mc"><b>規格驅動開發</b><p>先把規格與邊界寫清楚，AI 依規格產出，驗收也照同一份規格。</p></div>
+        <div class="mc"><b>grep 註解標記</b><p>開發時註解統一用關鍵字標記，之後要修改、要從整個專案找資料，一搜就到。</p></div>
+      </div></div>
     </div>
-    <p class="sk-note reveal">以上都是實際交付、上線用過的工具。程式以 AI 協作產出，我負責規格、驗收與上線後的維運。</p>
+    <p class="sk-note reveal">以上都是實際交付、上線用過的工具與做法。程式以 AI 協作產出，我負責規格、驗收與上線後的維運。</p>
   </div>
 </section>
 
