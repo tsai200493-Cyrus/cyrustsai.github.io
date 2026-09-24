@@ -120,8 +120,6 @@ mark.todo::before{content:"待確認";font:700 10px var(--mono);color:#a07c00;ma
 .js .stamp.stamped{opacity:var(--op);animation:stampIn .5s cubic-bezier(.3,1.4,.5,1) both}
 @keyframes stampIn{0%{opacity:0;transform:rotate(var(--rot)) scale(2.4)}55%{opacity:var(--op);transform:rotate(var(--rot)) scale(.9)}78%{transform:rotate(var(--rot)) scale(1.06)}100%{opacity:var(--op);transform:rotate(var(--rot)) scale(1)}}
 .stamp.ok{color:var(--green)}
-/* 「閱」：已結案的經歷，紅色雙圈圓印，跟「在職中」一樣蓋在職稱旁邊 */
-.stamp.seal{--rot:-12deg;--op:.88;display:inline-grid;place-items:center;width:40px;height:40px;padding:0;border-radius:50%;border-width:2.2px;color:var(--red);font:700 19px/1 "DFKai-SB","BiauKai","STKaiti","KaiTi","Kaiti TC",serif;letter-spacing:0;box-shadow:inset 0 0 0 2.5px #fff,inset 0 0 0 3.8px currentColor}
 .stamp.done{color:var(--blue)}
 
 /* ---------- 01 關於我 ---------- */
@@ -679,7 +677,7 @@ html.drawing,html.drawing *{cursor:url("data:image/svg+xml,%3Csvg xmlns='http://
       <div class="job reveal">
         <div class="job-when"><span class="d">2025.06 — 2025.09</span></div>
         <div class="job-card">
-          <div class="job-top"><h3>運營管理師</h3><span class="stamp seal" role="img" aria-label="已閱">閱</span></div>
+          <div class="job-top"><h3>運營管理師</h3><span class="stamp done">已交接</span></div>
           <p class="job-co">安永金融科技</p>
           <div class="job-groups">
             <div class="jg"><h4>AI 名片識別</h4><p>串接 Gemini API 自動處理 6,000+ 張名片並寫入資料庫，每日可處理 500 張；系統後續轉售外部企業。</p></div>
@@ -693,7 +691,7 @@ html.drawing,html.drawing *{cursor:url("data:image/svg+xml,%3Csvg xmlns='http://
       <div class="job reveal">
         <div class="job-when"><span class="d">2021.06 — 2025.06</span></div>
         <div class="job-card">
-          <div class="job-top"><h3>業務助理</h3><span class="stamp seal" role="img" aria-label="已閱">閱</span></div>
+          <div class="job-top"><h3>業務助理</h3><span class="stamp done">已交接</span></div>
           <p class="job-co">思博特有限公司<span class="sub">後期主力轉為流程自動化</span></p>
           <div class="job-groups">
             <div class="jg"><h4>庫存與採購自動化</h4><p>跨平台庫存自動更新、國外採購流程全自動化，節省 90% 工時；採購預測模型自動建議下單量（20 分鐘 → 3 分鐘）。</p></div>
