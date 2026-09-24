@@ -386,6 +386,21 @@ mark.todo::before{content:"待確認";font:700 10px var(--mono);color:#a07c00;ma
 .flow .n{font:600 11px var(--mono);color:var(--ink-3)}
 .flow b{display:block;font-size:15px;margin:3px 0 8px;line-height:1.35}
 .flow p{margin:8px 0 0;font-size:12.8px;color:var(--ink-2);line-height:1.6}
+/* 工作方式流程：滑鼠移到步驟上浮起、箭頭往下一步推；圖例可篩選對應的步驟（滑鼠移上去或點一下） */
+.flow li{transition:transform .25s ease,box-shadow .25s ease,border-color .25s ease,opacity .25s ease}
+.flow.filtering li:not(.match){opacity:.3}
+.flow.filtering li.match{transform:translateY(-4px);box-shadow:var(--shadow);border-color:var(--ink-3)}
+.legend{margin-left:-4px}
+.legend span{cursor:pointer;padding:3px 12px 3px 3px;border:1px solid transparent;border-radius:999px;transition:background .2s,border-color .2s,opacity .2s}
+.legend span.on{background:#fff;border-color:var(--rule)}
+.legend.filtering span:not(.on){opacity:.45}
+@media (hover:hover) and (min-width:721px){
+  .flow li:hover{transform:translateY(-4px);box-shadow:var(--shadow);border-color:var(--ink-3)}
+  .flow li:hover::after{animation:flowNudge .7s ease-in-out infinite}
+  .flow li:hover .who{animation:whoHop .45s ease}
+}
+@keyframes flowNudge{50%{transform:translateX(4px) rotate(45deg)}}
+@keyframes whoHop{40%{transform:translateY(-4px)}}
 .who{display:inline-grid;place-items:center;width:30px;height:30px;border-radius:50%;flex:none;vertical-align:middle}
 .who svg{width:17px;height:17px}
 .who.me{background:var(--ink);color:#fff}
@@ -1071,15 +1086,15 @@ html.drawing,html.drawing *{cursor:url("data:image/svg+xml,%3Csvg xmlns='http://
     <p class="quote reveal">程式大量由 AI 產出；<em>規格、邊界、出事怎麼處理，由我決定。</em></p>
     <p class="quote-sub reveal">因為那需要知道這些流程在業務上會怎麼壞、壞了誰會痛，這些 AI 不會知道。</p>
 
-    <div class="legend reveal"><span><i class="who me" role="img" aria-label="我負責" title="我負責"><svg viewBox="0 0 48 48" fill="currentColor" aria-hidden="true"><circle cx="24" cy="24" r="19"/><circle class="cut" cx="17.2" cy="21" r="2.9" fill="#fff"/><circle class="cut" cx="30.8" cy="21" r="2.9" fill="#fff"/><path class="cutS" d="M15.8 28.6q8.2 6.6 16.4 0" fill="none" stroke="#fff" stroke-width="3.4" stroke-linecap="round"/></svg></i>我負責</span><span><i class="who ai" role="img" aria-label="AI 負責" title="AI 負責"><svg viewBox="0 0 24 24" fill="currentColor"><rect x="11" y="2.5" width="2" height="4.5" rx="1"/><circle cx="12" cy="2.6" r="1.7"/><rect x="3.5" y="6.5" width="17" height="13" rx="4"/><rect x="1" y="11" width="2" height="5" rx="1"/><rect x="21" y="11" width="2" height="5" rx="1"/><circle class="eye" cx="9" cy="12.3" r="1.7"/><circle class="eye" cx="15" cy="12.3" r="1.7"/><rect class="eye" x="9" y="15.7" width="6" height="1.7" rx=".85"/></svg></i>AI 負責</span><span><i class="who both" role="img" aria-label="我和 AI 一起做" title="我＋AI 一起做"><svg viewBox="0 0 48 48" aria-hidden="true"><g fill="#2350b8"><rect x="32.6" y="3" width="2.6" height="6" rx="1.3"/><circle cx="33.9" cy="3.2" r="2.4"/><rect x="21" y="8.5" width="25" height="21" rx="5.5"/><rect x="44.6" y="15" width="3" height="7" rx="1.2"/></g><circle cx="31" cy="17.6" r="2.4" fill="#fff"/><circle cx="39.6" cy="17.6" r="2.4" fill="#fff"/><rect x="31.4" y="22.6" width="8" height="2.2" rx="1.1" fill="#fff"/><circle cx="17" cy="29" r="15" fill="#1b2230" stroke="#fff" stroke-width="2.6" paint-order="stroke"/><circle cx="11.8" cy="26.6" r="2.3" fill="#fff"/><circle cx="22.2" cy="26.6" r="2.3" fill="#fff"/><path d="M10.8 32.6q6.2 5 12.4 0" fill="none" stroke="#fff" stroke-width="2.7" stroke-linecap="round"/></svg></i>一起做</span></div>
+    <div class="legend reveal"><span><i class="who me" role="img" aria-label="我負責" title="我負責"><svg viewBox="0 0 48 48" fill="currentColor" aria-hidden="true"><circle cx="24" cy="24" r="19"/><circle class="cut" cx="17.2" cy="21" r="2.9" fill="#fff"/><circle class="cut" cx="30.8" cy="21" r="2.9" fill="#fff"/><path class="cutS" d="M15.8 28.6q8.2 6.6 16.4 0" fill="none" stroke="#fff" stroke-width="3.4" stroke-linecap="round"/></svg></i>我負責</span><span><i class="who ai" role="img" aria-label="AI 負責" title="AI 負責"><svg viewBox="0 0 24 24" fill="currentColor"><rect x="11" y="2.5" width="2" height="4.5" rx="1"/><circle cx="12" cy="2.6" r="1.7"/><rect x="3.5" y="6.5" width="17" height="13" rx="4"/><rect x="1" y="11" width="2" height="5" rx="1"/><rect x="21" y="11" width="2" height="5" rx="1"/><circle class="eye" cx="9" cy="12.3" r="1.7"/><circle class="eye" cx="15" cy="12.3" r="1.7"/><rect class="eye" x="9" y="15.7" width="6" height="1.7" rx=".85"/></svg></i>AI 負責</span><span><i class="who both" role="img" aria-label="我和 AI 協作" title="我＋AI 協作"><svg viewBox="0 0 48 48" aria-hidden="true"><g fill="#2350b8"><rect x="32.6" y="3" width="2.6" height="6" rx="1.3"/><circle cx="33.9" cy="3.2" r="2.4"/><rect x="21" y="8.5" width="25" height="21" rx="5.5"/><rect x="44.6" y="15" width="3" height="7" rx="1.2"/></g><circle cx="31" cy="17.6" r="2.4" fill="#fff"/><circle cx="39.6" cy="17.6" r="2.4" fill="#fff"/><rect x="31.4" y="22.6" width="8" height="2.2" rx="1.1" fill="#fff"/><circle cx="17" cy="29" r="15" fill="#1b2230" stroke="#fff" stroke-width="2.6" paint-order="stroke"/><circle cx="11.8" cy="26.6" r="2.3" fill="#fff"/><circle cx="22.2" cy="26.6" r="2.3" fill="#fff"/><path d="M10.8 32.6q6.2 5 12.4 0" fill="none" stroke="#fff" stroke-width="2.7" stroke-linecap="round"/></svg></i>協作</span></div>
     <ol class="flow reveal">
       <li><span class="n">01</span><div><b>需求訪談</b><i class="who me" role="img" aria-label="我負責" title="我負責"><svg viewBox="0 0 48 48" fill="currentColor" aria-hidden="true"><circle cx="24" cy="24" r="19"/><circle class="cut" cx="17.2" cy="21" r="2.9" fill="#fff"/><circle class="cut" cx="30.8" cy="21" r="2.9" fill="#fff"/><path class="cutS" d="M15.8 28.6q8.2 6.6 16.4 0" fill="none" stroke="#fff" stroke-width="3.4" stroke-linecap="round"/></svg></i></div><p>看第一線怎麼做、哪裡會出錯</p></li>
-      <li><span class="n">02</span><div><b>拆步驟、畫流程</b><i class="who both" role="img" aria-label="我和 AI 一起做" title="我＋AI 一起做"><svg viewBox="0 0 48 48" aria-hidden="true"><g fill="#2350b8"><rect x="32.6" y="3" width="2.6" height="6" rx="1.3"/><circle cx="33.9" cy="3.2" r="2.4"/><rect x="21" y="8.5" width="25" height="21" rx="5.5"/><rect x="44.6" y="15" width="3" height="7" rx="1.2"/></g><circle cx="31" cy="17.6" r="2.4" fill="#fff"/><circle cx="39.6" cy="17.6" r="2.4" fill="#fff"/><rect x="31.4" y="22.6" width="8" height="2.2" rx="1.1" fill="#fff"/><circle cx="17" cy="29" r="15" fill="#1b2230" stroke="#fff" stroke-width="2.6" paint-order="stroke"/><circle cx="11.8" cy="26.6" r="2.3" fill="#fff"/><circle cx="22.2" cy="26.6" r="2.3" fill="#fff"/><path d="M10.8 32.6q6.2 5 12.4 0" fill="none" stroke="#fff" stroke-width="2.7" stroke-linecap="round"/></svg></i></div><p>每一步寫清楚輸入與輸出</p></li>
+      <li><span class="n">02</span><div><b>拆步驟、畫流程</b><i class="who both" role="img" aria-label="我和 AI 協作" title="我＋AI 協作"><svg viewBox="0 0 48 48" aria-hidden="true"><g fill="#2350b8"><rect x="32.6" y="3" width="2.6" height="6" rx="1.3"/><circle cx="33.9" cy="3.2" r="2.4"/><rect x="21" y="8.5" width="25" height="21" rx="5.5"/><rect x="44.6" y="15" width="3" height="7" rx="1.2"/></g><circle cx="31" cy="17.6" r="2.4" fill="#fff"/><circle cx="39.6" cy="17.6" r="2.4" fill="#fff"/><rect x="31.4" y="22.6" width="8" height="2.2" rx="1.1" fill="#fff"/><circle cx="17" cy="29" r="15" fill="#1b2230" stroke="#fff" stroke-width="2.6" paint-order="stroke"/><circle cx="11.8" cy="26.6" r="2.3" fill="#fff"/><circle cx="22.2" cy="26.6" r="2.3" fill="#fff"/><path d="M10.8 32.6q6.2 5 12.4 0" fill="none" stroke="#fff" stroke-width="2.7" stroke-linecap="round"/></svg></i></div><p>每一步寫清楚輸入與輸出</p></li>
       <li><span class="n">03</span><div><b>定規格與邊界</b><i class="who me" role="img" aria-label="我負責" title="我負責"><svg viewBox="0 0 48 48" fill="currentColor" aria-hidden="true"><circle cx="24" cy="24" r="19"/><circle class="cut" cx="17.2" cy="21" r="2.9" fill="#fff"/><circle class="cut" cx="30.8" cy="21" r="2.9" fill="#fff"/><path class="cutS" d="M15.8 28.6q8.2 6.6 16.4 0" fill="none" stroke="#fff" stroke-width="3.4" stroke-linecap="round"/></svg></i></div><p>什麼情況要停、通知誰、能不能退回</p></li>
       <li><span class="n">04</span><div><b>產出程式</b><i class="who ai" role="img" aria-label="AI 負責" title="AI 負責"><svg viewBox="0 0 24 24" fill="currentColor"><rect x="11" y="2.5" width="2" height="4.5" rx="1"/><circle cx="12" cy="2.6" r="1.7"/><rect x="3.5" y="6.5" width="17" height="13" rx="4"/><rect x="1" y="11" width="2" height="5" rx="1"/><rect x="21" y="11" width="2" height="5" rx="1"/><circle class="eye" cx="9" cy="12.3" r="1.7"/><circle class="eye" cx="15" cy="12.3" r="1.7"/><rect class="eye" x="9" y="15.7" width="6" height="1.7" rx=".85"/></svg></i></div><p>依規格產出，不靠我手寫</p></li>
       <li><span class="n">05</span><div><b>兩輪審查</b><span class="who-seq"><i class="who ai" role="img" aria-label="AI 審查" title="AI 審查"><svg viewBox="0 0 24 24" fill="currentColor"><rect x="11" y="2.5" width="2" height="4.5" rx="1"/><circle cx="12" cy="2.6" r="1.7"/><rect x="3.5" y="6.5" width="17" height="13" rx="4"/><rect x="1" y="11" width="2" height="5" rx="1"/><rect x="21" y="11" width="2" height="5" rx="1"/><circle class="eye" cx="9" cy="12.3" r="1.7"/><circle class="eye" cx="15" cy="12.3" r="1.7"/><rect class="eye" x="9" y="15.7" width="6" height="1.7" rx=".85"/></svg></i><svg class="arr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg><i class="who me" role="img" aria-label="我裁決" title="我裁決"><svg viewBox="0 0 48 48" fill="currentColor" aria-hidden="true"><circle cx="24" cy="24" r="19"/><circle class="cut" cx="17.2" cy="21" r="2.9" fill="#fff"/><circle class="cut" cx="30.8" cy="21" r="2.9" fill="#fff"/><path class="cutS" d="M15.8 28.6q8.2 6.6 16.4 0" fill="none" stroke="#fff" stroke-width="3.4" stroke-linecap="round"/></svg></i></span></div><p>獨立審查員挑錯，有爭議由我決定</p></li>
-      <li><span class="n">06</span><div><b>測試驗證</b><i class="who both" role="img" aria-label="我和 AI 一起做" title="我＋AI 一起做"><svg viewBox="0 0 48 48" aria-hidden="true"><g fill="#2350b8"><rect x="32.6" y="3" width="2.6" height="6" rx="1.3"/><circle cx="33.9" cy="3.2" r="2.4"/><rect x="21" y="8.5" width="25" height="21" rx="5.5"/><rect x="44.6" y="15" width="3" height="7" rx="1.2"/></g><circle cx="31" cy="17.6" r="2.4" fill="#fff"/><circle cx="39.6" cy="17.6" r="2.4" fill="#fff"/><rect x="31.4" y="22.6" width="8" height="2.2" rx="1.1" fill="#fff"/><circle cx="17" cy="29" r="15" fill="#1b2230" stroke="#fff" stroke-width="2.6" paint-order="stroke"/><circle cx="11.8" cy="26.6" r="2.3" fill="#fff"/><circle cx="22.2" cy="26.6" r="2.3" fill="#fff"/><path d="M10.8 32.6q6.2 5 12.4 0" fill="none" stroke="#fff" stroke-width="2.7" stroke-linecap="round"/></svg></i></div><p>AI 先在測試環境跑，我用真實資料驗收</p></li>
-      <li><span class="n">07</span><div><b>上線、留紀錄</b><i class="who both" role="img" aria-label="我和 AI 一起做" title="我＋AI 一起做"><svg viewBox="0 0 48 48" aria-hidden="true"><g fill="#2350b8"><rect x="32.6" y="3" width="2.6" height="6" rx="1.3"/><circle cx="33.9" cy="3.2" r="2.4"/><rect x="21" y="8.5" width="25" height="21" rx="5.5"/><rect x="44.6" y="15" width="3" height="7" rx="1.2"/></g><circle cx="31" cy="17.6" r="2.4" fill="#fff"/><circle cx="39.6" cy="17.6" r="2.4" fill="#fff"/><rect x="31.4" y="22.6" width="8" height="2.2" rx="1.1" fill="#fff"/><circle cx="17" cy="29" r="15" fill="#1b2230" stroke="#fff" stroke-width="2.6" paint-order="stroke"/><circle cx="11.8" cy="26.6" r="2.3" fill="#fff"/><circle cx="22.2" cy="26.6" r="2.3" fill="#fff"/><path d="M10.8 32.6q6.2 5 12.4 0" fill="none" stroke="#fff" stroke-width="2.7" stroke-linecap="round"/></svg></i></div><p>我部署上線，AI 寫紀錄、我確認內容</p></li>
+      <li><span class="n">06</span><div><b>測試驗證</b><i class="who both" role="img" aria-label="我和 AI 協作" title="我＋AI 協作"><svg viewBox="0 0 48 48" aria-hidden="true"><g fill="#2350b8"><rect x="32.6" y="3" width="2.6" height="6" rx="1.3"/><circle cx="33.9" cy="3.2" r="2.4"/><rect x="21" y="8.5" width="25" height="21" rx="5.5"/><rect x="44.6" y="15" width="3" height="7" rx="1.2"/></g><circle cx="31" cy="17.6" r="2.4" fill="#fff"/><circle cx="39.6" cy="17.6" r="2.4" fill="#fff"/><rect x="31.4" y="22.6" width="8" height="2.2" rx="1.1" fill="#fff"/><circle cx="17" cy="29" r="15" fill="#1b2230" stroke="#fff" stroke-width="2.6" paint-order="stroke"/><circle cx="11.8" cy="26.6" r="2.3" fill="#fff"/><circle cx="22.2" cy="26.6" r="2.3" fill="#fff"/><path d="M10.8 32.6q6.2 5 12.4 0" fill="none" stroke="#fff" stroke-width="2.7" stroke-linecap="round"/></svg></i></div><p>AI 先在測試環境跑，我用真實資料驗收</p></li>
+      <li><span class="n">07</span><div><b>上線、留紀錄</b><i class="who both" role="img" aria-label="我和 AI 協作" title="我＋AI 協作"><svg viewBox="0 0 48 48" aria-hidden="true"><g fill="#2350b8"><rect x="32.6" y="3" width="2.6" height="6" rx="1.3"/><circle cx="33.9" cy="3.2" r="2.4"/><rect x="21" y="8.5" width="25" height="21" rx="5.5"/><rect x="44.6" y="15" width="3" height="7" rx="1.2"/></g><circle cx="31" cy="17.6" r="2.4" fill="#fff"/><circle cx="39.6" cy="17.6" r="2.4" fill="#fff"/><rect x="31.4" y="22.6" width="8" height="2.2" rx="1.1" fill="#fff"/><circle cx="17" cy="29" r="15" fill="#1b2230" stroke="#fff" stroke-width="2.6" paint-order="stroke"/><circle cx="11.8" cy="26.6" r="2.3" fill="#fff"/><circle cx="22.2" cy="26.6" r="2.3" fill="#fff"/><path d="M10.8 32.6q6.2 5 12.4 0" fill="none" stroke="#fff" stroke-width="2.7" stroke-linecap="round"/></svg></i></div><p>我部署上線，AI 寫紀錄、我確認內容</p></li>
     </ol>
 
     <div class="principles">
@@ -1230,6 +1245,38 @@ html.drawing,html.drawing *{cursor:url("data:image/svg+xml,%3Csvg xmlns='http://
   onView($$('.stamp'),function(st){st.classList.add('stamped');});
   /* 關於我能力卡圖示：捲到畫面才開始循環播放 */
   onView($$('.ability .ic'),function(ic){ic.classList.add('play');});
+  /* 工作方式：圖例篩選步驟（桌機滑鼠移上去預覽、點一下固定；手機點一下切換），滑鼠移到步驟上也會點亮對應的圖例 */
+  var flow=$('.flow'), legend=$('.legend');
+  if(flow&&legend){
+    var whoOf=function(el){return $$('.who',el).map(function(w){return ['me','ai','both'].filter(function(k){return w.classList.contains(k);})[0];});};
+    var steps=$$('li',flow), keys=$$('span',legend), pinned=null;
+    steps.forEach(function(li){li.setAttribute('data-who',whoOf(li).join(' '));});
+    var has=function(li,k){return li.getAttribute('data-who').split(' ').indexOf(k)>-1;};
+    function filter(k){
+      flow.classList.toggle('filtering',!!k); legend.classList.toggle('filtering',!!k);
+      steps.forEach(function(li){li.classList.toggle('match',!!k&&has(li,k));});
+      keys.forEach(function(sp){sp.classList.toggle('on',!!k&&sp.getAttribute('data-who')===k);});
+    }
+    keys.forEach(function(sp){
+      var k=whoOf(sp)[0]; sp.setAttribute('data-who',k);
+      sp.setAttribute('role','button'); sp.tabIndex=0; sp.setAttribute('aria-pressed','false');
+      sp.setAttribute('aria-label','只看「'+sp.textContent.trim()+'」的步驟');
+      function toggle(){
+        pinned=(pinned===k)?null:k; filter(pinned);
+        keys.forEach(function(x){x.setAttribute('aria-pressed',String(x.getAttribute('data-who')===pinned));});
+      }
+      sp.addEventListener('click',toggle);
+      sp.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault(); toggle();}});
+      if(canHover){
+        sp.addEventListener('mouseenter',function(){filter(k);});
+        sp.addEventListener('mouseleave',function(){filter(pinned);});
+      }
+    });
+    if(canHover) steps.forEach(function(li){
+      li.addEventListener('mouseenter',function(){ if(!pinned) keys.forEach(function(sp){sp.classList.toggle('on',has(li,sp.getAttribute('data-who')));}); });
+      li.addEventListener('mouseleave',function(){ if(!pinned) keys.forEach(function(sp){sp.classList.remove('on');}); });
+    });
+  }
   /* 塗鴉：在空白格紋上按住左鍵畫畫（刻意不顯示提示與橡皮擦，留給訪客自己發現）。筆跡記在「整頁座標」，捲動時跟著頁面走；不存檔，重新整理就清空 */
   var doodling=false;
   if(canHover){
