@@ -8,6 +8,7 @@
   紙飛機版履歷（另一個版本，正式首頁是 index.html）
   首屏：紙飛機主視覺（打光、光線、拆色、三種色調）；往下捲一句換一句：開場 → 對齊 → 追蹤 → 分權。
   捲出首屏：紙飛機縮到右側，隔一層同色調的淡霧沉進背景，特效照常在動；讀到哪一段就換成那段的色調。
+  關於・數字：T3 交叉軌道（圖橫著走、直排標題往上升）；每張圖是霧上開的窗（透出全強度主視覺）＋白線插畫。
   網址：#on-align / #on-trace / #on-split＝首屏截圖用；#debug＝每秒幾格。
 -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -123,6 +124,58 @@ button{font-family:inherit}
 .caps li{border-top:1.5px solid var(--ink);padding-top:16px}
 .caps h3{margin:0 0 6px;font:700 18px var(--sans);letter-spacing:.04em}
 .caps p{margin:0;color:var(--ink2);font-size:15px;line-height:1.75}
+
+/* ════ 關於・數字：T3 交叉軌道（照 techniques_demo 的 T3，配色改淺底）════ */
+.about{padding-bottom:4vh}.about .ab-grid{margin-top:0}
+.xtrack{position:relative}
+.xtrack .pin{position:sticky;top:0;height:100vh;height:100svh;overflow:hidden}
+.xtrack .kick{position:absolute;left:28vw;top:13svh}
+.xtrack .ph3{position:absolute;left:0;top:22svh;width:44vw;height:54svh;overflow:hidden;will-change:transform}
+/* 進場：外框從下往上滑、裡面的圖反方向慢一半＝布幕拉開 */
+.xtrack .rv,.xtrack .rv>i{position:absolute;inset:0;overflow:hidden;transition:transform 1.6s cubic-bezier(.75,0,.2,1)}
+.xtrack .rv{transform:translateY(101%)}.xtrack .rv>i{transform:translateY(-50.5%)}
+.xtrack.in .rv,.xtrack.in .rv>i{transform:none}
+.xtrack .rv>i{box-shadow:inset 0 0 0 1px rgba(255,255,255,.35)}
+.xtrack .art{position:absolute;top:0;bottom:0;left:-8%;width:116%;will-change:transform}
+.xtrack .art svg{width:100%;height:100%;display:block;overflow:visible}
+.xtrack .art path,.xtrack .art rect,.xtrack .art circle,.xtrack .art ellipse{fill:none;stroke:#fff;stroke-width:2;stroke-linejoin:round;stroke-linecap:round;vector-effect:non-scaling-stroke}
+.xtrack .art g path{stroke-width:1.6}
+.xtrack .art .on path{fill:#fff}
+.xtrack .art .tr{stroke-dasharray:2 9;stroke-opacity:.7}
+.xtrack .art .dot{fill:rgba(255,255,255,.25)}
+.xtrack .art .cell{fill:rgba(255,255,255,.14)}
+.xtrack .art .card{fill:rgba(255,255,255,.1)}
+.xtrack .art text{fill:#fff;stroke:none;font:500 22px var(--sans);letter-spacing:.06em}
+.xtrack .art .eq{font:700 64px var(--disp)}
+.xtrack .cap{position:absolute;left:22px;right:22px;bottom:18px;color:#fff;display:flex;flex-direction:column;gap:2px;text-shadow:0 1px 12px rgba(0,0,0,.18)}
+.xtrack .cap b{font:700 clamp(44px,7svh,84px)/1 var(--disp);letter-spacing:-.02em}
+.xtrack .cap b small{font:700 17px var(--sans);letter-spacing:.04em;margin-left:6px}
+.xtrack .cap>span{font:700 15px/1.5 var(--sans)}
+.xtrack .cap .src{font-weight:500;font-size:13.5px;opacity:.85}
+/* 直排大標題：一個隔一屏高，整條往上走；停在圖框右邊（80vw，框在 28–72vw），移動中圖從它底下穿過＝交叉，停下時不蓋住插畫裡的字 */
+.xtrack .vt{position:absolute;left:80vw;top:0;width:0;height:100%;pointer-events:none}
+.xtrack .vt-in{position:absolute;left:0;top:0;width:0;will-change:transform}
+.xtrack .vt b{position:absolute;left:0;writing-mode:vertical-rl;translate:-50% -50%;white-space:nowrap;color:var(--ink);font:900 11svh/1 var(--sans);letter-spacing:.14em}
+/* 捲動軸：刻度＋可拖的圓 */
+.xtrack .sbar{position:absolute;left:28vw;bottom:10svh;height:0}
+.xtrack .sbar .line{position:absolute;left:0;top:0;height:1px;background:rgba(17,20,27,.2)}
+.xtrack .sbar .dot{position:absolute;top:-10px;width:20px;height:20px;margin-left:-10px;padding:0;border:0;background:none;cursor:pointer;opacity:0;transition:opacity .8s}
+.xtrack .sbar .dot::before,.xtrack .sbar .dot::after{content:"";position:absolute;left:50%;top:50%;width:9px;height:1px;background:var(--ink);translate:-50% -50%}
+.xtrack .sbar .dot::after{rotate:90deg}
+.xtrack.in .sbar .dot{opacity:.7}
+.xtrack .knob{position:absolute;top:-30px;left:-30px;width:60px;height:60px;cursor:grab;touch-action:none;will-change:transform}
+.xtrack .knob svg{width:100%;height:100%;overflow:visible;transition:rotate .4s var(--ease),scale .4s var(--ease)}
+.xtrack .knob circle{fill:rgba(242,243,245,.55);stroke:var(--ink);stroke-width:1;stroke-dasharray:189;stroke-dashoffset:189;transition:stroke-dashoffset 1.5s cubic-bezier(.7,0,.2,1) .25s}
+.xtrack.in .knob circle{stroke-dashoffset:0}
+.xtrack .knob path{fill:none;stroke:var(--ink);stroke-width:1.2}
+.xtrack.grab .knob svg{rotate:90deg;scale:.82}.xtrack.grab{cursor:grabbing}
+@media (max-width:720px){
+  .xtrack .ph3{width:78vw;height:46svh;top:22svh}
+  .xtrack .kick,.xtrack .sbar{left:11vw}.xtrack .sbar{bottom:9svh}
+  .xtrack .vt{left:88vw}.xtrack .vt b{font-size:6.5svh}
+  .xtrack .art text{font-size:26px}
+}
+@media (prefers-reduced-motion:reduce){.xtrack .rv,.xtrack .rv>i{transition:none}}
 
 /* ════ 經歷：小飛機拖出時間軸 ════ */
 .exp{padding:14vh 0 8vh}
@@ -442,12 +495,6 @@ button{font-family:inherit}
 <section class="about" id="about">
   <div class="wrap">
     <div class="sec-h"><span class="lbl">About</span><h2>關於我</h2></div>
-    <div class="nums">
-      <div class="num"><div class="big"><span data-to="12">12</span><small>支</small></div><div class="k">上線中的自動化任務</div><div class="s">金車・自動化控制台</div></div>
-      <div class="num"><div class="big"><span data-to="3">3</span><small>個</small></div><div class="k">服務的部門組別</div><div class="s">官網・通路・健食</div></div>
-      <div class="num"><div class="big">0<small>差異</small></div><div class="k">訂單匯入上線前的新舊比對</div><div class="s"><span data-to="195">195</span> 張單・<span data-to="4095">4,095</span> 格</div></div>
-      <div class="num"><div class="big"><span data-to="6000">6,000</span>+<small>張</small></div><div class="k">AI 名片識別處理量</div><div class="s">安永金融科技</div></div>
-    </div>
     <div class="ab-grid">
       <div>
         <p class="why">自動化不該只活在<br><em>某個人的電腦裡</em></p>
@@ -468,6 +515,24 @@ button{font-family:inherit}
 </section>
 
 <!-- ════ 經歷：線被畫出來（ratchet） ════ -->
+<!-- ════ 關於・數字：T3 交叉軌道（圖橫著走、直排標題往上升）；圖＝霧上開的窗（透出全強度的主視覺）＋白線插畫 ════ -->
+<section class="xtrack" id="aboutNums" data-snap="1.2" aria-label="關於我：四個數字">
+  <div class="pin">
+    <div class="kick lbl">In numbers · 04</div>
+    <div class="photos">
+      <article class="ph3"><div class="rv"><i><div class="art"><svg viewBox="0 0 800 500" preserveAspectRatio="xMidYMid meet" aria-hidden="true"><path d="M80 180L152 130" class="tr"/><g transform="translate(146 92) scale(3.2)"><path d="M2.6 11.4 21.4 2.6 14.6 21.4 11.2 12.8Z M21.4 2.6 11.2 12.8"/></g><path d="M230 180L302 130" class="tr"/><g transform="translate(296 92) scale(3.2)"><path d="M2.6 11.4 21.4 2.6 14.6 21.4 11.2 12.8Z M21.4 2.6 11.2 12.8"/></g><path d="M380 180L452 130" class="tr"/><g transform="translate(446 92) scale(3.2)"><path d="M2.6 11.4 21.4 2.6 14.6 21.4 11.2 12.8Z M21.4 2.6 11.2 12.8"/></g><path d="M530 180L602 130" class="tr"/><g transform="translate(596 92) scale(3.2)"><path d="M2.6 11.4 21.4 2.6 14.6 21.4 11.2 12.8Z M21.4 2.6 11.2 12.8"/></g><path d="M140 305L212 255" class="tr"/><g transform="translate(206 217) scale(3.2)"><path d="M2.6 11.4 21.4 2.6 14.6 21.4 11.2 12.8Z M21.4 2.6 11.2 12.8"/></g><path d="M290 305L362 255" class="tr"/><g transform="translate(356 217) scale(3.2)"><path d="M2.6 11.4 21.4 2.6 14.6 21.4 11.2 12.8Z M21.4 2.6 11.2 12.8"/></g><path d="M440 305L512 255" class="tr"/><g transform="translate(506 217) scale(3.2)" class="on"><path d="M2.6 11.4 21.4 2.6 14.6 21.4 11.2 12.8Z M21.4 2.6 11.2 12.8"/></g><path d="M590 305L662 255" class="tr"/><g transform="translate(656 217) scale(3.2)"><path d="M2.6 11.4 21.4 2.6 14.6 21.4 11.2 12.8Z M21.4 2.6 11.2 12.8"/></g><path d="M80 430L152 380" class="tr"/><g transform="translate(146 342) scale(3.2)"><path d="M2.6 11.4 21.4 2.6 14.6 21.4 11.2 12.8Z M21.4 2.6 11.2 12.8"/></g><path d="M230 430L302 380" class="tr"/><g transform="translate(296 342) scale(3.2)"><path d="M2.6 11.4 21.4 2.6 14.6 21.4 11.2 12.8Z M21.4 2.6 11.2 12.8"/></g><path d="M380 430L452 380" class="tr"/><g transform="translate(446 342) scale(3.2)"><path d="M2.6 11.4 21.4 2.6 14.6 21.4 11.2 12.8Z M21.4 2.6 11.2 12.8"/></g><path d="M530 430L602 380" class="tr"/><g transform="translate(596 342) scale(3.2)"><path d="M2.6 11.4 21.4 2.6 14.6 21.4 11.2 12.8Z M21.4 2.6 11.2 12.8"/></g></svg></div></i></div><div class="cap"><b><span data-to="12">12</span><small>支</small></b><span>上線中的自動化任務</span><span class="src">金車・自動化控制台</span></div></article>
+      <article class="ph3"><div class="rv"><i><div class="art"><svg viewBox="0 0 800 500" preserveAspectRatio="xMidYMid meet" aria-hidden="true"><circle cx="130" cy="250" r="16" class="dot"/><text x="130" y="300" text-anchor="middle">控制台</text><path d="M146 250C330 250 420 110 640 110" class="tr"/><circle cx="650" cy="110" r="10" class="dot"/><text x="684" y="118">官網</text><g transform="translate(560 118) rotate(45) scale(2.6) translate(-12 -12)"><path d="M2.6 11.4 21.4 2.6 14.6 21.4 11.2 12.8Z M21.4 2.6 11.2 12.8"/></g><path d="M146 250C330 250 420 250 640 250" class="tr"/><circle cx="650" cy="250" r="10" class="dot"/><text x="684" y="258">通路</text><g transform="translate(560 250) rotate(45) scale(2.6) translate(-12 -12)"><path d="M2.6 11.4 21.4 2.6 14.6 21.4 11.2 12.8Z M21.4 2.6 11.2 12.8"/></g><path d="M146 250C330 250 420 390 640 390" class="tr"/><circle cx="650" cy="390" r="10" class="dot"/><text x="684" y="398">健食</text><g transform="translate(560 381) rotate(45) scale(2.6) translate(-12 -12)"><path d="M2.6 11.4 21.4 2.6 14.6 21.4 11.2 12.8Z M21.4 2.6 11.2 12.8"/></g></svg></div></i></div><div class="cap"><b><span data-to="3">3</span><small>個</small></b><span>服務的部門組別</span><span class="src">官網・通路・健食</span></div></article>
+      <article class="ph3"><div class="rv"><i><div class="art"><svg viewBox="0 0 800 500" preserveAspectRatio="xMidYMid meet" aria-hidden="true"><text x="220" y="92" text-anchor="middle">舊路・人工</text><text x="580" y="92" text-anchor="middle">新路・API</text><rect x="110" y="120" width="31" height="23" rx="3" class="cell"/><rect x="147" y="120" width="31" height="23" rx="3" class="cell"/><rect x="184" y="120" width="31" height="23" rx="3" class="cell"/><rect x="221" y="120" width="31" height="23" rx="3" class="cell"/><rect x="258" y="120" width="31" height="23" rx="3" class="cell"/><rect x="295" y="120" width="31" height="23" rx="3" class="cell"/><rect x="110" y="150" width="31" height="23" rx="3" class="cell"/><rect x="147" y="150" width="31" height="23" rx="3" class="cell"/><rect x="184" y="150" width="31" height="23" rx="3" class="cell"/><rect x="221" y="150" width="31" height="23" rx="3" class="cell"/><rect x="258" y="150" width="31" height="23" rx="3" class="cell"/><rect x="295" y="150" width="31" height="23" rx="3" class="cell"/><rect x="110" y="180" width="31" height="23" rx="3" class="cell"/><rect x="147" y="180" width="31" height="23" rx="3" class="cell"/><rect x="184" y="180" width="31" height="23" rx="3" class="cell"/><rect x="221" y="180" width="31" height="23" rx="3" class="cell"/><rect x="258" y="180" width="31" height="23" rx="3" class="cell"/><rect x="295" y="180" width="31" height="23" rx="3" class="cell"/><rect x="110" y="210" width="31" height="23" rx="3" class="cell"/><rect x="147" y="210" width="31" height="23" rx="3" class="cell"/><rect x="184" y="210" width="31" height="23" rx="3" class="cell"/><rect x="221" y="210" width="31" height="23" rx="3" class="cell"/><rect x="258" y="210" width="31" height="23" rx="3" class="cell"/><rect x="295" y="210" width="31" height="23" rx="3" class="cell"/><rect x="470" y="120" width="31" height="23" rx="3" class="cell"/><rect x="507" y="120" width="31" height="23" rx="3" class="cell"/><rect x="544" y="120" width="31" height="23" rx="3" class="cell"/><rect x="581" y="120" width="31" height="23" rx="3" class="cell"/><rect x="618" y="120" width="31" height="23" rx="3" class="cell"/><rect x="655" y="120" width="31" height="23" rx="3" class="cell"/><rect x="470" y="150" width="31" height="23" rx="3" class="cell"/><rect x="507" y="150" width="31" height="23" rx="3" class="cell"/><rect x="544" y="150" width="31" height="23" rx="3" class="cell"/><rect x="581" y="150" width="31" height="23" rx="3" class="cell"/><rect x="618" y="150" width="31" height="23" rx="3" class="cell"/><rect x="655" y="150" width="31" height="23" rx="3" class="cell"/><rect x="470" y="180" width="31" height="23" rx="3" class="cell"/><rect x="507" y="180" width="31" height="23" rx="3" class="cell"/><rect x="544" y="180" width="31" height="23" rx="3" class="cell"/><rect x="581" y="180" width="31" height="23" rx="3" class="cell"/><rect x="618" y="180" width="31" height="23" rx="3" class="cell"/><rect x="655" y="180" width="31" height="23" rx="3" class="cell"/><rect x="470" y="210" width="31" height="23" rx="3" class="cell"/><rect x="507" y="210" width="31" height="23" rx="3" class="cell"/><rect x="544" y="210" width="31" height="23" rx="3" class="cell"/><rect x="581" y="210" width="31" height="23" rx="3" class="cell"/><rect x="618" y="210" width="31" height="23" rx="3" class="cell"/><rect x="655" y="210" width="31" height="23" rx="3" class="cell"/><text x="400" y="190" text-anchor="middle" class="eq">＝</text><path d="M110 300H690" class="ln"/><text x="400" y="350" text-anchor="middle">逐格對照，一格都沒差</text></svg></div></i></div><div class="cap"><b>0<small>差異</small></b><span>訂單匯入上線前的新舊比對</span><span class="src"><span data-to="195">195</span> 張單・<span data-to="4095">4,095</span> 格</span></div></article>
+      <article class="ph3"><div class="rv"><i><div class="art"><svg viewBox="0 0 800 500" preserveAspectRatio="xMidYMid meet" aria-hidden="true"><rect x="110" y="200" width="160" height="96" rx="8" class="card" transform="rotate(-14 190 248) translate(0 0)"/><rect x="110" y="200" width="160" height="96" rx="8" class="card" transform="rotate(-8 190 248) translate(4 -6)"/><rect x="110" y="200" width="160" height="96" rx="8" class="card" transform="rotate(-2 190 248) translate(8 -12)"/><rect x="110" y="200" width="160" height="96" rx="8" class="card" transform="rotate(4 190 248) translate(12 -18)"/><rect x="110" y="200" width="160" height="96" rx="8" class="card" transform="rotate(10 190 248) translate(16 -24)"/><path d="M140 232H222M140 252H200M140 270H230" class="ln" transform="rotate(10 190 248) translate(16 -24)"/><rect x="320" y="240" width="24" height="16" rx="3" class="cell" style="opacity:1.00"/><rect x="358" y="240" width="24" height="16" rx="3" class="cell" style="opacity:0.90"/><rect x="396" y="240" width="24" height="16" rx="3" class="cell" style="opacity:0.80"/><rect x="434" y="240" width="24" height="16" rx="3" class="cell" style="opacity:0.70"/><rect x="472" y="240" width="24" height="16" rx="3" class="cell" style="opacity:0.60"/><rect x="510" y="240" width="24" height="16" rx="3" class="cell" style="opacity:0.50"/><rect x="548" y="240" width="24" height="16" rx="3" class="cell" style="opacity:0.40"/><ellipse cx="640" cy="190" rx="66" ry="18" class="ln"/><path d="M574 190V310A66 18 0 0 0 706 310V190" class="ln"/><path d="M574 250A66 18 0 0 0 706 250" class="ln"/><text x="640" y="370" text-anchor="middle">寫入資料庫</text></svg></div></i></div><div class="cap"><b><span data-to="6000">6,000</span>+<small>張</small></b><span>AI 名片識別處理量</span><span class="src">安永金融科技</span></div></article>
+    </div>
+    <div class="vt" aria-hidden="true"><div class="vt-in"><b>上線任務</b><b>三個組別</b><b>零差異</b><b>名片識別</b></div></div>
+    <div class="sbar"><div class="line"></div>
+      <div class="knob" aria-label="拖曳捲動" role="slider" tabindex="0" aria-valuemin="1" aria-valuemax="4"><svg viewBox="-30 -30 60 60" aria-hidden="true">
+        <circle r="29.5" transform="rotate(-90)"/><path d="M-9 0H9M-9 0l4-4M-9 0l4 4M9 0l-4-4M9 0l-4 4"/></svg></div>
+    </div>
+  </div>
+</section>
+
 <section class="exp" id="experience" data-mode="ratchet">
   <div class="wrap">
     <div class="sec-h"><span class="lbl">Experience</span><h2>工作經歷</h2></div>
@@ -1702,11 +1767,103 @@ button{font-family:inherit}
     });
   }
 
+  /* ▌關於・數字：T3 交叉軌道（照 techniques_demo 的 T3）
+     ① 直捲換橫走（區塊高＝一屏＋橫向總長）② 每張各自追，行進方向前面的慢半拍（手風琴）③ 圖在框裡反向微移
+     ④ 直排標題一個隔一屏高、整條往上走 ⑤ 圓形捲動軸＋刻度 ⑥ 停手 data-snap 秒對齊最近一張
+     ＋ 霧上開窗：每張圖的位置把整頁的淡霧（#amb）挖掉，透出後面全強度、正在動的主視覺；離開這段就把洞補回去。倒帶：scrub。 */
+  var xt = document.getElementById('aboutNums'), xPin = xt.querySelector('.pin'), xPh = [].slice.call(xt.querySelectorAll('.ph3')), XN = xPh.length;
+  var xArt = xPh.map(function (p) { return p.querySelector('.art'); }), xRv = xPh.map(function (p) { return p.querySelector('.rv'); });
+  var xVt = xt.querySelector('.vt-in'), xVb = [].slice.call(xVt.children), xBar = xt.querySelector('.sbar'), xLine = xBar.querySelector('.line'), xKnob = xBar.querySelector('.knob');
+  var xL = {}, xPos = xPh.map(function () { return 0; }), xDir = 1, xLastT = 0, xTit = new Damp(.32), xKn = new Damp(.22), xMag = { x: 0, y: 0, tx: 0, ty: 0 }, xDrag = false, xSnapT = null;
+  var fogEl = document.getElementById('amb'), fogClip = '';
+  function xLayout() {
+    var W = xt.clientWidth, H = innerHeight, mob = W <= 720;
+    xL = { W: W, H: H, pw: (mob ? .78 : .44) * W, gap: (mob ? .10 : .15) * W, x0: (mob ? .11 : .28) * W, sg: mob ? 30 : 38 };
+    xL.step = xL.pw + xL.gap; xL.max = (XN - 1) * xL.step;
+    xt.style.height = (H + xL.max) + 'px';
+    xPh.forEach(function (p) { p.style.width = xL.pw + 'px'; });
+    xVb.forEach(function (b, i) { b.style.top = (xPin.clientHeight * (i + .5)) + 'px'; });
+    xLine.style.width = ((XN - 1) * xL.sg) + 'px';
+    [].slice.call(xBar.querySelectorAll('.dot')).forEach(function (d) { d.remove(); });
+    for (var i = 0; i < XN; i++) {
+      var d = document.createElement('button'); d.type = 'button'; d.className = 'dot'; d.dataset.i = i; d.setAttribute('aria-label', '跳到第 ' + (i + 1) + ' 個數字');
+      d.style.left = (i * xL.sg) + 'px'; d.style.transitionDelay = (.7 + i * .06) + 's'; xBar.insertBefore(d, xKnob);
+    }
+  }
+  xLayout(); addEventListener('resize', xLayout);
+  function xSpan() { return xt.offsetHeight - innerHeight; }
+  function xTop() { return xt.getBoundingClientRect().top + scrollY; }
+  function xGo(frac, smooth) { scrollTo({ top: xTop() + clamp(frac) * xSpan(), behavior: smooth && !reduce ? 'smooth' : 'auto' }); }
+  xBar.addEventListener('click', function (e) { var d = e.target.closest('.dot'); if (d) xGo(+d.dataset.i / (XN - 1), true); });
+  xKnob.addEventListener('pointerdown', function (e) { xDrag = true; xt.classList.add('grab'); xKnob.setPointerCapture(e.pointerId); e.preventDefault(); });
+  xKnob.addEventListener('pointermove', function (e) { if (xDrag) xGo((e.clientX - xBar.getBoundingClientRect().left) / ((XN - 1) * xL.sg), false); });
+  function xUp() { if (!xDrag) return; xDrag = false; xt.classList.remove('grab'); xSnapLater(); }
+  xKnob.addEventListener('pointerup', xUp); xKnob.addEventListener('pointercancel', xUp);
+  xKnob.addEventListener('keydown', function (e) {
+    var cur = Math.round(xKn.v / xL.sg);
+    if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') { e.preventDefault(); xGo((cur + (e.key === 'ArrowRight' ? 1 : -1)) / (XN - 1), true); }
+  });
+  xt.addEventListener('pointermove', function (e) {                      // 磁吸：游標在圓附近 80px 內，圓往游標偏 30%
+    if (xDrag) return;
+    var r = xKnob.getBoundingClientRect(), dx = e.clientX - (r.left + r.width / 2 - xMag.x), dy = e.clientY - (r.top + r.height / 2 - xMag.y), near = Math.hypot(dx, dy) < 80;
+    xMag.tx = near ? dx * .3 : 0; xMag.ty = near ? dy * .3 : 0;
+  });
+  xt.addEventListener('pointerleave', function () { xMag.tx = xMag.ty = 0; });
+  function xSnapLater() {
+    var sn = +(xt.dataset.snap || 0); clearTimeout(xSnapT); if (!sn || reduce) return;
+    xSnapT = setTimeout(function () {
+      var r = xt.getBoundingClientRect(); if (xDrag || r.top > 0 || r.bottom < innerHeight) return;
+      var f = clamp(-r.top / xSpan()), want = Math.round(f * (XN - 1)) / (XN - 1);
+      if (Math.abs(want - f) * xSpan() > 2) xGo(want, true);
+    }, sn * 1000);
+  }
+  addEventListener('scroll', xSnapLater, { passive: true });
+  if ('IntersectionObserver' in window && !reduce) {                     // 第一次看到才演進場（每張錯開一點）
+    xPh.forEach(function (p, i) { var d = (.1 + i * .09) + 's'; xRv[i].style.transitionDelay = d; xRv[i].firstElementChild.style.transitionDelay = d; });
+    var xIo = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { xt.classList.add('in'); xIo.disconnect(); } }, { threshold: .02 });
+    xIo.observe(xt);
+  } else xt.classList.add('in');
+  function fogHoles(on) {                                                 // 霧上開窗：整片霧＋每張圖的矩形，evenodd 挖洞
+    var c = '';
+    if (on) {
+      var W = innerWidth, H = innerHeight, d = 'M0 0H' + W + 'V' + H + 'H0Z';
+      xPh.forEach(function (p, i) {
+        var a = p.getBoundingClientRect(), b = xRv[i].getBoundingClientRect();
+        var l = Math.max(a.left, b.left, 0), t = Math.max(a.top, b.top), r = Math.min(a.right, b.right, W), bt = Math.min(a.bottom, b.bottom);
+        if (r - l > 1 && bt - t > 1) d += 'M' + l.toFixed(1) + ' ' + t.toFixed(1) + 'H' + r.toFixed(1) + 'V' + bt.toFixed(1) + 'H' + l.toFixed(1) + 'Z';
+      });
+      c = 'path(evenodd, "' + d + '")';
+    }
+    if (c !== fogClip) { fogClip = c; fogEl.style.clipPath = c; }
+  }
+  function xFrame(dt) {
+    var r = xt.getBoundingClientRect(); if (r.bottom < 0 || r.top > innerHeight) { fogHoles(false); return; }
+    var target = clamp(-r.top / xSpan()) * xL.max;
+    if (target !== xLastT) { xDir = target > xLastT ? 1 : -1; xLastT = target; }
+    var avg = 0; xPos.forEach(function (v) { avg += v; }); avg /= XN;
+    var c = Math.round(avg / xL.step);
+    xPh.forEach(function (p, i) {
+      var tau = .2 + .07 * Math.max(0, (i - c) * xDir);                    // 行進方向前面的圖比較慢
+      xPos[i] = reduce ? target : xPos[i] + (target - xPos[i]) * (1 - Math.exp(-dt / tau));
+      var x = xL.x0 + i * xL.step - xPos[i];
+      p.style.transform = 'translate3d(' + x.toFixed(1) + 'px,0,0)';
+      var off = Math.max(-1, Math.min(1, (x + xL.pw / 2 - xL.W / 2) / (xL.W / 2 + xL.pw / 2)));
+      xArt[i].style.transform = 'translate3d(' + (-off * xL.pw * .07).toFixed(1) + 'px,0,0)';
+    });
+    xTit.target = target / xL.step; var tv = reduce ? xTit.target : xTit.step(dt);
+    xVt.style.transform = 'translate3d(0,' + (-tv * xPin.clientHeight).toFixed(1) + 'px,0)';
+    xKn.target = (target / (xL.max || 1)) * (XN - 1) * xL.sg; var kv = reduce ? xKn.target : xKn.step(dt);
+    xMag.x += (xMag.tx - xMag.x) * (1 - Math.exp(-dt / .15)); xMag.y += (xMag.ty - xMag.y) * (1 - Math.exp(-dt / .15));
+    xKnob.style.transform = 'translate3d(' + (kv + xMag.x).toFixed(1) + 'px,' + xMag.y.toFixed(1) + 'px,0)';
+    xKnob.setAttribute('aria-valuenow', Math.round(kv / xL.sg) + 1);
+    fogHoles(true);
+  }
+
   /* ── 一支 rAF 帶所有捲動段落 ── */
   var lastTs = 0;
   function frame(ts) {
     var dt = lastTs ? Math.min(.1, (ts - lastTs) / 1000) : .016; lastTs = ts;
-    topFrame(); tlFrame(dt); vtFrame(dt); htFrame(dt); foldFrame(dt); stackFrame(dt); ctFrame(); toneFrame();
+    topFrame(); xFrame(dt); tlFrame(dt); vtFrame(dt); htFrame(dt); foldFrame(dt); stackFrame(dt); ctFrame(); toneFrame();
     requestAnimationFrame(frame);
   }
   requestAnimationFrame(frame);
