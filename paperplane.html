@@ -78,14 +78,40 @@ button{font-family:inherit}
 .hero-run .hero{position:sticky;top:0}
 .hero{position:relative;height:100svh;min-height:600px;overflow:hidden;touch-action:pan-y;color:#fff}
 /* T2 換字幕：四句疊在同一格，進來從下 20px、出去往上 20px */
-.beats{display:grid;margin-top:30px}
-.beat{grid-area:1/1;opacity:0;transform:translateY(20px);transition:opacity .45s,transform .6s var(--ease);pointer-events:none}
-.beat.past{transform:translateY(-20px)}
-.beat.on{opacity:1;transform:none}
-.hero .beat .lead{margin:0}
-.hero .bw{margin:0;font:900 clamp(40px,4.4vw,62px)/1 var(--sans);letter-spacing:.24em}
-.hero .bw small{margin-left:14px;font:600 clamp(12px,1vw,14px) var(--disp);letter-spacing:.3em;opacity:.75;vertical-align:middle}
-.hero .bl{margin:14px 0 0;font:500 clamp(15.5px,1.25vw,18px)/1.8 var(--sans)}
+/* v6：首屏兩段。第一段＝原本的字；捲跑道時字往左滑走、卡片從下面浮上來（紙飛機不動＝T2 固定舞台）。
+   卡片底色＝目前色調壓暗，跟主視覺一起換；跑道四段＝第一段字 → 對齊 → 追蹤 → 分權（那條亮、其他淡） */
+.hero .copy,.hero .hgov{will-change:transform,opacity}
+.hero .copy .lead{margin-top:30px}   /* 原本靠字幕區 .beats 的 margin 撐開 */
+/* v8：第二段不用卡片——字和圖示直接放在主視覺上，放大到跟第一段的名字同一個量級（第二段的字若縮進卡片會比第一段小一截，主視覺的印象會變弱）；對齊方式跟第一段一樣靠左 */
+.hero .hgov{position:absolute;z-index:6;left:max(28px,calc((100vw - 1180px)/2 + 24px));top:52%;translate:0 -50%;width:min(37vw,500px);color:#fff;opacity:0;visibility:hidden;pointer-events:none}
+.hgov .gov span{display:inline-block}   /* 放不下時只從分號斷（不斷在詞中間） */
+.hgov .gov{margin:0 0 clamp(26px,5svh,48px);font:700 clamp(17px,1.45vw,21px)/1.7 var(--sans);letter-spacing:.04em}
+/* v7：卡片＝治理那句＋三個圖示；跑道往下：對齊出現 → 補上追蹤 → 補上分權（累加，不換掉），最新那個下面一條白線 */
+.hico{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(10px,1.6vw,24px)}
+.hico li{position:relative;padding-bottom:18px;opacity:0;transform:translateY(14px);transition:opacity .6s,transform .8s var(--ease)}
+.hico li.in{opacity:1;transform:none}
+.hico li::after{content:"";position:absolute;left:0;bottom:0;width:34px;height:2px;border-radius:1px;background:#fff;transform:scaleX(0);transform-origin:left;transition:transform .5s var(--ease)}
+.hico li.on::after{transform:none}
+.hico svg{display:block;width:clamp(66px,6.4vw,100px);height:auto;margin:0 0 clamp(14px,2.4svh,24px) -4px;overflow:visible;fill:none;stroke:#fff;stroke-width:1.3;stroke-linecap:round;stroke-linejoin:round}
+.hico svg path{transition:transform .9s var(--ease) .25s,opacity .6s .25s,stroke-dashoffset 1.1s var(--ease) .2s}
+.hico b{display:block;font:900 clamp(32px,3.6vw,54px)/1.05 var(--sans);letter-spacing:.12em}
+.hico small{display:block;margin-top:12px;font:600 clamp(11px,.95vw,14px) var(--disp);letter-spacing:.34em;opacity:.78}
+/* 對齊：三條長短不一的線，從錯開的位置滑到同一條基準線上 */
+.ia .g{stroke-dasharray:2 4;opacity:.55}
+.ia .b2{transform:translateX(9px)}.ia .b3{transform:translateX(-6px)}
+.in .ia .b2,.in .ia .b3{transform:none}
+/* 追蹤：一路留下記號（決策日記），最後插旗＝知道從哪裡來 */
+.it circle{fill:#fff;stroke:none;transform-box:fill-box;transform-origin:center;transform:scale(0);transition:transform .4s var(--ease)}
+.it .tr{stroke-dasharray:1;stroke-dashoffset:1}
+.it .fl{opacity:0}
+.in .it .tr{stroke-dashoffset:0}
+.in .it circle{transform:none}
+.in .it circle:nth-of-type(1){transition-delay:.2s}.in .it circle:nth-of-type(2){transition-delay:.5s}.in .it circle:nth-of-type(3){transition-delay:.8s}
+.in .it .fl{opacity:1;transition-delay:1.1s}
+/* 分權：一個圓拆成兩半（寫的 AI／審的 AI），上面一顆菱形＝由我拍板 */
+.is .hl{transform:translateX(2px)}.is .hr{transform:translateX(-2px)}.is .dm{opacity:0}
+.in .is .hl,.in .is .hr{transform:none}
+.in .is .dm{opacity:1;transition-delay:.9s}
 .hero .copy{position:absolute;z-index:6;left:max(28px,calc((100vw - 1180px)/2 + 24px));top:52%;translate:0 -50%;width:min(36vw,480px);pointer-events:none}
 .hero .copy a,.hero .copy button{pointer-events:auto}
 .hero .kick{font:500 14px var(--sans);letter-spacing:.14em;opacity:.82}
@@ -93,10 +119,6 @@ button{font-family:inherit}
 .hero h1 .en{display:block;margin-top:14px;font:500 clamp(16px,1.5vw,20px)/1 var(--disp);letter-spacing:.34em;opacity:.85}
 .hero .lead{margin:0;font:500 clamp(16px,1.3vw,18.5px)/1.8 var(--sans)}
 .hero .lead span{opacity:.75}
-.hero .gov{margin:20px 0 0;font:500 15px/1.8 var(--sans);opacity:.95}
-.hero .gov button{font:700 15px var(--sans);letter-spacing:.06em;color:rgba(255,255,255,.66);background:none;border:0;padding:0 .08em 1px;margin:0 .04em;border-bottom:1.5px dashed rgba(255,255,255,.55);cursor:pointer}
-.hero .gov button.on{color:#fff;border-bottom:1.5px solid #fff}
-.hero .gov button:focus-visible{outline:2px solid #fff;outline-offset:3px}
 .hero .meta{margin-top:28px;display:flex;flex-wrap:wrap;gap:8px 22px;font:500 14px var(--sans)}
 .hero .meta a{text-decoration:none;border-bottom:1px solid rgba(255,255,255,.5)}
 .hero .meta a:hover{border-bottom-color:#fff}
@@ -118,6 +140,10 @@ button{font-family:inherit}
 .why{margin:0;font:900 clamp(30px,3.6vw,50px)/1.32 var(--sans);letter-spacing:.02em}
 .why em{font-style:normal;color:var(--tone)}
 .why-p{margin:22px 0 0;color:var(--ink2);max-width:30em}
+/* v8 頭像：去背的人站在「霧上開的窗」前——照片框把整頁淡霧挖掉，透出後面正在動的主視覺；
+   照片的邊＝窗框（原照片肩膀被左右切成直線，貼著框就看不出來；試過往下淡出，外套會變半透明，像衣服被挖掉） */
+.ab-photo{position:relative;width:min(280px,72%);aspect-ratio:640/717;margin:0 0 30px}
+.ab-photo img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
 .ab-body p{margin:0 0 18px;color:var(--ink2)}
 .ab-body p:first-child{color:var(--ink);font-size:17px}
 .caps{display:grid;grid-template-columns:repeat(3,1fr);gap:28px;margin:72px 0 0;padding:0;list-style:none}
@@ -153,8 +179,10 @@ button{font-family:inherit}
 .xtrack .cap>span{font:700 15px/1.5 var(--sans)}
 .xtrack .cap .src{font-weight:500;font-size:13.5px;opacity:.85}
 /* 直排大標題：一個隔一屏高，整條往上走；停在圖框右邊（80vw，框在 28–72vw），移動中圖從它底下穿過＝交叉，停下時不蓋住插畫裡的字 */
-.xtrack .vt{position:absolute;left:80vw;top:0;width:0;height:100%;pointer-events:none}
-.xtrack .vt-in{position:absolute;left:0;top:0;width:0;will-change:transform}
+.xtrack .vt{position:absolute;left:0;top:0;width:100%;height:100%;pointer-events:none}
+.xtrack .vt-in{position:absolute;left:80vw;top:0;width:0;will-change:transform}
+/* 直排字跟導覽列一樣看底換色：疊在窗（全強度主視覺）上的那一段變白字、霧上維持墨色；白字那層是 JS 複製出來的，剪裁跟霧的洞同一組矩形 */
+.xtrack .vt-w{clip-path:inset(50%)}.xtrack .vt.vt-w b{color:#fff}
 .xtrack .vt b{position:absolute;left:0;writing-mode:vertical-rl;translate:-50% -50%;white-space:nowrap;color:var(--ink);font:900 11svh/1 var(--sans);letter-spacing:.14em}
 /* 捲動軸：刻度＋可拖的圓 */
 .xtrack .sbar{position:absolute;left:28vw;bottom:10svh;height:0}
@@ -172,7 +200,7 @@ button{font-family:inherit}
 @media (max-width:720px){
   .xtrack .ph3{width:78vw;height:46svh;top:22svh}
   .xtrack .kick,.xtrack .sbar{left:11vw}.xtrack .sbar{bottom:9svh}
-  .xtrack .vt{left:88vw}.xtrack .vt b{font-size:6.5svh}
+  .xtrack .vt-in{left:88vw}.xtrack .vt b{font-size:6.5svh}
   .xtrack .art text{font-size:26px}
 }
 @media (prefers-reduced-motion:reduce){.xtrack .rv,.xtrack .rv>i{transition:none}}
@@ -231,18 +259,46 @@ button{font-family:inherit}
 .htrack .win .wb span{margin-left:8px;font-family:var(--disp);letter-spacing:.06em}
 .htrack .win .wb em{margin-left:auto;font-style:normal}
 .htrack .win svg{display:block;flex:1;min-height:0;width:100%}
+/* v8 Demo 視窗＝色調漸層：純白底＋深陰影在淡霧上太搶眼
+   ⇒ 視窗改成同色系的淡漸層、邊框與陰影都用色調、後面模糊；裡面原本的白框改半透明，不然視窗淡了裡面還是一堆白塊 */
+.htrack .win{background:linear-gradient(150deg,color-mix(in srgb,var(--tone) 13%,transparent),color-mix(in srgb,var(--tone) 4%,transparent));-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);border-color:color-mix(in srgb,var(--tone) 10%,transparent);box-shadow:0 30px 60px -40px color-mix(in srgb,var(--tone) 40%,transparent)}
+.htrack .win .wb{border-bottom-color:color-mix(in srgb,var(--tone) 10%,transparent)}
+.htrack .win svg [fill="#fff"],.htrack .v .ln{fill:color-mix(in srgb,#fff 45%,transparent)}
 .htrack .copy{position:absolute;left:max(24px,6vw);top:54%;translate:0 -50%;width:min(38vw,500px)}
+/* v8 左右交錯：CASE 02、04 改成圖左字右。
+   原本一屏左字右圖整屏橫滑，換到一半會拼出「01 的 Demo＋02 的介紹」；交錯後中途是兩張 Demo 並排，字等那一屏到位才出現。
+   字層跟圖層同速（字層慢的話，交錯的字會慢半拍滑進對面那張 Demo 的位置） */
+@media (min-width:821px){
+  .htrack .hp.flip .win{right:auto;left:max(24px,6vw)}
+  .htrack .hp.flip .copy{left:auto;right:5vw}
+}
 .htrack .copy .no{font:600 13px var(--disp);letter-spacing:.22em;color:var(--tone)}
 .htrack .copy .no span{margin-left:10px;color:var(--ink3);font-family:var(--sans);font-weight:500;letter-spacing:.06em}
 .htrack .copy h3{margin:10px 0 18px;font:900 clamp(24px,2.4vw,33px)/1.32 var(--sans);letter-spacing:.02em}
 .htrack .copy dl{margin:0;display:grid;grid-template-columns:2.6em 1fr;gap:8px 12px;font-size:15px;line-height:1.72}
 .htrack .copy dt{font-weight:700}
 .htrack .copy dd{margin:0;color:var(--ink2)}
+/* v8 成效 highlight：「成效」兩字用色調；那句換墨色＋螢光筆（色調 30%，下半截；class 叫 .rhl——.hl 已是經歷段的重點格線，會被套成 grid），那一屏到位後 0.35 秒刷過去；關鍵詞加粗 */
+.htrack .copy dt.res{color:var(--tone)}
+.htrack .copy dd.res{color:var(--ink)}
+.htrack .copy .rhl{color:inherit;padding:0 2px;background:linear-gradient(transparent 56%,color-mix(in srgb,var(--tone) 30%,transparent) 56%) no-repeat 0 0/0% 100%;-webkit-box-decoration-break:clone;box-decoration-break:clone;transition:background-size 1s var(--ease) .35s}
+.htrack .hp.live .copy .rhl{background-size:100% 100%}
+.htrack .copy .rhl b{font-weight:800}
+@media (prefers-reduced-motion:reduce){.htrack .copy .rhl{transition:none;background-size:100% 100%}}
 .htrack .copy .meta{margin-top:16px;font:500 13px var(--disp);letter-spacing:.04em;color:var(--ink3)}
 .htrack .hbar{position:absolute;left:max(24px,6vw);right:5vw;bottom:26px;display:flex;align-items:center;gap:18px;font:500 13px var(--disp);letter-spacing:.16em;color:var(--ink3)}
 .htrack .hbar .line{flex:1;height:1px;background:var(--hair);position:relative}
 .htrack .hbar .fill{position:absolute;inset:0;background:var(--ink);transform-origin:left;transform:scaleX(0)}
-.htrack .hbar .tip{position:absolute;left:0;top:-12px;width:24px;height:24px;color:var(--tone);fill:var(--bg);will-change:transform}
+.htrack .hbar .tip{position:absolute;left:0;top:-12px;width:24px;height:24px;color:var(--tone);fill:var(--bg);will-change:transform;z-index:2;pointer-events:none}
+/* v8 錨點：進度線上每個 CASE 一個點（可以點過去）；走過的實心、目前那個用色調放大；滑上去顯示標題 */
+.htrack .hbar .hk{position:absolute;top:-12px;width:24px;height:24px;margin-left:-12px;padding:0;border:0;background:none;cursor:pointer}
+.htrack .hbar .hk::before{content:"";position:absolute;left:50%;top:50%;width:9px;height:9px;translate:-50% -50%;border-radius:50%;border:1.5px solid var(--ink3);background:var(--bg);transition:background .3s,border-color .3s,scale .3s var(--ease)}
+.htrack .hbar .hk.done::before{background:var(--ink);border-color:var(--ink)}
+.htrack .hbar .hk.cur::before{background:var(--tone);border-color:var(--tone);scale:1.35}
+.htrack .hbar .hk::after{content:attr(data-t);position:absolute;left:50%;bottom:26px;translate:-50% 4px;white-space:nowrap;padding:4px 10px;border-radius:6px;background:var(--ink);color:#fff;font:500 12.5px var(--sans);letter-spacing:.04em;opacity:0;pointer-events:none;transition:opacity .2s,translate .2s}
+.htrack .hbar .hk:hover::after,.htrack .hbar .hk:focus-visible::after{opacity:1;translate:-50% 0}
+.htrack .hbar .hk:first-of-type::after{left:0;translate:-12px 4px}.htrack .hbar .hk:first-of-type:hover::after,.htrack .hbar .hk:first-of-type:focus-visible::after{translate:-12px 0}
+.htrack .hbar .hk:last-of-type::after{left:auto;right:0;translate:12px 4px}.htrack .hbar .hk:last-of-type:hover::after,.htrack .hbar .hk:last-of-type:focus-visible::after{translate:12px 0}
 /* 示意圖（只有正在看的那屏在動） */
 .v{font-family:var(--sans)}
 .v text{font-size:15px;fill:var(--ink2)}
@@ -366,11 +422,10 @@ button{font-family:inherit}
   .hero h1 .en{margin-top:10px;font-size:15px}
   .hero .kick{font-size:13px}
   .hero .lead{font-size:15.5px;line-height:1.75}
-  .beats{margin-top:16px}
-  .hero .bw{font-size:36px}
-  .hero .bl{font-size:15px;line-height:1.75;margin-top:10px}
-  .hero .gov{margin-top:10px;font-size:14.5px}
-  .hero .gov button{font-size:14.5px}
+  .hero .hgov{left:16px;right:16px;width:auto;top:auto;bottom:30px;translate:none}
+  .hgov .gov{font-size:16px;margin-bottom:24px}
+  .hico b{font-size:32px}.hico svg{width:62px}
+  .hero .copy .lead{margin-top:16px}
   .hero .meta{margin-top:14px;font-size:13.5px;gap:4px 16px}
   .hero .hint{display:none}
 }
@@ -431,7 +486,7 @@ button{font-family:inherit}
   .steps7 li:not(.cur){display:grid}
   .hero-run{height:auto}.hero-run .hero{position:relative;height:auto;min-height:100svh}
   .hero .copy{position:relative;top:auto;translate:none;padding:110px 0 60px}
-  .beats{display:block}.beat{opacity:1;transform:none;margin-bottom:18px}
+  .hero .copy{padding-bottom:28px}.hero .hgov{position:relative;top:auto;translate:none;opacity:1;visibility:visible;margin-bottom:60px}.hico li,.hico svg path,.hico circle{opacity:1;transform:none;stroke-dashoffset:0;transition:none}
   .stack{height:auto}.stack .pin{position:relative;height:auto;display:flex;flex-direction:column;align-items:center;gap:24px;padding:14vh 16px}
   .stack .card{position:relative;left:auto;top:auto;translate:none;transform:none!important}
   .ct-card{opacity:1;transition:none}
@@ -475,18 +530,20 @@ button{font-family:inherit}
 <div class="hero-run" id="heroRun">
 <section class="hero" id="hero" aria-label="首屏：蔡承育，內部流程自動化">
   <div class="copy" id="heroCopy">
-    <div class="kick">內部流程自動化・從需求訪談到上線維運</div>
+    <div class="kick">公司內部流程自動化・從了解需求到上線後維護</div>
     <h1>蔡承育<span class="en">CYRUS TSAI</span></h1>
-    <div class="beats" id="beats">
-      <div class="beat"><p class="lead">我把部門裡重複、容易出錯的流程，變成可以放心交出去的自動化。<span>重點不只是省時間，而是出事時有退路。</span></p></div>
-      <div class="beat"><p class="bw">對齊<small>ALIGN</small></p><p class="bl">AI 會把理論上的風險都當真；哪些在業務上真的會發生，由我坐到第一線校正。</p></div>
-      <div class="beat"><p class="bw">追蹤<small>TRACE</small></p><p class="bl">每個決定都寫下前提與代價，累積 50+ 條；出事時知道當初為什麼、從哪裡退回。</p></div>
-      <div class="beat"><p class="bw">分權<small>SPLIT</small></p><p class="bl">寫的 AI 和審的 AI 分開，各守一邊；意見不合由我拍板，測試環境跑通才上線。</p></div>
-    </div>
-    <p class="gov">建立 AI 治理框架；以<button type="button" data-s="align">對齊</button>、<button type="button" data-s="trace">追蹤</button>、<button type="button" data-s="split">分權</button>防堵幻覺。</p>
+    <p class="lead">我把部門裡重複耗時的流程，變成能放心交出去的自動化。<span>真正的挑戰不是讓 AI 寫出程式，而是看穿它那些「看似完美，實則偏離預期」的結果。</span></p>
     <div class="meta"><span class="now">金車・電商部 自動化工程師</span><a href="mailto:tsai200493@gmail.com">tsai200493@gmail.com</a><a href="https://www.linkedin.com/in/cyrus-7a9597197" target="_blank" rel="noopener">LinkedIn</a></div>
   </div>
-  <div class="hint">往下捲：一句換一句　移動滑鼠：光跟著走</div>
+  <div class="hgov" id="heroCard">
+    <p class="gov"><span>建立 AI 治理框架；</span><span>以對齊、追蹤、分權防堵幻覺。</span></p>
+    <ol class="hico" id="beats">
+      <li class="beat"><svg class="ia" viewBox="0 0 48 48" aria-hidden="true"><path class="g" d="M12 5V43"/><path class="b1" d="M12 14H38"/><path class="b2" d="M12 24H31"/><path class="b3" d="M12 34H41"/></svg><b>對齊</b><small>ALIGN</small></li>
+      <li class="beat"><svg class="it" viewBox="0 0 48 48" aria-hidden="true"><path class="tr" pathLength="1" d="M7 39L17 29L28 33L40 15"/><circle cx="7" cy="39" r="2.6"/><circle cx="17" cy="29" r="2.6"/><circle cx="28" cy="33" r="2.6"/><path class="fl" d="M40 17V4L47 7.5L40 11"/></svg><b>追蹤</b><small>TRACE</small></li>
+      <li class="beat"><svg class="is" viewBox="0 0 48 48" aria-hidden="true"><path class="hl" d="M22 15A13 13 0 0 0 22 41Z"/><path class="hr" d="M26 15A13 13 0 0 1 26 41Z"/><path class="dm" d="M24 2L28 6L24 10L20 6Z"/></svg><b>分權</b><small>SPLIT</small></li>
+    </ol>
+  </div>
+  <div class="hint">往下捲：換上三條原則　移動滑鼠：光跟著走</div>
   <div class="fps" id="fps"></div>
 </section>
 </div>
@@ -498,18 +555,18 @@ button{font-family:inherit}
     <div class="ab-grid">
       <div>
         <p class="why">自動化不該只活在<br><em>某個人的電腦裡</em></p>
-        <p class="why-p">很多團隊的自動化，停在「某個人電腦上的一支腳本」。那個人一請假或離職，就沒人會修。我想做的是讓自動化變成團隊接得住的日常工具：大家看得到它在跑、出事會被通知、壞了有人知道怎麼退回。</p>
+        <p class="why-p">很多自動化只是「某個人電腦上的一支小程式」，那個人一請假或離職，就沒人會修。我想做的是團隊接得住的日常工具：大家看得到它在跑、出事會收到通知、壞了知道怎麼退回，接手的人也看得懂當初為什麼這樣做。</p>
       </div>
       <div class="ab-body">
+        <figure class="ab-photo" id="abPhoto"><img src="images/avatar_cut.webp" alt="蔡承育的大頭照" width="640" height="717"></figure>
         <p>我是承育，有電商營運與後勤背景，現在是金車電商部的自動化工程師，這個職位是公司為了自動化新設的。</p>
-        <p>我的工作從坐到需求人旁邊開始：看他怎麼做、哪裡會出錯、出錯了誰會痛。接著把流程拆成步驟、寫成規格，用 AI 協作產出程式，經過兩輪審查、在測試環境驗證後才上線。</p>
-        <p>比起「省了幾小時」，我更在意的是：自動化上線之後，出事時有沒有人知道、能不能退回、後面接手的人看不看得懂當初為什麼這樣做。</p>
+        <p>我的工作從坐到實際做事的同事旁邊開始：看他怎麼做、哪裡會出錯、出錯了誰會痛。接著拆成步驟、寫成規格，用 AI 協作寫出程式，經過兩輪審查、在測試環境驗證後才上線。</p>
       </div>
     </div>
     <ul class="caps">
-      <li><h3>需求 → 規格</h3><p>訪談第一線、拆步驟、畫流程圖，把「大家都這樣做」變成寫得下來、可以驗收的規格。</p></li>
-      <li><h3>落地與維運</h3><p>用 Python、GAS、VBA 做自動化，串接公司系統與電商平台，部署在內網伺服器（VM）常駐，上線後持續維運。</p></li>
-      <li><h3>風險控管</h3><p>測試帳號優先、上線前新舊比對、保留退回人工的開關；每個決定都寫下前提與代價。</p></li>
+      <li><h3>需求 → 規格</h3><p>訪談第一線、拆成步驟，把「大家都這樣做」寫成可以驗收的規格。</p></li>
+      <li><h3>落地與維運</h3><p>用 Python、GAS（Google 試算表腳本）、VBA（Excel 巨集）串接公司系統與電商平台，放在公司內網伺服器常駐執行，上線後持續維護。</p></li>
+      <li><h3>風險控管</h3><p>先用測試帳號、上線前新舊結果逐一比對、隨時能切回人工作業。</p></li>
     </ul>
   </div>
 </section>
@@ -546,10 +603,10 @@ button{font-family:inherit}
         <h3>自動化工程師</h3>
         <div class="co">金車股份有限公司・電商部<span>公司為推動自動化新設的職位</span></div>
         <div class="hl">
-          <div><h4>自建訂單 API</h4><p>自建 REST API，讓程式直接寫入公司訂單系統。官網訂單匯入、出貨轉業績 2 條流程自 2026.08 起全自動、人工匯入停用，官網訂單每日自動對帳。</p></div>
-          <div><h4>內網自動化控制台</h4><p>把腳本從各人電腦搬上公司內網伺服器 24 小時常駐，並建置網頁控制台：12 支任務集中管理、依人開放權限、一鍵執行，急件推播到手機。自動化不再綁在某個人身上，成為公司自有、換人也能接手的資產。</p></div>
-          <div><h4>跨組別需求落地</h4><p>服務官網、通路、健食 3 個組別、5 位需求人；從訪談、流程圖、開發到上線維運一手負責。</p></div>
-          <div><h4>配送品質儀表板</h4><p>與主管重新定義準時率與逾期分級：改用工作天計算，避免逾期率被高估 18 個百分點。</p></div>
+          <div><h4>自建訂單 API</h4><p>自己建了一個接口（API），讓程式能直接把訂單寫進公司系統，不用再靠人上傳。官網訂單匯入、出貨轉業績這 2 條流程自 2026.08 起全自動，人工匯入已停用，並每天自動核對訂單有沒有漏。</p></div>
+          <div><h4>內網自動化控制台</h4><p>把小程式從各人電腦搬上公司內網伺服器 24 小時常駐，並做了一個網頁控制台：12 支任務集中管理、依人開放權限、一鍵執行，急件推播到手機。自動化不再綁在某個人身上，成為換人也能接手的公司資產。</p></div>
+          <div><h4>跨組別需求落地</h4><p>服務官網、通路、健食 3 個組別、5 位需求同事；從訪談、流程圖、開發到上線後維護，一手負責。</p></div>
+          <div><h4>配送品質儀表板</h4><p>與主管重新定義「準時」與「逾期」的算法，改用工作天計算（週末不算），避免逾期率被高估 18 個百分點。</p></div>
         </div>
         <ul class="tags"><li>Python</li><li>FastAPI</li><li>SQL Server</li><li>Playwright</li><li>GAS</li><li>Excel VBA</li><li>內網伺服器（VM）</li><li>AI 協作開發</li></ul>
       </article>
@@ -561,8 +618,8 @@ button{font-family:inherit}
         <h3>運營管理師</h3>
         <div class="co">安永金融科技</div>
         <div class="hl">
-          <div><h4>AI 名片識別</h4><p>串接 Gemini API 自動處理 6,000+ 張名片並寫入資料庫，每日可處理 500 張；系統後續轉售外部企業。</p></div>
-          <div><h4>獎金試算自動化</h4><p>從 Salesforce 撈取跨部門銷售數據清理整併，季獎金試算從 2 個工作天縮短到 30 分鐘，並產出業績看板。</p></div>
+          <div><h4>AI 名片識別</h4><p>串接 Google 的 AI（Gemini API）自動辨識 6,000 多張名片並寫入資料庫，每天可處理 500 張；系統後來轉售給外部企業。</p></div>
+          <div><h4>獎金試算自動化</h4><p>從 Salesforce（客戶管理系統）撈出跨部門銷售數據並整理合併，季獎金試算從 2 個工作天縮短到 30 分鐘，並做出業績看板。</p></div>
           <div><h4>週報自動化</h4><p>擔任內外部溝通窗口追蹤會議進度；用 GAS 自動更新報表與週報。</p></div>
         </div>
         <ul class="tags"><li>Gemini API</li><li>Salesforce</li><li>GAS</li></ul>
@@ -578,7 +635,7 @@ button{font-family:inherit}
           <div><h4>庫存與採購自動化</h4><p>跨平台庫存自動更新、國外採購流程全自動化，節省 90% 工時；採購預測模型自動建議下單量（20 分鐘 → 3 分鐘）。</p></div>
           <div><h4>自動對帳</h4><p>負責跨通路請款、發票與對帳；以匯款後五碼與金額自動比對、異常自動提醒，對帳工時減半。</p></div>
           <div><h4>營運報表與儀表板</h4><p>Excel／Google Sheets 資料自動清理整合，月報從 4 小時縮短到 20 分鐘；動態儀表板獲海外品牌經理肯定。</p></div>
-          <div><h4>業務工具</h4><p>Google 表單填表即產出報價單（5 分鐘 → 30 秒）；Python 文案爬蟲、GoLABEL 標籤批次產生器。</p></div>
+          <div><h4>業務工具</h4><p>Google 表單一填完就自動產出報價單（5 分鐘 → 30 秒）；另做了 Python 文案蒐集程式、GoLABEL 標籤批次產生工具。</p></div>
         </div>
         <ul class="tags"><li>Python</li><li>Selenium</li><li>GAS</li><li>Excel VBA</li><li>Ecount ERP API</li></ul>
       </article>
@@ -591,9 +648,9 @@ button{font-family:inherit}
   <div class="proj-intro">
     <div class="wrap">
       <div class="sec-h"><span class="lbl">Projects</span><h2>代表專案</h2></div>
-      <p class="rt">從各人電腦上的腳本，逐漸長成公司的系統——每一站都在解上一站剩下的問題。</p>
+      <p class="rt">從各人電腦上的小程式，逐步長成公司的系統——每一站都在解決上一站留下的問題。</p>
       <ol class="road">
-        <li><span class="d">2026.04</span><b>腳本裝在各人電腦</b></li>
+        <li><span class="d">2026.04</span><b>小程式裝在各人電腦</b></li>
         <li><span class="d">2026.08.03</span><b>排程搬上內網伺服器</b></li>
         <li><span class="d">2026.08.04</span><b>自建 API，訂單流程全自動</b><span class="c">CASE 01・02</span></li>
         <li><span class="d">2026.08 起</span><b>自動化控制台</b><span class="c">CASE 03</span></li>
@@ -626,7 +683,7 @@ button{font-family:inherit}
             <text x="20" y="196" class="tb">API 接上缺口</text>
             <text x="20" y="222">人不必再上傳</text>
           </svg></div></div>
-        <div class="hp"><div class="win"><div class="wb"><i></i><i></i><i></i><span>shadow · compare</span><em>示意・範例資料</em></div>
+        <div class="hp flip"><div class="win"><div class="wb"><i></i><i></i><i></i><span>shadow · compare</span><em>示意・範例資料</em></div>
           <svg class="v v2" viewBox="0 0 420 280" preserveAspectRatio="xMidYMid meet">
             <text x="20" y="40" class="tb">舊路・人工匯入</text>
             <text x="232" y="40" class="tb">新路・API 匯入</text>
@@ -647,9 +704,9 @@ button{font-family:inherit}
             <g class="bub"><rect x="306" y="66" width="88" height="70" rx="9" class="ac"/><text x="316" y="88" style="fill:#fff;font-size:13px;font-weight:700">急件</text><text x="316" y="107" style="fill:#fff;font-size:13px">任務 C 卡住</text><text x="316" y="125" style="fill:#fff;font-size:13px">回覆就續跑</text></g>
             <text x="20" y="262" class="t3">跑完的事不推播，卡住才找人</text>
           </svg></div></div>
-        <div class="hp"><div class="win"><div class="wb"><i></i><i></i><i></i><span>ai · card reader</span><em>示意・範例資料</em></div>
+        <div class="hp flip"><div class="win"><div class="wb"><i></i><i></i><i></i><span>ai · card reader</span><em>示意・範例資料</em></div>
           <svg class="v" viewBox="0 0 420 280" preserveAspectRatio="xMidYMid meet">
-            <text x="20" y="34" class="t3">AI 讀名片 → 結構化資料</text>
+            <text x="20" y="34" class="t3">AI 讀名片 → 整理成資料</text>
             <rect class="ln" x="20" y="56" width="172" height="104" rx="8" fill="#fff"/>
             <text x="36" y="90" class="tb" style="font-size:17px">王大明</text>
             <text x="36" y="112" class="t3" style="font-size:13px">營運總監</text>
@@ -687,44 +744,44 @@ button{font-family:inherit}
         <div class="hp"><div class="copy">
           <div class="no">CASE 01<span>金車・2026.08 上線運作中</span></div>
           <h3>自建 API 上線：補上最後一哩路</h3>
-          <dl><dt>問題</dt><dd>公司系統沒有讓程式寫入的入口，自動化做到最後一步，還是得靠人上傳。</dd>
-            <dt>做法</dt><dd>自建 REST API，放在內網伺服器 24 小時常駐、用金鑰驗證，讓腳本直接寫入公司系統。</dd>
-            <dt>取捨</dt><dd>放內網、不放雲端：免去 VPN 申請與資安審查；代價是外部連不進來，伺服器要自己顧。</dd>
-            <dt>成效</dt><dd>官網訂單、出貨轉業績兩條流程由它接手，人不必介入；上線前壓測 330 筆零破損。</dd></dl>
+          <dl><dt>問題</dt><dd>公司系統沒有開放程式寫入的入口，所以自動化做到最後一步，還是得靠人手動上傳。</dd>
+            <dt>做法</dt><dd>自己建一個接口（API），放在公司內網伺服器 24 小時待命，要有金鑰才能使用，讓程式直接寫入公司系統。</dd>
+            <dt>取捨</dt><dd>選擇放在公司內網、不放雲端：省下 VPN 申請與資安審查；代價是外面連不進來，伺服器也要自己維護。</dd>
+            <dt class="res">成效</dt><dd class="res"><mark class="rhl">官網訂單、出貨轉業績兩條流程改由它處理，不需人工介入；上線前用 330 筆資料測試，<b>零損壞</b>。</mark></dd></dl>
           <div class="meta">自建 REST API · FastAPI · SQL Server · 金鑰驗證</div>
         </div></div>
-        <div class="hp"><div class="copy">
+        <div class="hp flip"><div class="copy">
           <div class="no">CASE 02<span>金車・2026.08 上線運作中</span></div>
           <h3>官網訂單全自動匯入</h3>
-          <dl><dt>問題</dt><dd>每月約 40 批、每批 20 分鐘人工處理；公司系統不讓我方刪除，匯錯了收不回來。</dd>
-            <dt>做法</dt><dd>抓單 → 篩選 → 匯入 → 對帳 → 通知，全程排程自動跑；匯入交給自建 API。</dd>
-            <dt>取捨</dt><dd>先比對、再切換：新舊並行，4,095 格零差異才切換（代價：上線晚一輪）；改一行設定就能退回人工。</dd>
-            <dt>成效</dt><dd>2026.08.05 起人工匯入停用，每批自動對帳。</dd></dl>
+          <dl><dt>問題</dt><dd>每月約 40 批，每批要人工處理 20 分鐘；而且公司系統不讓我方刪除資料，匯錯了就收不回來。</dd>
+            <dt>做法</dt><dd>抓單 → 篩選 → 匯入 → 對帳 → 通知，全程按時間表自動跑；匯入這一步交給自建的 API。</dd>
+            <dt>取捨</dt><dd>先比對、再切換：新舊兩條路同時跑，4,095 格都一樣才切換（代價：晚一輪上線）；改一行設定就能退回人工。</dd>
+            <dt class="res">成效</dt><dd class="res"><mark class="rhl">2026.08.05 起<b>停用人工匯入</b>，每一批自動對帳。</mark></dd></dl>
           <div class="meta">Python · 排程自動化 · 自動對帳 · 新舊並行比對</div>
         </div></div>
         <div class="hp"><div class="copy">
           <div class="no">CASE 03<span>金車・2026.08 起運作中</span></div>
           <h3>內網自動化控制台</h3>
-          <dl><dt>問題</dt><dd>腳本裝在各人電腦上，壞了要跑到座位處理，也看不到有沒有跑成功。</dd>
-            <dt>做法</dt><dd>任務搬上內網伺服器，做成網頁控制台：依人授權、一鍵執行、留下紀錄，急件推播到手機。</dd>
-            <dt>取捨</dt><dd>我推翻過自己：原以為訂單匯入會自己恢復，發現不會後補上自動補匯。手機只推「卡住等人處理」的急件。</dd>
-            <dt>成效</dt><dd>12 支任務、3 個組別使用；50+ 條決策紀錄齊全，換人也接得起來。</dd></dl>
+          <dl><dt>問題</dt><dd>小程式都裝在各人電腦上，壞了要跑到座位旁處理，也看不到有沒有跑成功。</dd>
+            <dt>做法</dt><dd>把任務搬上公司內網伺服器，做成網頁控制台：依人授權、一鍵執行、自動留紀錄，急件推播到手機。</dd>
+            <dt>取捨</dt><dd>我推翻過自己的判斷：原以為訂單匯入失敗後會自己恢復，發現不會，就補上自動補匯。手機只推「卡住、等人處理」的急件。</dd>
+            <dt class="res">成效</dt><dd class="res"><mark class="rhl"><b>12 支任務、3 個組別</b>使用；50 多條決策紀錄完整，換人也接得起來。</mark></dd></dl>
           <div class="meta">FastAPI · 帳號權限 · 排程整合 · Telegram Bot</div>
         </div></div>
-        <div class="hp"><div class="copy">
+        <div class="hp flip"><div class="copy">
           <div class="no">CASE 04<span>安永金融科技・2025 已交付</span></div>
           <h3>AI 名片識別系統</h3>
-          <dl><dt>問題</dt><dd>6,000+ 張名片人工鍵檔要數週；特殊排版與多國語言，傳統 OCR 認不準。</dd>
-            <dt>做法</dt><dd>串接 Gemini API 辨識並理解名片內容，批次處理後自動寫入雲端資料庫。</dd>
-            <dt>成效</dt><dd>6,000+ 張全數數位化、每日可處理 500 張；系統後來轉售外部企業。</dd></dl>
+          <dl><dt>問題</dt><dd>6,000 多張名片人工輸入要花數週；排版特殊又有多國語言，傳統的文字辨識（OCR）認不準。</dd>
+            <dt>做法</dt><dd>串接 Google 的 AI（Gemini API）辨識並理解名片內容，批次處理後自動寫進雲端資料庫。</dd>
+            <dt class="res">成效</dt><dd class="res"><mark class="rhl"><b>6,000 多張全數數位化</b>、每天可處理 500 張；系統後來轉售給外部企業。</mark></dd></dl>
           <div class="meta">Gemini API · Python · 批次處理</div>
         </div></div>
         <div class="hp"><div class="copy">
           <div class="no">CASE 05<span>思博特・2021–2025 已交付</span></div>
           <h3>採購自動化閉環</h3>
-          <dl><dt>問題</dt><dd>採購量靠人工估，旺季缺貨、淡季壓庫存；國外廠商的在途數量也看不到。</dd>
-            <dt>做法</dt><dd>串接 ERP，用季節性參數自動算出採購建議、一鍵下單；GAS 回寫在途清單，併入下一輪預測。</dd>
-            <dt>成效</dt><dd>採購評估時間縮短 90% 以上；在途數量即時可見；不需額外購買系統。</dd></dl>
+          <dl><dt>問題</dt><dd>採購量靠人工估，旺季缺貨、淡季庫存積壓；國外廠商的在途（運送中）數量也看不到。</dd>
+            <dt>做法</dt><dd>串接 ERP（企業資源管理系統），依季節性因素自動算出建議採購量、一鍵下單；再用 GAS 把在途清單寫回，納入下一輪預測。</dd>
+            <dt class="res">成效</dt><dd class="res"><mark class="rhl">採購評估時間<b>縮短 90% 以上</b>；在途數量即時可見；不需額外購買系統。</mark></dd></dl>
           <div class="meta">Ecount ERP API · GAS · Google Sheets · 預測模型</div>
         </div></div>
       </div>
@@ -733,19 +790,19 @@ button{font-family:inherit}
   </div>
 </section>
 
-<!-- ════ 方法：一張紙摺成飛機（T2＋③，ratchet） ════ -->
-<section class="fold" id="how" data-mode="ratchet">
+<!-- ════ 方法：一張紙摺成飛機（T2＋③，scrub：往回捲就拆回去、步驟跟著倒退展開） ════ -->
+<section class="fold" id="how" data-mode="scrub">
   <div class="pin">
     <div class="stage"><svg id="foldSvg" aria-hidden="true"></svg></div>
     <div class="side">
       <span class="lbl">How I work</span>
-      <h2 class="claim">程式由 AI 產出；<br><em>規格、邊界、出事怎麼處理，由我決定。</em></h2>
+      <h2 class="claim">程式由 AI 寫；<br><em>做什麼、做到哪、出事怎麼辦，由我決定。</em></h2>
       <ol class="steps7" id="steps7">
         <li><span class="n">01</span><b>需求訪談</b><span class="who">我</span><p>看第一線怎麼做、哪裡會出錯</p></li>
         <li><span class="n">02</span><b>拆步驟、畫流程</b><span class="who">我＋AI</span><p>每一步寫清楚輸入與輸出</p></li>
-        <li><span class="n">03</span><b>定規格與邊界</b><span class="who">我</span><p>什麼情況要停、通知誰、能不能退回</p></li>
+        <li><span class="n">03</span><b>定規格與範圍</b><span class="who">我</span><p>什麼情況要停、通知誰、能不能退回</p></li>
         <li><span class="n">04</span><b>產出程式</b><span class="who">AI</span><p>依規格產出，不靠我手寫</p></li>
-        <li><span class="n">05</span><b>兩輪審查</b><span class="who">AI → 我</span><p>獨立審查員挑錯，有爭議由我決定</p></li>
+        <li><span class="n">05</span><b>兩輪審查</b><span class="who">AI → 我</span><p>另一個 AI 審查員專門挑錯，有爭議由我決定</p></li>
         <li><span class="n">06</span><b>測試驗證</b><span class="who">我＋AI</span><p>AI 先在測試環境跑，我用真實資料驗收</p></li>
         <li><span class="n">07</span><b>上線、留紀錄</b><span class="who">我＋AI</span><p>我部署上線，AI 寫紀錄、我確認內容</p></li>
       </ol>
@@ -760,18 +817,18 @@ button{font-family:inherit}
     <div class="back"><p>建立 AI 治理框架；以對齊、追蹤、分權防堵幻覺。</p><h2>對齊・追蹤・分權</h2></div>
     <article class="card c1">
       <div class="pn">PRINCIPLE 01・對齊</div><h3>實務對齊</h3>
-      <p>AI 會把理論上的風險都當真；哪些在業務上真的會發生，由我校正。</p>
+      <p>AI 會把理論上可能的風險都當真；哪些在業務上真的會發生，由我到第一線確認。</p>
       <div class="ex"><div class="row"><span class="who">AI</span>週五失敗要等 72 小時才會被處理，建議補強。</div><div class="row"><span class="who">我</span>營業所週末本來就不出貨，實際缺口是 0。</div></div>
     </article>
     <article class="card c2">
       <div class="pn">PRINCIPLE 02・追蹤</div><h3>決策日記</h3>
-      <p>雙面刃的問題沒有標準答案；寫下前提與代價，方向才不會反覆。</p>
-      <div class="ex"><b>API 放內網，還是雲端？→ 內網</b><dl><dt>換到</dt><dd>免 VPN 申請、免資安審查</dd><dt>代價</dt><dd>外部連不進來，伺服器要自己顧</dd></dl><div style="margin-top:6px;opacity:.8">決策日記・共 50+ 條</div></div>
+      <p>兩邊都有好有壞的選擇，沒有標準答案；把「為什麼」和「代價」寫下來，方向才不會反覆。</p>
+      <div class="ex"><b>API 放內網，還是雲端？→ 內網</b><dl><dt>得到</dt><dd>免 VPN 申請、免資安審查</dd><dt>代價</dt><dd>外部連不進來，伺服器要自己顧</dd></dl><div style="margin-top:6px;opacity:.8">決策日記・共 50+ 條</div></div>
     </article>
     <article class="card c3">
       <div class="pn">PRINCIPLE 03・分權</div><h3>AI 分權</h3>
-      <p>寫的 AI 和審的 AI 分開，各守一邊；意見不合由我拍板，測試環境跑通才上線。</p>
-      <div class="ex"><div class="duo"><div><b>執行 AI</b>最懂業務邏輯，負責寫與改</div><span aria-hidden="true">⇄</span><div><b>審查 AI</b>專挑資安、風險邊界、死碼</div></div><div class="gate">✓ 測試環境跑通，才上正式環境</div></div>
+      <p>寫程式的 AI 和檢查的 AI 分開；兩邊意見不同由我決定，先在測試環境跑通才上線。</p>
+      <div class="ex"><div class="duo"><div><b>執行 AI</b>最懂業務邏輯，負責寫與改</div><span aria-hidden="true">⇄</span><div><b>審查 AI</b>專挑資安漏洞、風險範圍、用不到的程式碼</div></div><div class="gate">✓ 測試環境跑通，才上正式環境</div></div>
     </article>
   </div>
 </section>
@@ -800,7 +857,7 @@ button{font-family:inherit}
       <p>對內部自動化、流程改善有想法，歡迎來信交流。</p>
       <dl>
         <div><dt>姓名</dt><dd>蔡承育 Cyrus Tsai</dd></div>
-        <div><dt>定位</dt><dd>內部流程自動化・從需求訪談到上線維運</dd></div>
+        <div><dt>定位</dt><dd>公司內部流程自動化・從了解需求到上線後維護</dd></div>
         <div><dt>Email</dt><dd><a href="mailto:tsai200493@gmail.com">tsai200493@gmail.com</a></dd></div>
         <div><dt>LinkedIn</dt><dd><a href="https://www.linkedin.com/in/cyrus-7a9597197" target="_blank" rel="noopener">linkedin.com/in/cyrus-7a9597197</a></dd></div>
       </dl>
@@ -1077,13 +1134,29 @@ button{font-family:inherit}
   setSec(secName, true);
 
   /* 【頁 v3】T2 換字幕：跑道四等分＝開場、對齊、追蹤、分權；紙飛機不動，字一句換一句、色調跟著換。點詞＝捲到那一句 */
+  // v6：跑道四段＝第一段字（開場）→ 卡片上的對齊 → 追蹤 → 分權；第一段到卡片的換場跟著捲動走（倒捲會滑回來）
   var run = document.getElementById('heroRun'), beats = [].slice.call(document.querySelectorAll('#beats .beat'));
-  var BEAT_TONE = ['align', 'align', 'trace', 'split'], NB = beats.length, lockTo = 0, runLast = -1, beatLast = -1;
+  var BEAT_TONE = ['align', 'align', 'trace', 'split'], NB = BEAT_TONE.length, lockTo = 0, runLast = -1, beatLast = -1;
+  var hCopy = document.getElementById('heroCopy'), hCard = document.getElementById('heroCard'), swapLast = -1;
+  function swapStage(t) {                                                  // t：0＝第一段字，1＝卡片；字先往左滑走（前半），第二段再從下面浮上來（後半；幾乎不重疊，疊在一起會糊）
+    if (Math.abs(t - swapLast) < .001) return; swapLast = t;
+    var a = clamp01(t / .5), c = clamp01((t - .42) / .58), ec = 1 - Math.pow(1 - c, 3);
+    hCopy.style.transform = 'translate3d(' + (-a * a * 110).toFixed(1) + 'px,0,0)'; hCopy.style.opacity = (1 - a).toFixed(3);
+    hCopy.style.visibility = a >= 1 ? 'hidden' : '';
+    hCard.style.transform = 'translate3d(0,' + ((1 - ec) * 70).toFixed(1) + 'px,0)'; hCard.style.opacity = c.toFixed(3);
+    hCard.style.visibility = c > 0 ? 'visible' : 'hidden';
+  }
+  function lightBeat(i) {                                                  // i：0＝第一段字（卡片還沒上場），1–3＝對齊／＋追蹤／＋分權（累加）
+    if (i === beatLast) return; beatLast = i;
+    beats.forEach(function (b, k) { b.classList.toggle('in', k < i); b.classList.toggle('on', k === i - 1); });
+  }
   function runSpan() { return run.offsetHeight - innerHeight; }
   function runIdx() { var sp = runSpan(); if (sp <= 0) return reduce ? -1 : 0; var p = clamp01(-run.getBoundingClientRect().top / sp); return Math.min(NB - 1, Math.floor(p * NB)); }
   function onRun() {
+    var sp = runSpan(), p = sp > 0 ? clamp01(-run.getBoundingClientRect().top / sp) : 0;
+    if (!reduce) swapStage(clamp01((p - .08) / .17));                                // 第一段停一下（8%）再換場，換到第二段開頭（25%）剛好就位
     var i = runIdx(); if (i < 0) return;
-    if (i !== beatLast) { beatLast = i; beats.forEach(function (b, k) { b.classList.toggle('on', k === i); b.classList.toggle('past', k < i); }); }
+    lightBeat(i);
     if (FORCE || shrink > 0 || performance.now() < lockTo || i === runLast) return;   // 背景模式不管；只在跨句時換色（擴散途中重呼叫會重新起跑）
     runLast = i; bgTint = null; setSec(BEAT_TONE[i]);
   }
@@ -1436,10 +1509,20 @@ button{font-family:inherit}
     jobs.forEach(function (j) { var nt = j.getBoundingClientRect().top - top0 + 6; j.classList.toggle('lit', nt <= v * h + 2); });
   }
 
-  /* ▌T9 橫向軌道：圖層 τ .14、字層 τ .24；快捲壓扁只壓圖層；背景字 1/8；只有正在看的那屏在動；【頁】小飛機坐在進度線前端 */
+  /* ▌T9 橫向軌道：圖層 τ .14、字層 τ .14（A3 交錯後改同速，原 .24）；CASE 02、04 圖左字右；快捲壓扁只壓圖層；背景字 1/8；只有正在看的那屏在動；【頁】小飛機坐在進度線前端 */
   var ht = document.getElementById('htrack'), hMedia = ht.querySelector('.layer.media'), hText = ht.querySelector('.layer.text'),
       hWord = ht.querySelector('.bgword'), hFill = ht.querySelector('.hbar .fill'), hNum = ht.querySelector('.hbar .num'), hTip = ht.querySelector('.hbar .tip'), hLine = ht.querySelector('.hbar .line');
   var hPanels = [].slice.call(hMedia.children), HN = hPanels.length, hM = 0, hT = 0, hPrev = 0, hSq = 1, hLive = -1;
+  // 錨點：每個 CASE 一個點，位置＝它在進度線上的比例；點了捲到那一屏
+  var hTicks = [].slice.call(hText.children).map(function (pnl, k) {
+    var b = document.createElement('button'), t = pnl.querySelector('h3');
+    b.type = 'button'; b.className = 'hk'; b.style.left = (k / (HN - 1) * 100) + '%';
+    b.dataset.t = two(k + 1) + '　' + (t ? t.textContent : ''); b.setAttribute('aria-label', '跳到 CASE ' + two(k + 1) + (t ? '：' + t.textContent : ''));
+    b.addEventListener('click', function () {
+      scrollTo({ top: ht.getBoundingClientRect().top + scrollY + k / (HN - 1) * (ht.offsetHeight - innerHeight), behavior: reduce ? 'auto' : 'smooth' });
+    });
+    hLine.insertBefore(b, hTip); return b;
+  });
   function htLayout() { ht.style.height = (innerHeight + (HN - 1) * ht.clientWidth) + 'px'; }
   htLayout(); addEventListener('resize', htLayout);
   // CASE 02 的比對格子
@@ -1454,7 +1537,7 @@ button{font-family:inherit}
     var W = ht.clientWidth, span = ht.offsetHeight - innerHeight, max = (HN - 1) * W;
     var target = clamp(-ht.getBoundingClientRect().top / span) * max;
     if (reduce || !dt) { hM = hT = target; }
-    else { hM += (target - hM) * (1 - Math.exp(-dt / .14)); hT += (target - hT) * (1 - Math.exp(-dt / .24)); }
+    else { hM += (target - hM) * (1 - Math.exp(-dt / .14)); hT += (target - hT) * (1 - Math.exp(-dt / .14)); }   // A3：字層同速（原 .24）
     var v = dt ? (hM - hPrev) / dt / W : 0; hPrev = hM;
     var sq = reduce ? 1 : 1 - Math.min(.07, Math.abs(v) * .025);
     hSq += (sq - hSq) * (1 - Math.exp(-(dt || .016) / .08));
@@ -1465,7 +1548,10 @@ button{font-family:inherit}
     hFill.style.transform = 'scaleX(' + pr.toFixed(4) + ')';
     hTip.style.transform = 'translateX(' + (pr * hLine.clientWidth - 12).toFixed(1) + 'px) rotate(45deg)';
     var idx = Math.min(HN - 1, Math.round(hM / W));
-    if (idx !== hLive) { hLive = idx; hNum.textContent = two(idx + 1) + ' / ' + two(HN); hPanels.forEach(function (el, k) { el.classList.toggle('live', k === idx); }); }
+    if (idx !== hLive) {
+      hLive = idx; hNum.textContent = two(idx + 1) + ' / ' + two(HN); hPanels.forEach(function (el, k) { el.classList.toggle('live', k === idx); }); [].forEach.call(hText.children, function (el, k) { el.classList.toggle('live', k === idx); });
+      hTicks.forEach(function (b, k) { b.classList.toggle('done', k < idx); b.classList.toggle('cur', k === idx); b.setAttribute('aria-current', k === idx ? 'true' : 'false'); });
+    }
   }
 
   /* ════ 紙：一張真的會摺的紙（方法段摺成飛機、聯絡段倒著攤開，同一支引擎）
@@ -1631,16 +1717,16 @@ button{font-family:inherit}
   var G0 = { ry: 0, rx: .36, rz: 0 }, GP = { ry: .38, rx: 1.02, rz: .78 }, GI = { ry: 0, rx: 0, rz: 0 };
   function lerpG(a, b, t) { return { ry: a.ry + (b.ry - a.ry) * t, rx: a.rx + (b.rx - a.rx) * t, rz: a.rz + (b.rz - a.rz) * t }; }
 
-  /* ▌方法段：T2 固定舞台，七步＝七摺（ratchet：演過就定格） */
+  /* ▌方法段：T2 固定舞台，七步＝七摺（v8 起 scrub：飛機跟著捲動進度摺／拆，往回捲時目前那一步跟著退回去展開；原本 ratchet 演過就定格） */
   var fold = document.getElementById('how'), fSvg = document.getElementById('foldSvg'), paper = Paper(fSvg);
   var steps = [].slice.call(document.querySelectorAll('#steps7 li')), fCnt = document.getElementById('foldCnt');
-  var fMax = 0, fD = new Damp(.32), fW = 0, fH = 0, fCur = -2;
+  var fD = new Damp(.32), fW = 0, fH = 0, fCur = -2;
   function fLayout() { var r = fSvg.getBoundingClientRect(); fW = r.width; fH = r.height; fSvg.setAttribute('viewBox', '0 0 ' + fW.toFixed(0) + ' ' + fH.toFixed(0)); }
   fLayout(); addEventListener('resize', fLayout);
   function flyPath(k) { return [fW * .28 * Math.pow(k, 1.15), -fH * .2 * Math.pow(k, 1.6) + fH * .06 * Math.sin(Math.PI * k)]; }
   function foldFrame(dt) {
     var r = fold.getBoundingClientRect(); if (r.bottom < -50 || r.top > innerHeight + 50) return;
-    var p = prog(fold); fMax = Math.max(fMax, p); fD.target = fMax;
+    fD.target = prog(fold);
     var b = reduce ? 6 : fD.step(dt) * 7.25;
     var mob = innerWidth <= 820, top = mob ? 64 : 0;
     var S = Math.min((fH - top) * .245, fW * .3), cx = fW * .5, cy = top + (fH - top) * (mob ? .5 : .52);
@@ -1718,10 +1804,16 @@ button{font-family:inherit}
 
   /* ▌v2 整頁跟著捲動換色：畫面中線落在哪一段，就用那段的色調（--tone 本身有 2.4 秒過場）
      pick＝首屏三個詞選的「你的顏色」；steps＝方法段依目前那一步；cards＝原則段依最上面那張卡 */
-  var TONE_MAP = { hero: 'pick', about: 'align', experience: 'trace', projects: 'split', how: 'steps', principles: 'cards', skills: 'pick', contact: 'pick' };
+  var TONE_MAP = { hero: 'pick', about: 'photo', experience: 'trace', projects: 'case', how: 'steps', principles: 'cards', skills: 'pick', contact: 'pick' };
   var STEP_TONE = ['align', 'align', 'align', 'split', 'split', 'trace', 'trace'];   // 訪談・拆步驟・定規格＝對齊；產出・審查＝分權；測試・留紀錄＝追蹤
   var CARD_TONE = ['align', 'trace', 'split'];
   var rootEl = document.documentElement, toneSecs = Object.keys(TONE_MAP).map(function (id) { return document.getElementById(id); }), curTone = '';
+  /* v8 關於我＝照片跟著捲動換三種效果（照片中線在畫面下段＝對齊、中段＝追蹤、上段以上＝分權）；
+     主視覺有三套效果，照片窗只看得到一種太可惜 ⇒ 跟首屏、經歷、方法段一樣整頁跟著捲動換色 */
+  var abPhotoEl = document.getElementById('abPhoto');
+  function photoTone() { var r = abPhotoEl.getBoundingClientRect(), c = (r.top + r.bottom) / 2 / innerHeight; return c > .62 ? 'align' : c > .36 ? 'trace' : 'split'; }
+  /* v8 代表專案＝每個 CASE 一個色調（捲動驅動，不用計時器——停下來讀成效時顏色不能在旁邊一直變） */
+  var CASE_TONE = ['align', 'trace', 'split', 'align', 'trace'];
   function topCard() {
     var k = 0;
     cards.forEach(function (c, i) { if (reduce ? c.el.getBoundingClientRect().top < innerHeight * .5 : c.d.v > .5) k = i; });
@@ -1731,7 +1823,7 @@ button{font-family:inherit}
     var sec = toneSecs[0];
     toneSecs.forEach(function (s) { if (s.getBoundingClientRect().top < innerHeight * .5) sec = s; });
     var rule = TONE_MAP[sec.id];
-    var name = rule === 'pick' ? (rootEl.dataset.pick || 'align') : rule === 'steps' ? STEP_TONE[Math.max(0, fCur)] : rule === 'cards' ? topCard() : rule;
+    var name = rule === 'pick' ? (rootEl.dataset.pick || 'align') : rule === 'steps' ? STEP_TONE[Math.max(0, fCur)] : rule === 'cards' ? topCard() : rule === 'photo' ? photoTone() : rule === 'case' ? CASE_TONE[Math.max(0, hLive)] : rule;
     if (name !== curTone) { var first = !curTone; curTone = name; rootEl.style.setProperty('--tone', 'var(--t-' + name + ')'); ambTo(name, first); document.dispatchEvent(new CustomEvent('pagetone', { detail: name })); }
   }
 
@@ -1773,7 +1865,8 @@ button{font-family:inherit}
      ＋ 霧上開窗：每張圖的位置把整頁的淡霧（#amb）挖掉，透出後面全強度、正在動的主視覺；離開這段就把洞補回去。倒帶：scrub。 */
   var xt = document.getElementById('aboutNums'), xPin = xt.querySelector('.pin'), xPh = [].slice.call(xt.querySelectorAll('.ph3')), XN = xPh.length;
   var xArt = xPh.map(function (p) { return p.querySelector('.art'); }), xRv = xPh.map(function (p) { return p.querySelector('.rv'); });
-  var xVt = xt.querySelector('.vt-in'), xVb = [].slice.call(xVt.children), xBar = xt.querySelector('.sbar'), xLine = xBar.querySelector('.line'), xKnob = xBar.querySelector('.knob');
+  var xVt = xt.querySelector('.vt-in'), xVtK = xVt.parentNode, xVtW = xVtK.cloneNode(true); xVtW.classList.add('vt-w'); xVtK.after(xVtW);
+  var xVtWi = xVtW.firstElementChild, xVb = [].slice.call(xVt.children).concat([].slice.call(xVtWi.children)), xBar = xt.querySelector('.sbar'), xLine = xBar.querySelector('.line'), xKnob = xBar.querySelector('.knob');
   var xL = {}, xPos = xPh.map(function () { return 0; }), xDir = 1, xLastT = 0, xTit = new Damp(.32), xKn = new Damp(.22), xMag = { x: 0, y: 0, tx: 0, ty: 0 }, xDrag = false, xSnapT = null;
   var fogEl = document.getElementById('amb'), fogClip = '';
   function xLayout() {
@@ -1782,7 +1875,7 @@ button{font-family:inherit}
     xL.step = xL.pw + xL.gap; xL.max = (XN - 1) * xL.step;
     xt.style.height = (H + xL.max) + 'px';
     xPh.forEach(function (p) { p.style.width = xL.pw + 'px'; });
-    xVb.forEach(function (b, i) { b.style.top = (xPin.clientHeight * (i + .5)) + 'px'; });
+    xVb.forEach(function (b, i) { b.style.top = (xPin.clientHeight * (i % XN + .5)) + 'px'; });   // 墨色層＋白字層各 XN 個
     xLine.style.width = ((XN - 1) * xL.sg) + 'px';
     [].slice.call(xBar.querySelectorAll('.dot')).forEach(function (d) { d.remove(); });
     for (var i = 0; i < XN; i++) {
@@ -1823,18 +1916,23 @@ button{font-family:inherit}
     var xIo = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { xt.classList.add('in'); xIo.disconnect(); } }, { threshold: .02 });
     xIo.observe(xt);
   } else xt.classList.add('in');
-  function fogHoles(on) {                                                 // 霧上開窗：整片霧＋每張圖的矩形，evenodd 挖洞
-    var c = '';
+  var abPhoto = document.getElementById('abPhoto');
+  function fogHoles(on) {                                                 // 霧上開窗：整片霧＋每張圖的矩形，evenodd 挖洞（數字段四張圖＋關於我的照片框）
+    var c = '', ink = '', wht = 'inset(50%)', W = innerWidth, H = innerHeight, d = '';
+    function rc(l, t, r, b) { return 'M' + l.toFixed(1) + ' ' + t.toFixed(1) + 'H' + r.toFixed(1) + 'V' + b.toFixed(1) + 'H' + l.toFixed(1) + 'Z'; }
     if (on) {
-      var W = innerWidth, H = innerHeight, d = 'M0 0H' + W + 'V' + H + 'H0Z';
+      var pr = xPin.getBoundingClientRect(), e = '';
       xPh.forEach(function (p, i) {
         var a = p.getBoundingClientRect(), b = xRv[i].getBoundingClientRect();
         var l = Math.max(a.left, b.left, 0), t = Math.max(a.top, b.top), r = Math.min(a.right, b.right, W), bt = Math.min(a.bottom, b.bottom);
-        if (r - l > 1 && bt - t > 1) d += 'M' + l.toFixed(1) + ' ' + t.toFixed(1) + 'H' + r.toFixed(1) + 'V' + bt.toFixed(1) + 'H' + l.toFixed(1) + 'Z';
+        if (r - l > 1 && bt - t > 1) { d += rc(l, t, r, bt); e += rc(l - pr.left, t - pr.top, r - pr.left, bt - pr.top); }
       });
-      c = 'path(evenodd, "' + d + '")';
+      if (e) { ink = 'path(evenodd, "M0 0H' + pr.width + 'V' + pr.height + 'H0Z' + e + '")'; wht = 'path("' + e + '")'; }   // 直排字：窗外墨色、窗內白字（座標換成 pin 的）
     }
-    if (c !== fogClip) { fogClip = c; fogEl.style.clipPath = c; }
+    var q = abPhoto.getBoundingClientRect(), ql = Math.max(q.left, 0), qt = Math.max(q.top, 0), qr = Math.min(q.right, W), qb = Math.min(q.bottom, H);
+    if (qr - ql > 1 && qb - qt > 1) d += rc(ql, qt, qr, qb);
+    if (d) c = 'path(evenodd, "M0 0H' + W + 'V' + H + 'H0Z' + d + '")';
+    if (c !== fogClip) { fogClip = c; fogEl.style.clipPath = c; xVtK.style.clipPath = ink; xVtW.style.clipPath = wht; }
   }
   function xFrame(dt) {
     var r = xt.getBoundingClientRect(); if (r.bottom < 0 || r.top > innerHeight) { fogHoles(false); return; }
@@ -1851,7 +1949,7 @@ button{font-family:inherit}
       xArt[i].style.transform = 'translate3d(' + (-off * xL.pw * .07).toFixed(1) + 'px,0,0)';
     });
     xTit.target = target / xL.step; var tv = reduce ? xTit.target : xTit.step(dt);
-    xVt.style.transform = 'translate3d(0,' + (-tv * xPin.clientHeight).toFixed(1) + 'px,0)';
+    xVt.style.transform = xVtWi.style.transform = 'translate3d(0,' + (-tv * xPin.clientHeight).toFixed(1) + 'px,0)';
     xKn.target = (target / (xL.max || 1)) * (XN - 1) * xL.sg; var kv = reduce ? xKn.target : xKn.step(dt);
     xMag.x += (xMag.tx - xMag.x) * (1 - Math.exp(-dt / .15)); xMag.y += (xMag.ty - xMag.y) * (1 - Math.exp(-dt / .15));
     xKnob.style.transform = 'translate3d(' + (kv + xMag.x).toFixed(1) + 'px,' + xMag.y.toFixed(1) + 'px,0)';
