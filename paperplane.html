@@ -15,8 +15,8 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
 <style>
-@property --tone{syntax:'<color>';inherits:true;initial-value:#c63c2d}
-:root{--bg:#f2f3f5;--sheet:#fff;--ink:#11141b;--ink2:#464c58;--ink3:#767c88;--hair:#d9dce3;--tone:#c63c2d;
+@property --tone{syntax:'<color>';inherits:true;initial-value:#14886c}
+:root{--bg:#f2f3f5;--sheet:#fff;--ink:#11141b;--ink2:#464c58;--ink3:#767c88;--hair:#d9dce3;--tone:#14886c;
   --disp:"Space Grotesk","Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;
   --sans:"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;
   --ease:cubic-bezier(.2,.7,.1,1);transition:--tone 2.4s ease}
@@ -55,7 +55,7 @@ button{font-family:inherit}
 /* ════ 首屏（T12b 疊層，下 → 上）：底色 → SVG 形狀 → 光線（screen）→ 光層（overlay）→ 噪點 → 字 ════ */
 /* v3：舞台＝首屏的紙飛機整套，固定在最底層（z -1）；首屏 section 透明、只放字 */
 .hstage{position:fixed;inset:0;z-index:-1;overflow:hidden;isolation:isolate;pointer-events:none;color:#fff}
-.stage-bg{position:absolute;inset:0;background:radial-gradient(ellipse 70% 80% at var(--cx,70%) var(--cy,48%),var(--bg2,#e66a55),var(--bg1,#c43a2c) 75%)}
+.stage-bg{position:absolute;inset:0;background:radial-gradient(ellipse 70% 80% at var(--cx,70%) var(--cy,48%),var(--bg2,#46ba9e),var(--bg1,#14886c) 75%)}
 /* 捲出首屏後疊上來的淡色底（首屏色調的淡版光暈＋噪點）；換色從紙飛機的位置圓形擴散 */
 .amb{position:absolute;inset:0;opacity:0}
 .amb i{position:absolute;inset:0}
@@ -140,10 +140,14 @@ button{font-family:inherit}
 .why{margin:0;font:900 clamp(30px,3.6vw,50px)/1.32 var(--sans);letter-spacing:.02em}
 .why em{font-style:normal;color:var(--tone)}
 .why-p{margin:22px 0 0;color:var(--ink2);max-width:30em}
-/* v8 頭像：去背的人站在「霧上開的窗」前——照片框把整頁淡霧挖掉，透出後面正在動的主視覺；
+/* v8 頭像：去背的人站在一扇「窗」前——窗裡是全強度、正在動的主視覺（照片框外則是整頁的淡霧）；
    照片的邊＝窗框（原照片肩膀被左右切成直線，貼著框就看不出來；試過往下淡出，外套會變半透明，像衣服被挖掉） */
 .ab-photo{position:relative;width:min(280px,72%);aspect-ratio:640/717;margin:0 0 30px}
-.ab-photo img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
+.ab-photo img{position:absolute;inset:0;z-index:2;width:100%;height:100%;object-fit:cover;display:block}
+/* 窗＝照片框裡的 canvas，每格把主視覺在這個位置的那一塊畫進來（底色光＋光線 screen＋光層 overlay，跟舞台同樣的疊法）＋噪點。
+   不用「在固定的霧上挖洞」：捲動時照片由瀏覽器直接移、洞要等 JS 下一格才跟上，捲快了窗會跟照片分開；畫在框裡就永遠一起動 */
+.ab-photo .ab-win{position:absolute;inset:0;z-index:0;width:100%;height:100%;display:block}
+.ab-photo::before{content:"";position:absolute;inset:0;z-index:1;background-image:var(--grain);background-size:192px 192px;opacity:.6;pointer-events:none}
 .ab-body p{margin:0 0 18px;color:var(--ink2)}
 .ab-body p:first-child{color:var(--ink);font-size:17px}
 .caps{display:grid;grid-template-columns:repeat(3,1fr);gap:28px;margin:72px 0 0;padding:0;list-style:none}
@@ -263,7 +267,7 @@ button{font-family:inherit}
 .htrack .win svg{display:block;flex:1;min-height:0;width:100%}
 /* v8 Demo 視窗＝色調漸層：純白底＋深陰影在淡霧上太搶眼
    ⇒ 視窗改成同色系的淡漸層、邊框與陰影都用色調、後面模糊；裡面原本的白框改半透明，不然視窗淡了裡面還是一堆白塊 */
-.htrack .win{background:linear-gradient(150deg,color-mix(in srgb,var(--tone) 13%,transparent),color-mix(in srgb,var(--tone) 4%,transparent));-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);border-color:color-mix(in srgb,var(--tone) 10%,transparent);box-shadow:0 30px 60px -40px color-mix(in srgb,var(--tone) 40%,transparent)}
+.htrack .win{background:linear-gradient(150deg,color-mix(in srgb,var(--tone) 13%,transparent),color-mix(in srgb,var(--tone) 4%,transparent));border-color:color-mix(in srgb,var(--tone) 10%,transparent);box-shadow:0 30px 60px -40px color-mix(in srgb,var(--tone) 40%,transparent)}
 .htrack .win .wb{border-bottom-color:color-mix(in srgb,var(--tone) 10%,transparent)}
 .htrack .win svg [fill="#fff"],.htrack .v .ln{fill:color-mix(in srgb,#fff 45%,transparent)}
 .htrack .copy{position:absolute;left:var(--eL);top:54%;translate:0 -50%;width:min(38vw,500px)}
@@ -560,7 +564,7 @@ button{font-family:inherit}
         <p class="why-p">很多自動化只是「某個人電腦上的一支小程式」，那個人一請假或離職，就沒人會修。我想做的是團隊接得住的日常工具：大家看得到它在跑、出事會收到通知、壞了知道怎麼退回，接手的人也看得懂當初為什麼這樣做。</p>
       </div>
       <div class="ab-body">
-        <figure class="ab-photo" id="abPhoto"><img src="images/avatar_cut.webp" alt="蔡承育的大頭照" width="640" height="717"></figure>
+        <figure class="ab-photo" id="abPhoto"><canvas class="ab-win" aria-hidden="true"></canvas><img src="images/avatar_cut.webp" alt="蔡承育的大頭照" width="640" height="717"></figure>
         <p>我是承育，有電商營運與後勤背景，現在是金車電商部的自動化工程師，這個職位是公司為了自動化新設的。</p>
         <p>我的工作從坐到實際做事的同事旁邊開始：看他怎麼做、哪裡會出錯、出錯了誰會痛。接著拆成步驟、寫成規格，用 AI 協作寫出程式，經過兩輪審查、在測試環境驗證後才上線。</p>
       </div>
@@ -1009,7 +1013,7 @@ button{font-family:inherit}
   var rootEl = document.documentElement;
   Object.keys(SECS).forEach(function (k) { rootEl.style.setProperty('--t-' + k, 'rgb(' + SECS[k].bg.join(',') + ')'); });
   function pageTone(name) { rootEl.dataset.pick = name; }
-  var secName = (/align|trace|split/.exec(hash) || ['align'])[0];
+  var secName = (/align|trace|split/.exec(hash) || ['split'])[0];   // 首屏第一段＝分權（綠）；往下捲到「對齊」才換紅，紅色不會從開場一路撐到對齊
   var col = {}; ['bg', 'bg2', 'dark', 'light'].forEach(function (k) { col[k] = tone(secName)[k].map(function (v) { return new Damp(.8, v); }); });
 
   var hero = document.getElementById('hero'), stage = document.getElementById('stage'), stageBg = document.getElementById('stageBg'), ambEl = document.getElementById('amb'), grainEl = document.getElementById('grain'), svg = document.getElementById('shape'), grab = document.getElementById('grab'), copyEl = document.getElementById('heroCopy');
@@ -1138,7 +1142,7 @@ button{font-family:inherit}
   /* 【頁 v3】T2 換字幕：跑道四等分＝開場、對齊、追蹤、分權；紙飛機不動，字一句換一句、色調跟著換。點詞＝捲到那一句 */
   // v6：跑道四段＝第一段字（開場）→ 卡片上的對齊 → 追蹤 → 分權；第一段到卡片的換場跟著捲動走（倒捲會滑回來）
   var run = document.getElementById('heroRun'), beats = [].slice.call(document.querySelectorAll('#beats .beat'));
-  var BEAT_TONE = ['align', 'align', 'trace', 'split'], NB = BEAT_TONE.length, lockTo = 0, runLast = -1, beatLast = -1;
+  var BEAT_TONE = ['split', 'align', 'trace', 'split'], NB = BEAT_TONE.length, lockTo = 0, runLast = -1, beatLast = -1;
   var hCopy = document.getElementById('heroCopy'), hCard = document.getElementById('heroCard'), swapLast = -1;
   function swapStage(t) {                                                  // t：0＝第一段字，1＝卡片；字先往左滑走（前半），第二段再從下面浮上來（後半；幾乎不重疊，疊在一起會糊）
     if (Math.abs(t - swapLast) < .001) return; swapLast = t;
@@ -1332,10 +1336,10 @@ button{font-family:inherit}
       sctx.setTransform(1, 0, 0, 1, 0, 0);
       sctx.drawImage(mask, 0, 0);
       rctx.globalCompositeOperation = 'lighter';
-      var Lx = o.x * k, Ly = (o.y - o.up) * k, N = 20, dens = .55, a = .26 * .42 * 1.5;
+      var Lx = o.x * k, Ly = (o.y - o.up) * k, N = 14, dens = .55, a = .26 * .42 * 1.5 * (20 / N), decay = Math.pow(.95, 20 / N);   // 效能：20 層→14 層，亮度與衰減等比補償
       for (var i = 0; i < N; i++) {
         var sc = 1 / (1 - (i + 1) * dens / N);
-        rctx.globalAlpha = a; a *= .95;
+        rctx.globalAlpha = Math.min(1, a); a *= decay;
         rctx.drawImage(src, Lx - Lx * sc, Ly - Ly * sc, w * sc, h * sc);
       }
     });
@@ -1361,7 +1365,7 @@ button{font-family:inherit}
     var bg = col.bg.map(function (d) { return st(d, dt); }), bg2 = col.bg2.map(function (d) { return st(d, dt); }), dk = col.dark.map(function (d) { return st(d, dt); }), lt = col.light.map(function (d) { return st(d, dt); });
     bgFollow();
     // 【頁 v4】退成背景後動態全留著，但光層（光線／拆色／遮罩）每兩格算一次，省一半；打光的面每格都算
-    var heavy = shrink < .98 || (frameN++ & 1) === 0;
+    var heavy = shrink < .98 || (frameN++ % 3) === 0;
     stageBg.style.setProperty('--bg1', 'rgb(' + bg.map(Math.round) + ')'); stageBg.style.setProperty('--bg2', 'rgb(' + bg2.map(Math.round) + ')');
     drawBg(bg);   // 背景遊走光（原站 #8）：約 6000 點，每格都畫
 
@@ -1919,7 +1923,7 @@ button{font-family:inherit}
     xIo.observe(xt);
   } else xt.classList.add('in');
   var abPhoto = document.getElementById('abPhoto');
-  function fogHoles(on) {                                                 // 霧上開窗：整片霧＋每張圖的矩形，evenodd 挖洞（數字段四張圖＋關於我的照片框）
+  function fogHoles(on) {                                                 // 霧上開窗：整片霧＋每張圖的矩形，evenodd 挖洞（數字段四張圖；關於我的照片窗改成自己畫，見 photoWin）
     var c = '', ink = '', wht = 'inset(50%)', W = innerWidth, H = innerHeight, d = '';
     function rc(l, t, r, b) { return 'M' + l.toFixed(1) + ' ' + t.toFixed(1) + 'H' + r.toFixed(1) + 'V' + b.toFixed(1) + 'H' + l.toFixed(1) + 'Z'; }
     if (on) {
@@ -1931,10 +1935,24 @@ button{font-family:inherit}
       });
       if (e) { ink = 'path(evenodd, "M0 0H' + pr.width + 'V' + pr.height + 'H0Z' + e + '")'; wht = 'path("' + e + '")'; }   // 直排字：窗外墨色、窗內白字（座標換成 pin 的）
     }
-    var q = abPhoto.getBoundingClientRect(), ql = Math.max(q.left, 0), qt = Math.max(q.top, 0), qr = Math.min(q.right, W), qb = Math.min(q.bottom, H);
-    if (qr - ql > 1 && qb - qt > 1) d += rc(ql, qt, qr, qb);
     if (d) c = 'path(evenodd, "M0 0H' + W + 'V' + H + 'H0Z' + d + '")';
     if (c !== fogClip) { fogClip = c; fogEl.style.clipPath = c; xVtK.style.clipPath = ink; xVtW.style.clipPath = wht; }
+  }
+  /* 關於我的照片窗：每格把舞台在照片位置的那一塊畫進框裡的 canvas（舞台的 rAF 先跑，這裡讀到的是同一格的畫面） */
+  var pwCv = abPhoto.querySelector('.ab-win'), pwX = pwCv.getContext('2d'), pwStage = document.getElementById('stage');
+  var pwSrc = [['bgc', 'source-over'], ['rays', 'screen'], ['ov', 'overlay']].map(function (a) { return { el: document.getElementById(a[0]), op: a[1] }; });
+  function photoWin() {
+    var r = abPhoto.getBoundingClientRect(); if (r.bottom < 0 || r.top > innerHeight || !r.width) return;
+    var k = Math.min(2, devicePixelRatio || 1), w = Math.round(r.width * k), h = Math.round(r.height * k);
+    if (pwCv.width !== w || pwCv.height !== h) { pwCv.width = w; pwCv.height = h; }
+    var sr = pwStage.getBoundingClientRect();
+    pwSrc.forEach(function (L) {
+      var c = L.el; if (!c.width || !c.height) return;
+      var fx = c.width / sr.width, fy = c.height / sr.height;
+      pwX.globalCompositeOperation = L.op; pwX.globalAlpha = parseFloat(c.style.opacity || '1');   // 光線的透明度舞台是用 CSS 調的，這裡照抄
+      pwX.drawImage(c, (r.left - sr.left) * fx, (r.top - sr.top) * fy, r.width * fx, r.height * fy, 0, 0, w, h);
+    });
+    pwX.globalCompositeOperation = 'source-over'; pwX.globalAlpha = 1;
   }
   function xFrame(dt) {
     var r = xt.getBoundingClientRect(); if (r.bottom < 0 || r.top > innerHeight) { fogHoles(false); return; }
@@ -1963,7 +1981,7 @@ button{font-family:inherit}
   var lastTs = 0;
   function frame(ts) {
     var dt = lastTs ? Math.min(.1, (ts - lastTs) / 1000) : .016; lastTs = ts;
-    topFrame(); xFrame(dt); tlFrame(dt); vtFrame(dt); htFrame(dt); foldFrame(dt); stackFrame(dt); ctFrame(); toneFrame();
+    topFrame(); xFrame(dt); photoWin(); tlFrame(dt); vtFrame(dt); htFrame(dt); foldFrame(dt); stackFrame(dt); ctFrame(); toneFrame();
     requestAnimationFrame(frame);
   }
   requestAnimationFrame(frame);
