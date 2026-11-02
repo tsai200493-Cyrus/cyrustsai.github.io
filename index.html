@@ -14,7 +14,8 @@
 <link rel="icon" type="image/svg+xml" href="images/logo.svg">
 <!--
   履歷首頁（紙飛機版；2026-11 起只留這一個版本）
-  首屏：紙飛機主視覺（打光、光線、拆色、三種色調）；往下捲一句換一句：開場 → 對齊 → 追蹤 → 分權。
+  首屏：紙飛機主視覺（打光、光線、拆色、三種色調）；往下捲換到第二段，對齊・追蹤・分權自己輪流出現（首屏底色固定綠色，不跟著換）。
+  原則三張卡（T7 疊卡）緊接在「關於我」下面（2026-11-02 從方法段後面搬上來，重點介紹）。
   捲出首屏：紙飛機縮到右側，隔一層同色調的淡霧沉進背景，特效照常在動；讀到哪一段就換成那段的色調。
   關於・數字：T3 交叉軌道（圖橫著走、直排標題往上升）；每張圖是霧上開的窗（透出全強度主視覺）＋白線插畫。
   網址：#on-align / #on-trace / #on-split＝首屏截圖用；#debug＝每秒幾格。
@@ -81,8 +82,8 @@ button{font-family:inherit}
 .hstage .grain{position:absolute;inset:0;background-repeat:repeat;background-size:192px 192px}
 .hstage .ink{position:absolute;left:0;top:0;overflow:visible}
 .hstage .ink path{fill:none;stroke:#fff;stroke-width:1.4px;vector-effect:non-scaling-stroke}
-/* 首屏跑道：一屏＋三段換字幕 */
-.hero-run{position:relative;height:calc(100svh + 3 * 60svh)}
+/* 首屏跑道：一屏＋換到第二段的那一小段（v9：三個原則改成自己輪流，不再靠捲動一句換一句，跑道縮短） */
+.hero-run{position:relative;height:calc(100svh + 70svh)}
 .hero-run .hero{position:sticky;top:0}
 .hero{position:relative;height:100svh;min-height:600px;overflow:hidden;touch-action:pan-y;color:#fff}
 /* T2 換字幕：四句疊在同一格，進來從下 20px、出去往上 20px */
@@ -120,6 +121,12 @@ button{font-family:inherit}
 .is .hl{transform:translateX(2px)}.is .hr{transform:translateX(-2px)}.is .dm{opacity:0}
 .in .is .hl,.in .is .hr{transform:none}
 .in .is .dm{opacity:1;transition-delay:.9s}
+/* v9：三個原則自己輪流——先依序出現，之後輪流亮（其他淡掉、亮的那個圖示重播一次；.re＝瞬間退回起始狀態再放開） */
+.hico.cyc li.in:not(.on){opacity:.42}
+.hico li.re svg path,.hico li.re svg circle{transition:none!important}
+.hico li.re .ia .b2{transform:translateX(9px)}.hico li.re .ia .b3{transform:translateX(-6px)}
+.hico li.re .it .tr{stroke-dashoffset:1}.hico li.re .it circle{transform:scale(0)}.hico li.re .it .fl{opacity:0}
+.hico li.re .is .hl{transform:translateX(2px)}.hico li.re .is .hr{transform:translateX(-2px)}.hico li.re .is .dm{opacity:0}
 .hero .copy{position:absolute;z-index:6;left:max(28px,calc((100vw - 1180px)/2 + 24px));top:52%;translate:0 -50%;width:min(36vw,480px);pointer-events:none}
 .hero .copy a,.hero .copy button{pointer-events:auto}
 .hero .kick{font:500 14px var(--sans);letter-spacing:.14em;opacity:.82}
@@ -132,7 +139,6 @@ button{font-family:inherit}
 .hero .meta a:hover{border-bottom-color:#fff}
 .now::before{content:"";display:inline-block;width:7px;height:7px;border-radius:50%;background:currentColor;margin-right:9px;vertical-align:2px;animation:live 2.4s infinite}
 @keyframes live{0%{box-shadow:0 0 0 0 rgba(255,255,255,.55)}70%,100%{box-shadow:0 0 0 8px rgba(255,255,255,0)}}
-.hero .hint{position:absolute;right:20px;bottom:16px;font:500 13px var(--sans);letter-spacing:.06em;color:rgba(255,255,255,.72);z-index:6;pointer-events:none}
 .hero .fps{position:absolute;left:12px;top:70px;font:11px var(--disp);color:#fff;background:rgba(0,0,0,.4);padding:2px 6px;z-index:7;display:none}
 
 /* ════ 關於 ════ */
@@ -441,7 +447,6 @@ button{font-family:inherit}
   .hico b{font-size:32px}.hico svg{width:62px}
   .hero .copy .lead{margin-top:16px}
   .hero .meta{margin-top:14px;font-size:13.5px;gap:4px 16px}
-  .hero .hint{display:none}
 }
 @media (max-width:820px){
   .nums{grid-template-columns:1fr 1fr}
@@ -557,7 +562,6 @@ button{font-family:inherit}
       <li class="beat"><svg class="is" viewBox="0 0 48 48" aria-hidden="true"><path class="hl" d="M22 15A13 13 0 0 0 22 41Z"/><path class="hr" d="M26 15A13 13 0 0 1 26 41Z"/><path class="dm" d="M24 2L28 6L24 10L20 6Z"/></svg><b>分權</b><small>SPLIT</small></li>
     </ol>
   </div>
-  <div class="hint">往下捲：換上三條原則　移動滑鼠：光跟著走</div>
   <div class="fps" id="fps"></div>
 </section>
 </div>
@@ -582,6 +586,28 @@ button{font-family:inherit}
       <li><h3>落地與維運</h3><p>用 Python、GAS（Google 試算表腳本）、VBA（Excel 巨集）串接公司系統與電商平台，放在公司內網伺服器常駐執行，上線後持續維護。</p></li>
       <li><h3>風險控管</h3><p>先用測試帳號、上線前新舊結果逐一比對、隨時能切回人工作業。</p></li>
     </ul>
+  </div>
+</section>
+
+<!-- ════ 原則：T7 疊卡（三張卡＝首屏三種色調）；2026-11-02 從方法段後面搬到關於我下面（需求人：重點介紹） ════ -->
+<section class="stack" id="principles">
+  <div class="pin">
+    <div class="back"><p>建立 AI 治理框架；以對齊、追蹤、分權防堵幻覺。</p><h2>對齊・追蹤・分權</h2></div>
+    <article class="card c1">
+      <div class="pn">PRINCIPLE 01・對齊</div><h3>實務對齊</h3>
+      <p>AI 會把理論上可能的風險都當真；哪些在業務上真的會發生，由我到第一線確認。</p>
+      <div class="ex"><div class="row"><span class="who">AI</span>週五失敗要等 72 小時才會被處理，建議補強。</div><div class="row"><span class="who">我</span>營業所週末本來就不出貨，實際缺口是 0。</div></div>
+    </article>
+    <article class="card c2">
+      <div class="pn">PRINCIPLE 02・追蹤</div><h3>決策日記</h3>
+      <p>兩邊都有好有壞的選擇，沒有標準答案；把「為什麼」和「代價」寫下來，方向才不會反覆。</p>
+      <div class="ex"><b>API 放內網，還是雲端？→ 內網</b><dl><dt>得到</dt><dd>免 VPN 申請、免資安審查</dd><dt>代價</dt><dd>外部連不進來，伺服器要自己顧</dd></dl><div style="margin-top:6px;opacity:.8">決策日記・共 50+ 條</div></div>
+    </article>
+    <article class="card c3">
+      <div class="pn">PRINCIPLE 03・分權</div><h3>AI 分權</h3>
+      <p>寫程式的 AI 和檢查的 AI 分開；兩邊意見不同由我決定，先在測試環境跑通才上線。</p>
+      <div class="ex"><div class="duo"><div><b>執行 AI</b>最懂業務邏輯，負責寫與改</div><span aria-hidden="true">⇄</span><div><b>審查 AI</b>專挑資安漏洞、風險範圍、用不到的程式碼</div></div><div class="gate">✓ 測試環境跑通，才上正式環境</div></div>
+    </article>
   </div>
 </section>
 
@@ -822,28 +848,6 @@ button{font-family:inherit}
       </ol>
       <div class="cnt" id="foldCnt">01 / 07</div>
     </div>
-  </div>
-</section>
-
-<!-- ════ 原則：T7 疊卡（三張卡＝首屏三種色調） ════ -->
-<section class="stack" id="principles">
-  <div class="pin">
-    <div class="back"><p>建立 AI 治理框架；以對齊、追蹤、分權防堵幻覺。</p><h2>對齊・追蹤・分權</h2></div>
-    <article class="card c1">
-      <div class="pn">PRINCIPLE 01・對齊</div><h3>實務對齊</h3>
-      <p>AI 會把理論上可能的風險都當真；哪些在業務上真的會發生，由我到第一線確認。</p>
-      <div class="ex"><div class="row"><span class="who">AI</span>週五失敗要等 72 小時才會被處理，建議補強。</div><div class="row"><span class="who">我</span>營業所週末本來就不出貨，實際缺口是 0。</div></div>
-    </article>
-    <article class="card c2">
-      <div class="pn">PRINCIPLE 02・追蹤</div><h3>決策日記</h3>
-      <p>兩邊都有好有壞的選擇，沒有標準答案；把「為什麼」和「代價」寫下來，方向才不會反覆。</p>
-      <div class="ex"><b>API 放內網，還是雲端？→ 內網</b><dl><dt>得到</dt><dd>免 VPN 申請、免資安審查</dd><dt>代價</dt><dd>外部連不進來，伺服器要自己顧</dd></dl><div style="margin-top:6px;opacity:.8">決策日記・共 50+ 條</div></div>
-    </article>
-    <article class="card c3">
-      <div class="pn">PRINCIPLE 03・分權</div><h3>AI 分權</h3>
-      <p>寫程式的 AI 和檢查的 AI 分開；兩邊意見不同由我決定，先在測試環境跑通才上線。</p>
-      <div class="ex"><div class="duo"><div><b>執行 AI</b>最懂業務邏輯，負責寫與改</div><span aria-hidden="true">⇄</span><div><b>審查 AI</b>專挑資安漏洞、風險範圍、用不到的程式碼</div></div><div class="gate">✓ 測試環境跑通，才上正式環境</div></div>
-    </article>
   </div>
 </section>
 
@@ -1154,13 +1158,13 @@ button{font-family:inherit}
     ripple = { t0: performance.now() };
     if (!quiet) pageTone(name);
   }
-  btns.forEach(function (b) { b.addEventListener('click', function () { setSec(b.dataset.s); jumpTo(b.dataset.s); }); });
+  btns.forEach(function (b) { b.addEventListener('click', function () { setSec(b.dataset.s); }); });
   setSec(secName, true);
 
-  /* 【頁 v3】T2 換字幕：跑道四等分＝開場、對齊、追蹤、分權；紙飛機不動，字一句換一句、色調跟著換。點詞＝捲到那一句 */
-  // v6：跑道四段＝第一段字（開場）→ 卡片上的對齊 → 追蹤 → 分權；第一段到卡片的換場跟著捲動走（倒捲會滑回來）
-  var run = document.getElementById('heroRun'), beats = [].slice.call(document.querySelectorAll('#beats .beat'));
-  var BEAT_TONE = ['split', 'align', 'trace', 'split'], NB = BEAT_TONE.length, lockTo = 0, runLast = -1, beatLast = -1;
+  /* 【頁 v3】T2 固定舞台：紙飛機不動，第一段字換成第二段（治理那句＋三個原則）；換場跟著捲動走（倒捲會滑回來）
+     v9（2026-11-02 需求人）：三個原則不再靠捲動一句換一句，換到第二段後自己輪流出現；首屏底色固定（HERO_TONE），換句不換色 */
+  var run = document.getElementById('heroRun'), beatsEl = document.getElementById('beats'), beats = [].slice.call(beatsEl.querySelectorAll('.beat'));
+  var HERO_TONE = secName, runLast = -1, cycT = 0, cycOn = false;
   var hCopy = document.getElementById('heroCopy'), hCard = document.getElementById('heroCard'), swapLast = -1;
   function swapStage(t) {                                                  // t：0＝第一段字，1＝卡片；字先往左滑走（前半），第二段再從下面浮上來（後半；幾乎不重疊，疊在一起會糊）
     if (Math.abs(t - swapLast) < .001) return; swapLast = t;
@@ -1170,24 +1174,27 @@ button{font-family:inherit}
     hCard.style.transform = 'translate3d(0,' + ((1 - ec) * 70).toFixed(1) + 'px,0)'; hCard.style.opacity = c.toFixed(3);
     hCard.style.visibility = c > 0 ? 'visible' : 'hidden';
   }
-  function lightBeat(i) {                                                  // i：0＝第一段字（卡片還沒上場），1–3＝對齊／＋追蹤／＋分權（累加）
-    if (i === beatLast) return; beatLast = i;
-    beats.forEach(function (b, k) { b.classList.toggle('in', k < i); b.classList.toggle('on', k === i - 1); });
+  function showBeats(n, cur) {                                             // n：已出現幾個（累加）；cur：目前亮的那個（-1＝沒有）
+    beats.forEach(function (b, k) { b.classList.toggle('in', k < n); b.classList.toggle('on', k === cur); });
   }
+  function replay(b) { b.classList.add('re'); void b.offsetWidth; b.classList.remove('re'); }   // 圖示瞬間退回起點再放開＝動畫重播一次
+  function cycle(step) {                                                   // step 0–2：對齊 → ＋追蹤 → ＋分權依序出現；3 起：三個輪流亮
+    var n = beats.length, k = step % n;
+    if (step < n) showBeats(step + 1, k);
+    else { beatsEl.classList.add('cyc'); showBeats(n, k); replay(beats[k]); }
+    cycT = setTimeout(function () { cycle(step + 1); }, step < n - 1 ? 1100 : 2600);
+  }
+  function startCycle() { if (cycOn) return; cycOn = true; cycT = setTimeout(function () { cycle(0); }, 250); }
+  function stopCycle() { if (!cycOn) return; cycOn = false; clearTimeout(cycT); beatsEl.classList.remove('cyc'); showBeats(0, -1); }
   function runSpan() { return run.offsetHeight - innerHeight; }
-  function runIdx() { var sp = runSpan(); if (sp <= 0) return reduce ? -1 : 0; var p = clamp01(-run.getBoundingClientRect().top / sp); return Math.min(NB - 1, Math.floor(p * NB)); }
   function onRun() {
     var sp = runSpan(), p = sp > 0 ? clamp01(-run.getBoundingClientRect().top / sp) : 0;
-    if (!reduce) swapStage(clamp01((p - .08) / .17));                                // 第一段停一下（8%）再換場，換到第二段開頭（25%）剛好就位
-    var i = runIdx(); if (i < 0) return;
-    lightBeat(i);
-    if (FORCE || shrink > 0 || performance.now() < lockTo || i === runLast) return;   // 背景模式不管；只在跨句時換色（擴散途中重呼叫會重新起跑）
-    runLast = i; bgTint = null; setSec(BEAT_TONE[i]);
-  }
-  function jumpTo(name) {
-    var i = BEAT_TONE.lastIndexOf(name), sp = runSpan(); if (sp <= 0 || i < 0) return;
-    lockTo = performance.now() + 1200; runLast = i;
-    scrollTo({ top: run.offsetTop + sp * (i + .5) / NB, behavior: reduce ? 'auto' : 'smooth' });
+    if (!reduce) {
+      var t = clamp01((p - .12) / .5); swapStage(t);                               // 第一段停一下（12%）再換場，跑道 62% 處第二段就位
+      if (t > .75 && shrink < .4) startCycle(); else if (t < .3 || shrink >= .4) stopCycle();   // 第二段看得到才輪流；退回第一段或捲出首屏就停、下次重新依序出現
+    }
+    if (FORCE || shrink > 0 || runLast === 0) return;                              // 從背景模式捲回首屏：底色換回首屏色調（只換一次）
+    runLast = 0; bgTint = null; setSec(HERO_TONE);
   }
   // 背景模式：頁面換色（第二支 script 發 pagetone）就跟著把紙飛機染過去，順便播一次鼓起來的波
   var pageToneName = secName, bgTint = null;
@@ -1828,7 +1835,7 @@ button{font-family:inherit}
 
   /* ▌v2 整頁跟著捲動換色：畫面中線落在哪一段，就用那段的色調（--tone 本身有 2.4 秒過場）
      pick＝首屏三個詞選的「你的顏色」；steps＝方法段依目前那一步；cards＝原則段依最上面那張卡 */
-  var TONE_MAP = { hero: 'pick', about: 'photo', experience: 'trace', projects: 'case', how: 'steps', principles: 'cards', skills: 'pick', contact: 'pick' };
+  var TONE_MAP = { hero: 'pick', about: 'photo', principles: 'cards', experience: 'trace', projects: 'case', how: 'steps', skills: 'pick', contact: 'pick' };
   var STEP_TONE = ['align', 'align', 'align', 'split', 'split', 'trace', 'trace'];   // 訪談・拆步驟・定規格＝對齊；產出・審查＝分權；測試・留紀錄＝追蹤
   var CARD_TONE = ['align', 'trace', 'split'];
   var rootEl = document.documentElement, toneSecs = Object.keys(TONE_MAP).map(function (id) { return document.getElementById(id); }), curTone = '';
